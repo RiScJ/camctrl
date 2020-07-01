@@ -1,8 +1,8 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
-import QtMultimedia 5.4
-import Qt.labs.folderlistmodel 2.15
+import QtQuick 2.6
+import QtQuick.Window 2.6
+import QtQuick.Controls 2.2
+import QtMultimedia 5
+import Qt.labs.folderlistmodel 1
 
 Window { id: app
 
@@ -11,7 +11,6 @@ Window { id: app
     height: 480
     color: "#2c2c2c"
     visible: true
-
 
     // z-height reserved for items which must always be on top
     property int forceTop: 1000
@@ -66,7 +65,7 @@ Window { id: app
 
 
     // Capture properties and methods
-    property string projectPath: "/home/zarya/Qt/camctrl/Cap/"
+    property string projectPath: "/home/zarya/Projects/"
     property string currentProject: "example"
     property string selectedProject: projectPath + currentProject
     property int currentPhoto: countIMG.count
@@ -170,13 +169,13 @@ Window { id: app
 
         ToolButton { id: backButton
             y: 0
-            text: controlStack.depth > 1 ? qsTr("‹") : qsTr("")
+            text: stack.depth > 1 ? qsTr("‹") : qsTr("")
             anchors.left: parent.left
             anchors.leftMargin: 0
-            enabled: controlStack.depth > 1
+            enabled: stack.depth > 1
             onClicked: {
-                mainBar.currentMenuName = controlStack.get(controlStack.currentItem.StackView.index - 1).menuTitle
-                controlStack.pop()
+                mainBar.currentMenuName = stack.get(stack.currentItem.StackView.index - 1).menuTitle
+                stack.pop()
             }
         }
 
@@ -207,8 +206,12 @@ Window { id: app
             text: qsTr("⋮")
             anchors.right: parent.right
             anchors.rightMargin: 0
+            onClicked: {
+                mainMenu.popup()
+            }
         }
     }
+
 
     // Options menu pane
     Pane { id: optionsPane
@@ -384,6 +387,7 @@ Window { id: app
 
         //
     }
+
 
     // Control menu pane
     Pane { id: controlPane
@@ -584,7 +588,7 @@ Window { id: app
             font.family: "Courier"
             enabled: false
             onClicked: {
-                controlStack.pop()
+                stack.pop()
             }
         }
 
@@ -600,11 +604,12 @@ Window { id: app
             font.family: "Courier"
             enabled: app.statusName == "IDLE"
             onClicked: {
-                controlStack.push(optionsPane)
+                stack.push(optionsPane)
                 mainBar.currentMenuName = "Options"
             }
         }
     }
+
 
     // Status bar, gives user additional information about app states
     ToolBar { id: statusBar
@@ -818,14 +823,16 @@ Window { id: app
         }
     }
 
-    Rectangle {
-        id: cameraUI
+
+    // Camera viewframe
+    Rectangle { id: cameraUI
         x: 0
         y: 0
         z: app.forceTop
         width: 600
         height: 460
         color: "#040404"
+        visible: stack.subapp == "control"
 
         state: {
             app.modeName == "VID" ? "VideoCapture" : "PhotoCapture"
@@ -836,6 +843,7 @@ Window { id: app
                 name: "PhotoCapture"
                 StateChangeScript {
                     script: {
+                        camera.stop()
                         camera.captureMode = Camera.CaptureStillImage
                         camera.start()
                     }
@@ -845,6 +853,7 @@ Window { id: app
                 name: "VideoCapture"
                 StateChangeScript {
                     script: {
+                        camera.stop()
                         camera.captureMode = Camera.CaptureVideo
                         camera.start()
                     }
@@ -866,6 +875,7 @@ Window { id: app
 
             videoRecorder.muted: true
             videoRecorder.outputLocation: app.selectedProject + "/VID_" + ("000" + app.currentVideo).slice(-4)
+            videoRecorder.frameRate: 30
             videoRecorder.mediaContainer: "mp4"
 
         }
@@ -879,14 +889,374 @@ Window { id: app
         }
     }
 
+
+    // Project manager window
+    Rectangle { id: projectUI
+        x: 0
+        y: 0
+        z: app.forceTop - 1
+        width: 600
+        height: 460
+        color: "#ffffff"
+        visible: stack.subapp == "projects"
+
+        Rectangle { id: projectListTitle
+            x: 0
+            y: 0
+            z: app.forceTop + 5
+            width: 600
+            height: 40
+            color: "#000000"
+            visible: stack.subapp == "projects"
+
+            Text {
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                z: app.forceTop + 1
+                text: qsTr("Name")
+                color: "#ffffff"
+                font.pointSize: 19
+                font.bold: false
+                font.family: "Courier"
+                topPadding: 10
+                leftPadding: 10
+            }
+
+            Text {
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                z: app.forceTop + 1
+                text: qsTr("Last modified")
+                color: "#ffffff"
+                font.pointSize: 19
+                font.bold: false
+                font.family: "Courier"
+                topPadding: 10
+                rightPadding: 10
+            }
+
+        }
+
+        ListView {
+            id: listView
+            z: app.forceTop
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 40
+            visible: true
+            snapMode: ListView.SnapToItem
+            model: projectListModel
+            delegate: projectListDelegate
+            focus: true
+            currentIndex: 0
+            highlight: Rectangle {
+                   z: app.forceTop
+                   color:"#32fc9e"
+                   opacity: 0.5
+                   focus: true
+            }
+            highlightFollowsCurrentItem: true
+
+            Component { id: projectListDelegate
+                Rectangle {
+
+                    width: ListView.view.width
+                    height: 50
+
+                    color: fileName == app.currentProject ? "#fc9e32" : index % 2 == 0 ? "#a4a4a4" : "#444444"
+
+                    Text { id: fileNameText
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        z: app.forceTop + 1
+                        text: fileName
+                        color: "#000000"
+                        font.pointSize: 19
+                        font.bold: false
+                        font.family: "Courier"
+                        topPadding: 15
+                        leftPadding: 10
+                    }
+
+                    Text { id: fileModText
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        z: app.forceTop + 1
+                        text: fileModified.toLocaleDateString(Qt.locale("en_US"), "d MMM yyyy")
+                        color: "#000000"
+                        font.pointSize: 19
+                        font.bold: false
+                        font.family: "Courier"
+                        topPadding: 15
+                        leftPadding: 10
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            listView.currentIndex = index
+                        }
+                    }
+
+                }
+
+            }
+
+            FolderListModel { id: projectListModel
+                folder: "/home/zarya/Projects/"
+            }
+
+        }
+
+
+    }
+
+
+    // Remote manager window
+    Rectangle { id: remoteUI
+        x: 0
+        y: 0
+        z: app.forceTop
+        width: 600
+        height: 460
+        color: "#040404"
+        visible: stack.subapp == "remote"
+
+
+    }
+
+
+    // Help documentation window
+    Rectangle { id: helpUI
+        x: 0
+        y: 0
+        z: app.forceTop
+        width: 600
+        height: 460
+        color: "#040404"
+        visible: stack.subapp == "help"
+
+
+    }
+
+
+    // System info window
+    Rectangle { id: sysinfoUI
+        x: 0
+        y: 0
+        z: app.forceTop
+        width: 600
+        height: 460
+        color: "#040404"
+        visible: stack.subapp == "sysinfo"
+
+
+    }
+
+
     StackView {
-        id: controlStack
+        id: stack
         x: 600
         y: 40
         width: 200
         height: 440
         initialItem: controlPane
+
+        property string subapp: "control"
+
     }
+
+    // Project manager control pane
+    Pane { id: projectsPane
+        background: Rectangle {
+            color: "#444444"
+            border.width: 0
+        }
+        x: 600
+        width: 200
+        height: 440
+        anchors.top: mainBar.bottom
+        anchors.topMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        visible: stack.subapp == "projects"
+
+        property string menuTitle: "Projects"
+
+        Button { id: newProjButton
+            enabled: false
+            width: 80
+            height: 79
+            text: "NEW"
+            topPadding: 15
+            font.pointSize: 24
+            font.family: "Courier"
+            display: AbstractButton.TextBesideIcon
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 3
+            visible: true
+        }
+
+        Button { id: deleteProjButton
+            enabled: false
+            width: 80
+            height: 79
+            text: qsTr("DEL")
+            topPadding: 15
+            font.pointSize: 24
+            font.family: "Courier"
+            anchors.left: parent.left
+            anchors.leftMargin: 95
+            anchors.top: parent.top
+            visible: true
+            anchors.topMargin: 3
+
+            onClicked: {
+            }
+
+        }
+
+        ToolSeparator {
+            id: toolSeparator6
+            anchors.top: parent.top
+            anchors.topMargin: 90
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            orientation: Qt.Horizontal
+        }
+
+        Button { id: selectProjButton
+            width: 176
+            height: 79
+            text: "SELECT"
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            topPadding: 15
+            anchors.top: parent.top
+            visible: true
+            anchors.topMargin: 109
+            display: AbstractButton.TextBesideIcon
+            font.pointSize: 24
+            font.family: "Courier"
+
+            onClicked: {
+                app.currentProject = projectListModel.get(listView.currentIndex, "fileName")
+            }
+
+        }
+
+        ToolSeparator {
+            id: toolSeparator7
+            anchors.left: parent.left
+            orientation: Qt.Horizontal
+            anchors.leftMargin: 0
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.topMargin: 194
+            anchors.rightMargin: 0
+        }
+
+        Button { id: openProjButton
+            enabled: false
+            width: 176
+            height: 79
+            text: "OPEN"
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            topPadding: 15
+            anchors.top: parent.top
+            visible: true
+            anchors.topMargin: 213
+            font.pointSize: 24
+            display: AbstractButton.TextBesideIcon
+            font.family: "Courier"
+        }
+    }
+
+    // Remote access/hosting/etc pane
+    Pane { id: remotePane
+
+    }
+
+    // Help documentation for the user
+    Pane { id: helpPane
+
+    }
+
+    // Display information about the system
+    Pane { id: sysinfoPane
+
+    }
+
+
+    Menu { id: mainMenu
+
+        MenuItem {
+            text: "Projects"
+            onTriggered: {
+                stack.pop(null)
+                stack.replace(projectsPane)
+                stack.subapp = "projects"
+                mainBar.currentMenuName = projectsPane.menuTitle
+            }
+        }
+
+        MenuItem {
+            text: "Control"
+            onTriggered: {
+                stack.pop(null)
+                stack.replace(controlPane)
+                stack.subapp = "control"
+                mainBar.currentMenuName = controlPane.menuTitle
+            }
+        }
+
+        MenuItem {
+            text: "Remote"
+            onTriggered: {
+                stack.pop(null)
+                stack.replace(remotePane)
+                stack.subapp = "remote"
+                mainBar.currentMenuName = remotePane.menuTitle
+            }
+        }
+
+        MenuSeparator { }
+
+        MenuItem {
+            text: "Help"
+            onTriggered: {
+                stack.pop(null)
+                stack.replace(helpPane)
+                stack.subapp = "help"
+                mainBar.currentMenuName = helpPane.menuTitle
+            }
+        }
+
+        MenuSeparator { }
+
+        MenuItem {
+            text: "SysInfo"
+            onTriggered: {
+                stack.pop(null)
+                stack.replace(sysinfoPane)
+                stack.subapp = "sysinfo"
+                mainBar.currentMenuName = sysinfoPane.menuTitle
+            }
+        }
+
+    }
+
 }
 
 /*##^##
