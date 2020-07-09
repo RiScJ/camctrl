@@ -573,7 +573,7 @@ Window { id: app
             font.family: "Courier"
             topPadding: 12
             font.pointSize: 15
-            enabled: app.statusName == "IDLE" & app.modeName != "VID"
+            enabled: app.statusName == "IDLE" 
             onClicked: {
                 app.switchTrig()
             }
@@ -837,58 +837,24 @@ Window { id: app
         color: "#040404"
         visible: stack.subapp == "control"
 
-        state: {
-            app.modeName == "VID" ? "VideoCapture" : "PhotoCapture"
-        }
-
-        states: [
-            State {
-                name: "PhotoCapture"
-                StateChangeScript {
-                    script: {
-                        camera.stop()
-                        camera.captureMode = Camera.CaptureStillImage
-                        camera.start()
-                    }
-                }
-            },
-            State {
-                name: "VideoCapture"
-                StateChangeScript {
-                    script: {
-                        camera.stop()
-                        camera.captureMode = Camera.CaptureVideo
-                        camera.start()
-                    }
-                }
-            }
-        ]
-
         Camera {
             id: camera
-
-            imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
 
             exposure {
                 exposureCompensation: -1.0
                 exposureMode: Camera.ExposurePortrait
             }
 
-            flash.mode: Camera.FlashRedEyeReduction
-
             videoRecorder.muted: true
             videoRecorder.outputLocation: app.selectedProject + "/VID_" + ("000" + app.currentVideo).slice(-4)
             videoRecorder.frameRate: 30
-            videoRecorder.mediaContainer: "mp4"
 
         }
-
 
         VideoOutput {
             source: camera
             fillMode: VideoOutput.PreserveAspectCrop
             anchors.fill: parent
-            focus : visible // to receive focus and capture key events when visible
         }
     }
 
@@ -1443,12 +1409,13 @@ Window { id: app
 
     }
 
-  //  InputPanel {
-  //          id: inputPanel
-   //         y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
-   //         anchors.left: parent.left
-   //         anchors.right: parent.right
-   // }
+    InputPanel {
+            id: inputPanel
+            y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
+            z: app.forceTop + 10
+            anchors.left: parent.left
+            anchors.right: parent.right
+    }
 
 }
 
