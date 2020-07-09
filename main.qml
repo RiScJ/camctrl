@@ -3,6 +3,9 @@ import QtQuick.Window 2.6
 import QtQuick.Controls 2.2
 import QtMultimedia 5
 import Qt.labs.folderlistmodel 1
+import QtQuick.VirtualKeyboard 2.1
+
+
 
 Window { id: app
 
@@ -65,7 +68,7 @@ Window { id: app
 
 
     // Capture properties and methods
-    property string projectPath: "/home/zarya/Projects/"
+    property string projectPath: "/home/pi/Projects/"
     property string currentProject: "example"
     property string selectedProject: projectPath + currentProject
     property int currentPhoto: countIMG.count
@@ -134,17 +137,17 @@ Window { id: app
     }
 
     FolderListModel { id: countIMG
-        folder: app.selectedProject
+        folder: "file://" + app.selectedProject
         nameFilters: ["IMG_*"]
     }
 
     FolderListModel { id: countVID
-        folder: app.selectedProject
+        folder: "file://" + app.selectedProject
         nameFilters: ["VID_*"]
     }
 
     FolderListModel { id: countLPS
-        folder: app.selectedProject
+        folder: "file://" + app.selectedProject
         nameFilters: ["LPS_*"]
     }
 
@@ -1009,13 +1012,151 @@ Window { id: app
             }
 
             FolderListModel { id: projectListModel
-                folder: "/home/zarya/Projects/"
+                folder: "file://" + projectPath
             }
 
         }
 
 
     }
+
+
+    // New project window
+    Rectangle { id: newProjectUI
+        x: 0
+        y: 0
+        z: app.forceTop + 2
+        width: 800
+        height: 480
+        color: "#4e4e4e"
+        visible: false
+
+        TextField { id: newProjTextField
+            enabled: newProjectUI.visible
+            y: 52
+            height: 60
+            z: app.forceTop + 5
+            text: ""
+            anchors.right: newProjCancelButton.left
+            anchors.rightMargin: 15
+            anchors.left: parent.left
+            anchors.leftMargin: 40
+            leftPadding: 15
+            topPadding: 14
+            font.pointSize: 17
+            font.bold: false
+            visible: true
+            font.family: "Courier"
+            placeholderText: qsTr("New project name")
+        }
+
+        Button { id: newProjCancelButton
+            enabled: newProjectUI.visible
+            x: 533
+            y: 52
+            width: 100
+            height: 60
+            text: qsTr("CANCEL")
+            topPadding: 14
+            font.bold: false
+            font.pointSize: 17
+            font.family: "Courier"
+            anchors.right: newProjCreateButton.left
+            anchors.rightMargin: 15
+
+            onClicked: {
+                newProjTextField.text = ""
+                newProjectUI.visible = false
+            }
+        }
+
+        Button { id: newProjCreateButton
+            enabled: newProjectUI.visible
+            x: 685
+            y: 52
+            width: 100
+            height: 60
+            text: qsTr("CREATE")
+            topPadding: 14
+            font.pointSize: 17
+            font.family: "Courier"
+            anchors.right: parent.right
+            anchors.rightMargin: 40
+
+            onClicked: {
+                fileUtils.mkdir(projectPath + newProjTextField.text)
+                newProjTextField.text = ""
+                newProjectUI.visible = false
+            }
+        }
+    }
+
+
+    // Delete project window
+    Rectangle { id: delProjectUI
+        x: 100
+        y: 150
+        z: app.forceTop + 2
+        width: 400
+        height: 200
+        color: "#000000"
+        visible: false
+
+        Label { id: deleteProjectLabel
+            x: 50
+            y: 12
+            z: app.forceTop + 2
+            width: 300
+            height: 30
+            color: "#ffffff"
+            text: qsTr("Are you sure you want to delete the\nhighlighted project?\nThis cannot be undone.")
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 13
+            font.family: "Courier"
+        }
+
+        Button { id: confirmDeleteProjectButton
+            enabled: delProjectUI.visible
+            y: 70
+            width: 170
+            height: 107
+            text: qsTr("CONFIRM")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+            topPadding: 14
+            font.bold: false
+            font.pointSize: 17
+            font.family: "Courier"
+
+            onClicked: {
+                fileUtils.removeDir(projectPath + projectListModel.get(listView.currentIndex, "fileName"))
+                delProjectUI.visible = false
+            }
+        }
+
+        Button { id: cancelDeleteProjectButton
+            enabled: delProjectUI.visible
+            x: 210
+            y: 73
+            width: 170
+            height: 107
+            text: qsTr("CANCEL")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            topPadding: 14
+            font.pointSize: 17
+            font.family: "Courier"
+
+            onClicked: {
+                delProjectUI.visible = false
+            }
+        }
+}
 
 
     // Remote manager window
@@ -1060,6 +1201,7 @@ Window { id: app
     }
 
 
+    // Control pane stack
     StackView {
         id: stack
         x: 600
@@ -1090,7 +1232,7 @@ Window { id: app
         property string menuTitle: "Projects"
 
         Button { id: newProjButton
-            enabled: false
+            enabled: true
             width: 80
             height: 79
             text: "NEW"
@@ -1103,10 +1245,14 @@ Window { id: app
             anchors.top: parent.top
             anchors.topMargin: 3
             visible: true
+
+            onClicked: {
+                newProjectUI.visible = true
+            }
         }
 
         Button { id: deleteProjButton
-            enabled: false
+            enabled: true
             width: 80
             height: 79
             text: qsTr("DEL")
@@ -1120,6 +1266,7 @@ Window { id: app
             anchors.topMargin: 3
 
             onClicked: {
+                delProjectUI.visible = true
             }
 
         }
@@ -1185,17 +1332,56 @@ Window { id: app
 
     // Remote access/hosting/etc pane
     Pane { id: remotePane
+        background: Rectangle {
+            color: "#444444"
+            border.width: 0
+        }
+        x: 600
+        width: 200
+        height: 440
+        anchors.top: mainBar.bottom
+        anchors.topMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        visible: stack.subapp == "remote"
 
+        property string menuTitle: "Remote"
     }
 
     // Help documentation for the user
     Pane { id: helpPane
+        background: Rectangle {
+            color: "#444444"
+            border.width: 0
+        }
+        x: 600
+        width: 200
+        height: 440
+        anchors.top: mainBar.bottom
+        anchors.topMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        visible: stack.subapp == "help"
 
+        property string menuTitle: "Help"
     }
 
     // Display information about the system
     Pane { id: sysinfoPane
+        background: Rectangle {
+            color: "#444444"
+            border.width: 0
+        }
+        x: 600
+        width: 200
+        height: 440
+        anchors.top: mainBar.bottom
+        anchors.topMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        visible: stack.subapp == "sysinfo"
 
+        property string menuTitle: "SysInfo"
     }
 
 
@@ -1257,14 +1443,25 @@ Window { id: app
 
     }
 
+  //  InputPanel {
+  //          id: inputPanel
+   //         y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
+   //         anchors.left: parent.left
+   //         anchors.right: parent.right
+   // }
+
 }
 
 /*##^##
 Designer {
     D{i:0;formeditorColor:"#4c4e50"}D{i:2;anchors_height:400;anchors_width:200;anchors_x:77;anchors_y:25}
 D{i:6;anchors_height:150;anchors_width:166;anchors_x:0;anchors_y:267}D{i:7;anchors_height:150;anchors_width:166;anchors_x:0;anchors_y:267}
-D{i:8;anchors_x:71}D{i:14;anchors_height:400;anchors_width:200}D{i:15;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}
-D{i:16;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}D{i:17;anchors_x:130;anchors_y:8}
-D{i:18;anchors_x:204}D{i:19;anchors_x:190}D{i:20;anchors_x:190}
+D{i:8;anchors_x:71}D{i:5;invisible:true}D{i:14;anchors_height:400;anchors_width:200}
+D{i:15;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}D{i:16;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}
+D{i:17;anchors_x:130;anchors_y:8}D{i:18;anchors_x:204}D{i:19;anchors_x:190}D{i:20;anchors_x:190}
+D{i:9;invisible:true}D{i:23;invisible:true}D{i:33;invisible:true}D{i:47;invisible:true}
+D{i:57;invisible:true}D{i:58;invisible:true}D{i:54;invisible:true}D{i:68;invisible:true}
+D{i:69;invisible:true}D{i:70;invisible:true}D{i:71;invisible:true}D{i:72;invisible:true}
+D{i:80;invisible:true}D{i:81;invisible:true}D{i:82;invisible:true}
 }
 ##^##*/
