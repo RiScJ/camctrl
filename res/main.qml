@@ -965,19 +965,6 @@ Window { id: app
                 leftPadding: 10
             }
 
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                z: app.forceTop + 1
-                text: qsTr("Last modified")
-                color: "#ffffff"
-                font.pointSize: 19
-                font.bold: false
-                font.family: "Courier"
-                topPadding: 10
-                rightPadding: 10
-            }
-
         }
 
         ListView {
@@ -1017,20 +1004,7 @@ Window { id: app
                         anchors.left: parent.left
                         anchors.leftMargin: 0
                         z: app.forceTop + 1
-                        text: fileName
-                        color: "#000000"
-                        font.pointSize: 19
-                        font.bold: false
-                        font.family: "Courier"
-                        topPadding: 15
-                        leftPadding: 10
-                    }
-
-                    Text { id: remoteModText
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        z: app.forceTop + 1
-                        text: fileModified.toLocaleDateString(Qt.locale("en_US"), "d MMM yyyy")
+                        text: fileName.slice(0, -5);
                         color: "#000000"
                         font.pointSize: 19
                         font.bold: false
@@ -1122,7 +1096,7 @@ Window { id: app
             anchors.rightMargin: 40
 
             onClicked: {
-                fileUtils.mkdir("/home/zarya/.camctrl/remote/" + newRemoteTextField.text)
+                fileUtils.touch(app.homeDir + ".camctrl/remote/" + newRemoteTextField.text + ".conf")
                 newRemoteTextField.text = ""
                 newRemoteUI.visible = false
             }
@@ -1168,7 +1142,7 @@ Window { id: app
             font.family: "Courier"
 
             onClicked: {
-                fileUtils.removeDir(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"))
+                fileUtils.rm(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"))
                 delRemoteUI.visible = false
             }
         }

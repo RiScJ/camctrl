@@ -88,3 +88,23 @@ qint64 FileUtils::freeStorage() {
     QStorageInfo storage = QStorageInfo::root();
     return storage.bytesFree();
 }
+
+
+bool FileUtils::touch(const QString &path) {
+    QFile* file = new QFile(path);
+    file->open(QIODevice::ReadWrite);
+    return 1;
+}
+
+
+bool FileUtils::rm(const QString &path) {
+    QFile* file = new QFile(path);
+    file->remove();
+    return 1;
+}
+
+
+
+
+
+

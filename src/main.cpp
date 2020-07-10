@@ -33,6 +33,5 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     engine.load(url);
 
-
     return app.exec();
 }
