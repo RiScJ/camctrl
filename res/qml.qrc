@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>main.qml</file>
+        <file>Pane_SysInfo.qml</file>
+        <file>Pane_Help.qml</file>
+        <file>Pane_Remote.qml</file>
+        <file>Pane_Projects.qml</file>
+        <file>Pane_Controls.qml</file>
+    </qresource>
+</RCC>

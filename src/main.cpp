@@ -3,6 +3,8 @@
 #include <QQmlContext>
 
 #include "fileutils.h"
+#include "gpio.h"
+#include "timelapse_utils.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -23,7 +25,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     FileUtils* fileUtils = new FileUtils();
     engine.rootContext()->setContextProperty("fileUtils", fileUtils);
 
+    GPIO* gpio = new GPIO();
+    engine.rootContext()->setContextProperty("GPIO", gpio);
+
+    TimelapseUtils* timelapseUtils = new TimelapseUtils();
+    engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
+
     engine.load(url);
+
 
     return app.exec();
 }

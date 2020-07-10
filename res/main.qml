@@ -6,8 +6,16 @@ import Qt.labs.folderlistmodel 1
 import QtQuick.VirtualKeyboard 2.1
 
 
-
 Window { id: app
+
+    Connections {
+        target: GPIO
+        onRisingEdge: {
+            app.capturePhoto()
+        }
+    }
+
+    objectName: "root"
 
     title: qsTr("Hello World")
     width: 800
@@ -18,38 +26,8 @@ Window { id: app
     // z-height reserved for items which must always be on top
     property int forceTop: 1000
 
-
-    // MODE properties and methods
-    property int numModes: 3
-    property int mode: 0
     property string modeName: "IMG"
-    property var modeList: ["IMG", "VID", "LPS"]
-
-    function switchMode() {
-        app.mode = app.mode >= app.numModes - 1 ? 0 : app.mode + 1
-        app.updateModeName()
-    }
-
-    function updateModeName() {
-        app.modeName = app.modeList[app.mode]
-    }
-
-
-    // TRIG properties and methods
-    property int numTrigs: 3
-    property int trig: 0
     property string trigName: "USR"
-    property var trigList: ["USR", "EXT", "TMR"]
-
-    function switchTrig() {
-        app.trig = app.trig >= app.numTrigs - 1 ? 0 : app.trig + 1
-        app.updateTrigName()
-    }
-
-    function updateTrigName() {
-        app.trigName = app.trigList[app.trig]
-    }
-
 
     // STATUS properties and methods
     property int numStatuses: 3
@@ -68,16 +46,20 @@ Window { id: app
 
 
     // Capture properties and methods
-    property string projectPath: "/home/pi/Projects/"
+    property string homeDir: "/home/zarya/"
+
+    property string projectPath: app.homeDir + "Projects/"
     property string currentProject: "example"
     property string selectedProject: projectPath + currentProject
     property int currentPhoto: countIMG.count
     property int currentVideo: countVID.count
     property int currentLapse: countLPS.count
+    property int currentFrame: countFRM.count
 
 
     function capturePhoto() {
         camera.imageCapture.captureToLocation(app.selectedProject + "/IMG_" + (("000" + app.currentPhoto).slice(-4)))
+        console.log("Capturing!")
     }
 
     function captureTimedPhotos() {
@@ -87,6 +69,7 @@ Window { id: app
 
     function captureEXTPhotos() {
         app.switchStatus(3)
+        GPIO.attachInterrupt(qsTr("10"))
     }
 
     function stopTimedPhotos() {
@@ -96,10 +79,6 @@ Window { id: app
 
     function stopEXTPhotos() {
         app.switchStatus(0)
-    }
-
-    function captureLapseFrame() {
-        app.switchStatus(1)
     }
 
     function startRecording() {
@@ -121,11 +100,11 @@ Window { id: app
     }
 
     function startEXTRecording() {
-
+        app.switchStatus(3)
     }
 
     function stopEXTRecording() {
-
+        app.switchStatus(0)
     }
 
     function toggleVideoState() {
@@ -134,6 +113,27 @@ Window { id: app
         } else if (app.statusName == "RECORDING") {
             app.stopRecording()
         }
+    }
+
+    function startLapse() {
+        app.switchStatus(3)
+        app.modeName = "FRM"
+        if (app.trigName === "TMR") {
+            timer.running = true
+        }
+    }
+
+    function captureLapseFrame() {
+        camera.imageCapture.captureToLocation(app.selectedProject + "/FRM_" + (("000" + app.currentFrame).slice(-4)))
+    }
+
+    function stopLapse() {
+        app.modeName = "LPS"
+        app.switchStatus(0)
+        if (app.trigName === "TMR") {
+            timer.running = false
+        }
+        TimelapseUtils.stitch(app.selectedProject)
     }
 
     FolderListModel { id: countIMG
@@ -151,13 +151,24 @@ Window { id: app
         nameFilters: ["LPS_*"]
     }
 
+    FolderListModel { id: countFRM
+        folder: "file://" + app.selectedProject
+        nameFilters: ["FRM_*"]
+    }
+
     // Timer object for timed capture control
     Timer { id: timer
-        interval: 60000
+        interval: optionsPane.delayTime
         running: false
         repeat: true
         onTriggered: {
-            app.modeName == "IMG" ? capturePhoto() : app.modeName == "VID" ? toggleVideoState() : captureLapseFrame()
+            if (app.modeName === "IMG"){
+                app.capturePhoto()
+            } else if (app.modeName === "VID") {
+
+            } else if (app.modeName === "FRM") {
+                app.captureLapseFrame()
+            }
         }
     }
 
@@ -215,7 +226,6 @@ Window { id: app
         }
     }
 
-
     // Options menu pane
     Pane { id: optionsPane
         background: Rectangle {
@@ -231,6 +241,7 @@ Window { id: app
         anchors.rightMargin: 0
 
         property string menuTitle: "Options"
+        property int delayTime: 4000
 
         Label {
             id: label1
@@ -331,6 +342,22 @@ Window { id: app
             font.family: "Courier"
         }
 
+        function formatText(count, modelData) {
+                var data = count === 12 ? modelData + 1 : modelData;
+                return data.toString().length < 2 ? "0" + data : data;
+        }
+
+        Component {
+            id: tumblerDelegate
+
+            Label {
+                text: optionsPane.formatText(Tumbler.tumbler.count, modelData)
+                opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
+                color: "#000000"
+                font.pointSize: 15
+            }
+        }
+
         Tumbler { id: minTumbler
             x: 70
             y: 170
@@ -338,12 +365,11 @@ Window { id: app
             height: 116
             font.wordSpacing: 0
             font.italic: true
-            font.pointSize: 13
             font.family: "Courier"
-            font.weight: Font.Black
-            font.bold: false
             visibleItemCount: 6
             model: 60
+
+            delegate: tumblerDelegate
         }
 
         Tumbler { id: secTumbler
@@ -352,13 +378,12 @@ Window { id: app
             width: 36
             height: 116
             font.italic: true
-            font.weight: Font.Black
             model: 60
             visibleItemCount: 6
             font.wordSpacing: 0
-            font.bold: false
-            font.pointSize: 13
             font.family: "Courier"
+
+            delegate: tumblerDelegate
         }
 
         Label {
@@ -391,228 +416,10 @@ Window { id: app
         //
     }
 
-
     // Control menu pane
-    Pane { id: controlPane
-        background: Rectangle {
-            color: "#444444"
-            border.width: 0
-        }
-        x: 600
-        width: 200
-        height: 440
-        anchors.top: mainBar.bottom
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-
-        property string menuTitle: "Control"
-
-        // Photo capturing button
-        Button { id: captureButton
-            width: 150
-            text: {
-                app.statusName == "IDLE"
-                        ?
-                            app.trigName == "USR"
-                                ?
-                                    qsTr("CAPTURE")
-                                :
-                                    app.trigName == "TMR"
-                                        ?
-                                            qsTr("START\nTIMED\nCAPTURE")
-                                        :
-                                            qsTr("START\nEXT\nCAPTURE")
-                        :
-                            app.trigName == "USR"
-                                ?
-                                    qsTr("CAPTURE")
-                                :
-                                    app.trigName == "TMR"
-                                        ?
-                                            qsTr("STOP\nTIMED\nCAPTURE")
-                                        :
-                                            qsTr("STOP\nEXT\nCAPTURE")
-            }
-            wheelEnabled: false
-            font.family: "Courier"
-            font.pointSize: 23
-            bottomPadding: 0
-            rightPadding: 0
-            leftPadding: 0
-            topPadding: 10
-            anchors.top: toolSeparator.bottom
-            anchors.topMargin: 10
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            visible: app.modeName == "IMG"
-            enabled: app.modeName == "IMG"
-            onClicked: {
-                app.statusName == "IDLE"
-                        ?
-                            app.trigName == "USR" ? app.capturePhoto() : app.trigName == "TMR" ? app.captureTimedPhotos() : app.captureEXTPhotos()
-                        :
-                            app.trigName == "TMR" ? app.stopTimedPhotos() : app.stopEXTPhotos()
-            }
-        }
-
-        Button { id: recordButton
-            width: 150
-            text: {
-                app.statusName == "IDLE"
-                        ?
-                            app.trigName == "USR"
-                                ?
-                                    qsTr("RECORD")
-                                :
-                                    app.trigName == "TMR"
-                                        ?
-                                            qsTr("START\nTIMED\nRECORD")
-                                        :
-                                            qsTr("START\nEXT\nRECORD")
-                        :
-                            app.trigName == "USR"
-                                ?
-                                    qsTr("STOP")
-                                :
-                                    app.trigName == "TMR"
-                                        ?
-                                            qsTr("STOP\nTIMED\nRECORD")
-                                        :
-                                            qsTr("STOP\nEXT\nRECORD")
-            }
-            font.family: "Courier"
-            font.pointSize: 23
-            bottomPadding: 0
-            rightPadding: 0
-            leftPadding: 0
-            topPadding: 10
-            anchors.top: toolSeparator.bottom
-            anchors.topMargin: 10
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            visible: app.modeName == "VID"
-            enabled: app.modeName == "VID"
-            onClicked: {
-                app.statusName == "IDLE"
-                        ?
-                            app.trigName == "USR" ? app.startRecording() : app.trigName == "TMR" ? app.startTimedRecording() : app.startEXTRecording()
-                        :
-                            app.trigName == "USR" ? app.stopRecording() : app.trigName == "TMR" ? app.stopTimedRecording() : app.stopEXTRecording()
-            }
-        }
-
-        Button { id: lapseButton
-            width: 150
-            text: qsTr("LAPSE")
-            font.family: "Courier"
-            font.pointSize: 23
-            bottomPadding: 0
-            rightPadding: 0
-            leftPadding: 0
-            topPadding: 10
-            anchors.top: toolSeparator.bottom
-            anchors.topMargin: 10
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            visible: app.modeName == "LPS"
-            enabled: app.modeName == "LPS"
-        }
-
-        ToolSeparator {
-            id: toolSeparator
-            y: 235
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            orientation: Qt.Horizontal
-        }
-
-        Button { id: modeButton
-            x: 10
-            y: 12
-            width: 72
-            height: 64
-            text: qsTr("MODE")
-            font.bold: false
-            topPadding: 12
-            font.family: "Courier"
-            font.pointSize: 15
-            enabled: app.statusName == "IDLE"
-            onClicked: {
-                app.switchMode()
-                if (app.modeName == "VID") {
-                    app.trig = 0
-                    app.updateTrigName()
-                } else if (app.modeName == "LPS") {
-                    app.trig = 0
-                    app.updateTrigName()
-                }
-            }
-        }
-
-        Button { id: trigButton
-            x: 94
-            y: 12
-            width: 72
-            height: 64
-            text: qsTr("TRIG")
-            font.family: "Courier"
-            topPadding: 12
-            font.pointSize: 15
-            enabled: app.statusName == "IDLE" 
-            onClicked: {
-                app.switchTrig()
-            }
-        }
-
-        Button { id: overlaysButton
-            x: 10
-            y: 87
-            width: 156
-            height: 64
-            text: qsTr("OVERLAYS")
-            topPadding: 12
-            font.pointSize: 15
-            font.bold: false
-            font.family: "Courier"
-            enabled: false
-            onClicked: {
-                stack.pop()
-            }
-        }
-
-        Button { id: optionsButton
-            x: 10
-            y: 162
-            width: 156
-            height: 64
-            text: qsTr("OPTIONS")
-            topPadding: 12
-            font.pointSize: 15
-            font.bold: false
-            font.family: "Courier"
-            enabled: app.statusName == "IDLE"
-            onClicked: {
-                stack.push(optionsPane)
-                mainBar.currentMenuName = "Options"
-            }
-        }
+    Pane_Controls {
+        id: controlPane
     }
-
 
     // Status bar, gives user additional information about app states
     ToolBar { id: statusBar
@@ -811,6 +618,10 @@ Window { id: app
                     ("000" + app.currentVideo).slice(-4)
                 } else if (app.modeName == "LPS") {
                     ("000" + app.currentLapse).slice(-4)
+                } else if (app.modeName === "FRM") {
+                    ("000" + app.currentFrame).slice(-4)
+                } else {
+                    console.log("ERROR: Unknown application mode.")
                 }
             }
             anchors.left: toolSeparator4.right
@@ -826,7 +637,6 @@ Window { id: app
         }
     }
 
-
     // Camera viewframe
     Rectangle { id: cameraUI
         x: 0
@@ -835,19 +645,21 @@ Window { id: app
         width: 600
         height: 460
         color: "#040404"
-        visible: stack.subapp == "control"
+        visible: stack.subapp !== "projects" & stack.subapp !== "remote"
 
         Camera {
             id: camera
 
             exposure {
-                exposureCompensation: -1.0
+                exposureCompensation: 1.0
                 exposureMode: Camera.ExposurePortrait
             }
 
-            videoRecorder.muted: true
-            videoRecorder.outputLocation: app.selectedProject + "/VID_" + ("000" + app.currentVideo).slice(-4)
-            videoRecorder.frameRate: 30
+            videoRecorder {
+                muted: true
+                outputLocation: app.selectedProject + "/VID_" + ("000" + app.currentVideo).slice(-4)
+                frameRate: 30
+            }
 
         }
 
@@ -857,7 +669,6 @@ Window { id: app
             anchors.fill: parent
         }
     }
-
 
     // Project manager window
     Rectangle { id: projectUI
@@ -986,7 +797,6 @@ Window { id: app
 
     }
 
-
     // New project window
     Rectangle { id: newProjectUI
         x: 0
@@ -1057,7 +867,6 @@ Window { id: app
         }
     }
 
-
     // Delete project window
     Rectangle { id: delProjectUI
         x: 100
@@ -1124,20 +933,270 @@ Window { id: app
         }
 }
 
-
     // Remote manager window
     Rectangle { id: remoteUI
         x: 0
         y: 0
-        z: app.forceTop
+        z: app.forceTop - 1
         width: 600
         height: 460
-        color: "#040404"
+        color: "#ffffff"
         visible: stack.subapp == "remote"
+
+        Rectangle { id: remoteListTitle
+            x: 0
+            y: 0
+            z: app.forceTop + 5
+            width: 600
+            height: 40
+            color: "#000000"
+            visible: stack.subapp == "remote"
+
+            Text {
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                z: app.forceTop + 1
+                text: qsTr("Name")
+                color: "#ffffff"
+                font.pointSize: 19
+                font.bold: false
+                font.family: "Courier"
+                topPadding: 10
+                leftPadding: 10
+            }
+
+            Text {
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                z: app.forceTop + 1
+                text: qsTr("Last modified")
+                color: "#ffffff"
+                font.pointSize: 19
+                font.bold: false
+                font.family: "Courier"
+                topPadding: 10
+                rightPadding: 10
+            }
+
+        }
+
+        ListView {
+            id: remoteListView
+            z: app.forceTop
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 40
+            visible: true
+            snapMode: ListView.SnapToItem
+            model: remoteListModel
+            delegate: remoteListDelegate
+            focus: true
+            currentIndex: 0
+            highlight: Rectangle {
+                   z: app.forceTop
+                   color:"#32fc9e"
+                   opacity: 0.5
+                   focus: true
+            }
+            highlightFollowsCurrentItem: true
+
+            Component { id: remoteListDelegate
+                Rectangle {
+
+                    width: ListView.view.width
+                    height: 50
+
+                    color: index % 2 == 0 ? "#a4a4a4" : "#444444"
+
+                    Text { id: remoteNameText
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        z: app.forceTop + 1
+                        text: fileName
+                        color: "#000000"
+                        font.pointSize: 19
+                        font.bold: false
+                        font.family: "Courier"
+                        topPadding: 15
+                        leftPadding: 10
+                    }
+
+                    Text { id: remoteModText
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        z: app.forceTop + 1
+                        text: fileModified.toLocaleDateString(Qt.locale("en_US"), "d MMM yyyy")
+                        color: "#000000"
+                        font.pointSize: 19
+                        font.bold: false
+                        font.family: "Courier"
+                        topPadding: 15
+                        leftPadding: 10
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            remoteListView.currentIndex = index
+                        }
+                    }
+
+                }
+
+            }
+
+            FolderListModel { id: remoteListModel
+                folder: "file://" + app.homeDir + ".camctrl/remote/"
+            }
+
+        }
 
 
     }
 
+    Rectangle { id: newRemoteUI
+        x: 0
+        y: 0
+        z: app.forceTop + 2
+        width: 800
+        height: 480
+        color: "#4e4e4e"
+        visible: false
+
+        TextField { id: newRemoteTextField
+            enabled: newRemoteUI.visible
+            y: 52
+            height: 60
+            z: app.forceTop + 5
+            text: ""
+            anchors.right: newRemoteCancelButton.left
+            anchors.rightMargin: 15
+            anchors.left: parent.left
+            anchors.leftMargin: 40
+            leftPadding: 15
+            topPadding: 14
+            font.pointSize: 17
+            font.bold: false
+            visible: true
+            font.family: "Courier"
+            placeholderText: qsTr("New remote name")
+        }
+
+        Button { id: newRemoteCancelButton
+            enabled: newRemoteUI.visible
+            x: 533
+            y: 52
+            width: 100
+            height: 60
+            text: qsTr("CANCEL")
+            topPadding: 14
+            font.bold: false
+            font.pointSize: 17
+            font.family: "Courier"
+            anchors.right: newRemoteCreateButton.left
+            anchors.rightMargin: 15
+
+            onClicked: {
+                newRemoteTextField.text = ""
+                newRemoteUI.visible = false
+            }
+        }
+
+        Button { id: newRemoteCreateButton
+            enabled: newRemoteUI.visible
+            x: 685
+            y: 52
+            width: 100
+            height: 60
+            text: qsTr("CREATE")
+            topPadding: 14
+            font.pointSize: 17
+            font.family: "Courier"
+            anchors.right: parent.right
+            anchors.rightMargin: 40
+
+            onClicked: {
+                fileUtils.mkdir("/home/zarya/.camctrl/remote/" + newRemoteTextField.text)
+                newRemoteTextField.text = ""
+                newRemoteUI.visible = false
+            }
+        }
+    }
+
+    Rectangle { id: delRemoteUI
+        x: 100
+        y: 150
+        z: app.forceTop + 2
+        width: 400
+        height: 200
+        color: "#000000"
+        visible: false
+
+        Label { id: deleteRemoteLabel
+            x: 50
+            y: 12
+            z: app.forceTop + 2
+            width: 300
+            height: 30
+            color: "#ffffff"
+            text: qsTr("Are you sure you want to delete the\nhighlighted remote?\nThis cannot be undone.")
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 13
+            font.family: "Courier"
+        }
+
+        Button { id: confirmDeleteRemoteButton
+            enabled: delRemoteUI.visible
+            y: 70
+            width: 170
+            height: 107
+            text: qsTr("CONFIRM")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+            topPadding: 14
+            font.bold: false
+            font.pointSize: 17
+            font.family: "Courier"
+
+            onClicked: {
+                fileUtils.removeDir(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"))
+                delRemoteUI.visible = false
+            }
+        }
+
+        Button { id: cancelDeleteRemoteButton
+            enabled: delRemoteUI.visible
+            x: 210
+            y: 73
+            width: 170
+            height: 107
+            text: qsTr("CANCEL")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            topPadding: 14
+            font.pointSize: 17
+            font.family: "Courier"
+
+            onClicked: {
+                delRemoteUI.visible = false
+            }
+        }
+}
+
+    Rectangle { id: configRemoteUI
+
+    }
 
     // Help documentation window
     Rectangle { id: helpUI
@@ -1151,21 +1210,6 @@ Window { id: app
 
 
     }
-
-
-    // System info window
-    Rectangle { id: sysinfoUI
-        x: 0
-        y: 0
-        z: app.forceTop
-        width: 600
-        height: 460
-        color: "#040404"
-        visible: stack.subapp == "sysinfo"
-
-
-    }
-
 
     // Control pane stack
     StackView {
@@ -1181,175 +1225,28 @@ Window { id: app
     }
 
     // Project manager control pane
-    Pane { id: projectsPane
-        background: Rectangle {
-            color: "#444444"
-            border.width: 0
-        }
-        x: 600
-        width: 200
-        height: 440
-        anchors.top: mainBar.bottom
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
+    Pane_Projects {
+        id: projectsPane
         visible: stack.subapp == "projects"
-
-        property string menuTitle: "Projects"
-
-        Button { id: newProjButton
-            enabled: true
-            width: 80
-            height: 79
-            text: "NEW"
-            topPadding: 15
-            font.pointSize: 24
-            font.family: "Courier"
-            display: AbstractButton.TextBesideIcon
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 3
-            visible: true
-
-            onClicked: {
-                newProjectUI.visible = true
-            }
-        }
-
-        Button { id: deleteProjButton
-            enabled: true
-            width: 80
-            height: 79
-            text: qsTr("DEL")
-            topPadding: 15
-            font.pointSize: 24
-            font.family: "Courier"
-            anchors.left: parent.left
-            anchors.leftMargin: 95
-            anchors.top: parent.top
-            visible: true
-            anchors.topMargin: 3
-
-            onClicked: {
-                delProjectUI.visible = true
-            }
-
-        }
-
-        ToolSeparator {
-            id: toolSeparator6
-            anchors.top: parent.top
-            anchors.topMargin: 90
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            orientation: Qt.Horizontal
-        }
-
-        Button { id: selectProjButton
-            width: 176
-            height: 79
-            text: "SELECT"
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            topPadding: 15
-            anchors.top: parent.top
-            visible: true
-            anchors.topMargin: 109
-            display: AbstractButton.TextBesideIcon
-            font.pointSize: 24
-            font.family: "Courier"
-
-            onClicked: {
-                app.currentProject = projectListModel.get(listView.currentIndex, "fileName")
-            }
-
-        }
-
-        ToolSeparator {
-            id: toolSeparator7
-            anchors.left: parent.left
-            orientation: Qt.Horizontal
-            anchors.leftMargin: 0
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.topMargin: 194
-            anchors.rightMargin: 0
-        }
-
-        Button { id: openProjButton
-            enabled: false
-            width: 176
-            height: 79
-            text: "OPEN"
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            topPadding: 15
-            anchors.top: parent.top
-            visible: true
-            anchors.topMargin: 213
-            font.pointSize: 24
-            display: AbstractButton.TextBesideIcon
-            font.family: "Courier"
-        }
     }
 
     // Remote access/hosting/etc pane
-    Pane { id: remotePane
-        background: Rectangle {
-            color: "#444444"
-            border.width: 0
-        }
-        x: 600
-        width: 200
-        height: 440
-        anchors.top: mainBar.bottom
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
+    Pane_Remote {
+        id: remotePane
         visible: stack.subapp == "remote"
-
-        property string menuTitle: "Remote"
     }
 
     // Help documentation for the user
-    Pane { id: helpPane
-        background: Rectangle {
-            color: "#444444"
-            border.width: 0
-        }
-        x: 600
-        width: 200
-        height: 440
-        anchors.top: mainBar.bottom
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
+    Pane_Help {
+        id: helpPane
         visible: stack.subapp == "help"
-
-        property string menuTitle: "Help"
     }
 
     // Display information about the system
-    Pane { id: sysinfoPane
-        background: Rectangle {
-            color: "#444444"
-            border.width: 0
-        }
-        x: 600
-        width: 200
-        height: 440
-        anchors.top: mainBar.bottom
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
+    Pane_SysInfo {
+        id: sysinfoPane
         visible: stack.subapp == "sysinfo"
-
-        property string menuTitle: "SysInfo"
     }
-
 
     Menu { id: mainMenu
 

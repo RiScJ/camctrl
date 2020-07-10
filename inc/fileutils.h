@@ -9,6 +9,11 @@ public:
     explicit FileUtils (QObject* parent = 0) : QObject(parent) {}
     Q_INVOKABLE static bool mkdir(const QString &dirName);
     Q_INVOKABLE static bool removeDir(const QString &dirName);
+    Q_INVOKABLE static qint64 dirSize(const QString &dirPath);
+    Q_INVOKABLE static QString formatSize(const qint64 &size);
+    Q_INVOKABLE static QString formattedDirSize(const QString &dirPath);
+    Q_INVOKABLE static qint64 totalStorage();
+    Q_INVOKABLE static qint64 freeStorage();
 };
 
 #endif // FILEUTILS_H
