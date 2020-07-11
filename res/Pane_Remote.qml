@@ -17,7 +17,7 @@ Pane {
     property string menuTitle: "Remote"
 
     Button { id: newRemoteButton
-        enabled: true
+        enabled: remotePane.visible
         width: 80
         height: 79
         text: "NEW"
@@ -28,7 +28,6 @@ Pane {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.topMargin: 3
-        visible: true
 
         onClicked: {
             newRemoteUI.visible = true
@@ -36,7 +35,7 @@ Pane {
     }
 
     Button { id: deleteRemoteButton
-        enabled: true
+        enabled: remotePane.visible
         width: 80
         height: 79
         text: qsTr("DEL")
@@ -46,7 +45,6 @@ Pane {
         anchors.left: parent.left
         anchors.leftMargin: 95
         anchors.top: parent.top
-        visible: true
         anchors.topMargin: 3
 
         onClicked: {
@@ -67,6 +65,7 @@ Pane {
     }
 
     Button { id: configRemoteButton
+        enabled: remotePane.visible
         width: 176
         height: 79
         text: "CONFIG"
@@ -74,14 +73,12 @@ Pane {
         anchors.leftMargin: 0
         topPadding: 15
         anchors.top: parent.top
-        visible: true
         anchors.topMargin: 109
         font.pointSize: 24
         font.family: "Courier"
 
         onClicked: {
             configRemoteUI.visible = true
-            rsync.readConfig("/home/zarya/.camctrl/remote/testconfig.conf")
         }
 
     }

@@ -26,7 +26,8 @@ SOURCES += \
         ../src/gpio.cpp \
         ../src/main.cpp \
         ../src/rsync_utils.cpp \
-        ../src/timelapse_utils.cpp
+        ../src/timelapse_utils.cpp \
+        ../tests/test_rsync_utils.cpp
 
 RESOURCES += \
         ../res/qml.qrc

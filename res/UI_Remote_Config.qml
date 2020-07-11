@@ -8,15 +8,13 @@ Rectangle {
     width: 800
     height: 480
     color: "#4e4e4e"
-    visible: true
+    visible: false
 
-    //property string cmd: value
-    //property string flags: value
-    //property string user: ""
-    //property string host: value
-    //property string dest: value
-
-    //(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"))
+    property string cmd: rsync.getConfigParam((app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName")), "CMD")
+    property string flags: rsync.getConfigParam((app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName")), "FLAGS")
+    property string user: rsync.getConfigParam((app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName")), "USER")
+    property string host: rsync.getConfigParam((app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName")), "HOST")
+    property string dest: rsync.getConfigParam((app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName")), "DEST")
 
     Button { id: configRemoteCancelButton
         enabled: configRemoteUI.visible
@@ -29,7 +27,7 @@ Rectangle {
         font.bold: false
         font.pointSize: 17
         font.family: "Courier"
-        anchors.right: configRemoteCreateButton.left
+        anchors.right: configRemoteApplyButton.left
         anchors.rightMargin: 20
 
         onClicked: {
@@ -37,7 +35,7 @@ Rectangle {
         }
     }
 
-    Button { id: configRemoteCreateButton
+    Button { id: configRemoteApplyButton
         enabled: configRemoteUI.visible
         x: 664
         y: 36
@@ -51,7 +49,14 @@ Rectangle {
         anchors.rightMargin: 26
 
         onClicked: {
-
+            rsync.setConfig(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"),
+                            rCMD_Combo.displayText,
+                            rFLAGS_Text.text,
+                            rUSER_Text.text,
+                            rHOST_Text.text,
+                            rDEST_Text.text
+                            )
+            configRemoteUI.visible = false
         }
     }
 
@@ -115,27 +120,25 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    TextField {
-        id: textField
+    TextField { id: rFLAGS_Text
         x: 239
         y: 36
         width: 273
         height: 40
-        text: "avz"
+        text: flags
         topPadding: 10
         font.italic: true
         font.pointSize: 17
         font.family: "Courier"
-        placeholderText: qsTr("Text Field")
+        placeholderText: qsTr("args")
     }
 
-    TextField {
-        id: textField1
+    TextField { id: rHOST_Text
         x: 293
         y: 92
         width: 219
         height: 40
-        text: "127.0.0.1"
+        text: host
         topPadding: 10
         font.italic: true
         font.pointSize: 17
@@ -143,13 +146,12 @@ Rectangle {
         placeholderText: qsTr("HOST")
     }
 
-    TextField {
-        id: textField2
+    TextField { id: rUSER_Text
         x: 39
         y: 92
         width: 219
         height: 40
-        text: "pi"
+        text: user
         topPadding: 10
         font.italic: true
         font.pointSize: 17
@@ -157,13 +159,12 @@ Rectangle {
         placeholderText: qsTr("[USER]")
     }
 
-    TextField {
-        id: textField3
+    TextField { id: rDEST_Text
         x: 39
         y: 149
         width: 473
         height: 39
-        text: "/example/destination"
+        text: dest
         topPadding: 10
         font.italic: true
         font.pointSize: 17
