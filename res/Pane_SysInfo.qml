@@ -108,62 +108,6 @@ Pane {
     }
 
     Label {
-        id: label8
-        x: -552
-        color: "#ffffff"
-        text: qsTr("Remote Sync")
-        font.family: "Courier"
-        rightPadding: 10
-        anchors.topMargin: 130
-        visible: true
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 1
-        anchors.top: parent.top
-        font.pointSize: 18
-    }
-
-    Label {
-        id: label9
-        x: 0
-        y: 151
-        color: "#ffffff"
-        text: qsTr("NAS path:")
-        font.family: "Courier"
-    }
-
-    Label {
-        id: label10
-        y: 167
-        color: "#ff1111"
-        text: qsTr("---")
-        font.family: "Courier"
-        anchors.left: parent.left
-        font.pointSize: 10
-        anchors.leftMargin: 1
-    }
-
-    Label {
-        id: label11
-        x: 0
-        y: 183
-        color: "#ffffff"
-        text: qsTr("GDrive path:")
-        font.family: "Courier"
-    }
-
-    Label {
-        id: label12
-        y: 199
-        height: 15
-        color: "#ff1111"
-        text: qsTr("---")
-        font.family: "Courier"
-        anchors.left: parent.left
-        font.pointSize: 10
-        anchors.leftMargin: 1
-    }
-
-    Label {
         id: label13
         x: -552
         color: "#ffffff"
