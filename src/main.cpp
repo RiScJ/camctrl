@@ -5,6 +5,7 @@
 #include "fileutils.h"
 #include "gpio.h"
 #include "timelapse_utils.h"
+#include "rsync_utils.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -30,6 +31,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     TimelapseUtils* timelapseUtils = new TimelapseUtils();
     engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
+
+    RsyncUtils* rsyncUtils = new RsyncUtils();
+    engine.rootContext()->setContextProperty("rsync", rsyncUtils);
 
     engine.load(url);
 

@@ -10,6 +10,14 @@ Rectangle {
     color: "#4e4e4e"
     visible: true
 
+    //property string cmd: value
+    //property string flags: value
+    //property string user: ""
+    //property string host: value
+    //property string dest: value
+
+    //(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"))
+
     Button { id: configRemoteCancelButton
         enabled: configRemoteUI.visible
         x: 534

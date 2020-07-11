@@ -81,6 +81,7 @@ Pane {
 
         onClicked: {
             configRemoteUI.visible = true
+            rsync.readConfig("/home/zarya/.camctrl/remote/testconfig.conf")
         }
 
     }

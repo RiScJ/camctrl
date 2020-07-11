@@ -18,12 +18,14 @@ INCLUDEPATH += \
 HEADERS += \
     ../inc/fileutils.h \
     ../inc/gpio.h \
+    ../inc/rsync_utils.h \
     ../inc/timelapse_utils.h
 
 SOURCES += \
         ../src/fileutils.cpp \
         ../src/gpio.cpp \
         ../src/main.cpp \
+        ../src/rsync_utils.cpp \
         ../src/timelapse_utils.cpp
 
 RESOURCES += \
