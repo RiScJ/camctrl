@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE static qint64 freeStorage();
     Q_INVOKABLE static bool touch(const QString &path);
     Q_INVOKABLE static bool rm(const QString &path);
+    Q_INVOKABLE static QString readFile(const QString &path);
 };
 
 #endif // FILEUTILS_H

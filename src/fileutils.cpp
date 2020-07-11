@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QFileInfoList>
 #include <QStorageInfo>
+#include <QTextStream>
 
 #include "fileutils.h"
 
@@ -104,6 +105,15 @@ bool FileUtils::rm(const QString &path) {
 }
 
 
+QString FileUtils::readFile(const QString &path) {
+    QFile file(path);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        return in.readAll();
+    } else {
+        return nullptr;
+    }
+};
 
 
 

@@ -1173,16 +1173,8 @@ Window { id: app
     }
 
     // Help documentation window
-    Rectangle { id: helpUI
-        x: 0
-        y: 0
-        z: app.forceTop
-        width: 600
-        height: 460
-        color: "#040404"
+    UI_Help { id: helpUI
         visible: stack.subapp == "help"
-
-
     }
 
     // Control pane stack
