@@ -88,5 +88,8 @@ Pane {
         anchors.topMargin: 203
         font.pointSize: 24
         font.family: "Courier"
+        onClicked: {
+            rsync.sync(app.selectedProject, app.homeDir + ".camctrl/remote/" + syncPane.selectedRemote)
+        }
     }
 }
