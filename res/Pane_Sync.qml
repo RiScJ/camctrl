@@ -17,11 +17,13 @@ Pane {
 
     property string menuTitle: "Sync"
 
+    property string selectedRemote: ""
+
     Button { id: addSync_Button
         enabled: true
         width: 80
         height: 79
-        text: "ADD"
+        text: "SELECT"
         topPadding: 15
         font.pointSize: 24
         font.family: "Courier"
@@ -34,7 +36,13 @@ Pane {
         visible: true
 
         onClicked: {
-            app.selectedRemote = remoteListModel.get(remoteListView.currentIndex, "fileName")
+            //if (!syncPane.selectedRemotes.includes(remoteListModel.get(remoteListView.currentIndex, "fileName"))) {
+            //    syncPane.selectedRemotes.push(remoteListModel.get(remoteListView.currentIndex, "fileName"))
+            //} else {
+            //    console.log("Already selected.")
+            //}
+            //console.log(syncPane.selectedRemotes)
+            syncPane.selectedRemote = remoteListModel.get(remoteListView.currentIndex, "fileName")
         }
     }
 
@@ -52,7 +60,7 @@ Pane {
         font.family: "Courier"
 
         onClicked: {
-
+            syncPane.selectedRemote = ""
         }
 
     }
