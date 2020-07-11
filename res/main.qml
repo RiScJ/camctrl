@@ -23,6 +23,8 @@ Window { id: app
     color: "#2c2c2c"
     visible: true
 
+    property string selectedRemote: ""
+
     // z-height reserved for items which must always be on top
     property int forceTop: 1000
 
@@ -941,7 +943,7 @@ Window { id: app
         width: 600
         height: 460
         color: "#ffffff"
-        visible: stack.subapp == "remote"
+        visible: stack.subapp == "remote" | mainBar.currentMenuName === "Sync"
 
         Rectangle { id: remoteListTitle
             x: 0
@@ -998,7 +1000,14 @@ Window { id: app
                     width: ListView.view.width
                     height: 50
 
-                    color: index % 2 == 0 ? "#a4a4a4" : "#444444"
+                    color: {
+                        mainBar.currentMenuName === "Sync" ?
+                            fileName == app.selectedRemote ? "#fc9e32" : index % 2 == 0 ? "#a4a4a4" : "#444444"
+                        :
+                            index % 2 == 0 ? "#a4a4a4" : "#444444"
+
+                    }
+
 
                     Text { id: remoteNameText
                         anchors.left: parent.left
@@ -1212,6 +1221,10 @@ Window { id: app
     Pane_SysInfo {
         id: sysinfoPane
         visible: stack.subapp == "sysinfo"
+    }
+
+    Pane_Sync {
+        id: syncPane
     }
 
     Menu { id: mainMenu

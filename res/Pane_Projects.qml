@@ -113,4 +113,34 @@ Pane {
         display: AbstractButton.TextBesideIcon
         font.family: "Courier"
     }
+
+    ToolSeparator {
+        anchors.topMargin: 298
+        anchors.leftMargin: 0
+        anchors.left: parent.left
+        anchors.rightMargin: 0
+        orientation: Qt.Horizontal
+        anchors.top: parent.top
+        anchors.right: parent.right
+    }
+
+    Button { id: syncProj_Button
+        width: 176
+        height: 79
+        text: "SYNC"
+        anchors.topMargin: 317
+        visible: true
+        anchors.leftMargin: 0
+        anchors.left: parent.left
+        font.pointSize: 24
+        enabled: true
+        anchors.top: parent.top
+        font.family: "Courier"
+        topPadding: 15
+
+        onClicked: {
+            stack.push(syncPane)
+            mainBar.currentMenuName = syncPane.menuTitle
+        }
+    }
 }
