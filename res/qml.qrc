@@ -7,5 +7,6 @@
         <file>Pane_Remote.qml</file>
         <file>Pane_Projects.qml</file>
         <file>Pane_Controls.qml</file>
+        <file>UI_Remote_Config.qml</file>
     </qresource>
 </RCC>

@@ -1168,8 +1168,8 @@ Window { id: app
         }
 }
 
-    Rectangle { id: configRemoteUI
-
+    UI_Remote_Config {
+         id: configRemoteUI
     }
 
     // Help documentation window
