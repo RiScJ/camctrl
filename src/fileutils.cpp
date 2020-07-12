@@ -91,27 +91,26 @@ qint64 FileUtils::freeStorage() {
 }
 
 
-bool FileUtils::touch(const QString &path) {
+void FileUtils::touch(const QString path) {
     QFile* file = new QFile(path);
     file->open(QIODevice::ReadWrite);
-    return 1;
+    file->close();
 }
 
 
-bool FileUtils::rm(const QString &path) {
+void FileUtils::rm(const QString path) {
     QFile* file = new QFile(path);
     file->remove();
-    return 1;
 }
 
 
-QString FileUtils::readFile(const QString &path) {
-    QFile file(path);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
+QString FileUtils::readFile(const QString path) {
+    QFile* file = new QFile(path);
+    if (file->open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(file);
         return in.readAll();
     } else {
-        return nullptr;
+        return "";
     }
 };
 

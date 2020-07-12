@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.6
 import QtQuick.Controls 2.2
 
 Rectangle {
@@ -23,7 +23,7 @@ Rectangle {
             wrapMode: Text.WordWrap
             font.family: "Courier"
             readOnly: true
-            text: fileUtils.readFile("/home/zarya/.github/camctrl/README.md")
+            text: fileUtils.readFile(app.homeDir + "camctrl/README.md")
         }
     }
 }

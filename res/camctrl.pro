@@ -5,6 +5,8 @@ static {
 	QTPLUGIN += qtvirtualkeyboardplugin
 }
 
+QMAKE_CXXFLAGS += -g -rdynamic
+
 CONFIG += c++11 disable-desktop
 
 DEFINES += QT_DEPRECATED_WARNINGS

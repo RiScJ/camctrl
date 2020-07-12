@@ -8,12 +8,12 @@ import QtQuick.VirtualKeyboard 2.1
 
 Window { id: app
 
-    Connections {
-        target: GPIO
-        onRisingEdge: {
-            app.capturePhoto()
-        }
-    }
+    //Connections {
+    //    target: GPIO
+    //    onRisingEdge: {
+    //       app.capturePhoto()
+    //    }
+    //}
 
     objectName: "root"
 
@@ -22,8 +22,6 @@ Window { id: app
     height: 480
     color: "#2c2c2c"
     visible: true
-
-    property var selectedRemotes: []
 
     // z-height reserved for items which must always be on top
     property int forceTop: 1000
@@ -61,7 +59,6 @@ Window { id: app
 
     function capturePhoto() {
         camera.imageCapture.captureToLocation(app.selectedProject + "/IMG_" + (("000" + app.currentPhoto).slice(-4)))
-        console.log("Capturing!")
     }
 
     function captureTimedPhotos() {
@@ -71,7 +68,6 @@ Window { id: app
 
     function captureEXTPhotos() {
         app.switchStatus(3)
-        GPIO.attachInterrupt(qsTr("10"))
     }
 
     function stopTimedPhotos() {
@@ -980,7 +976,7 @@ Window { id: app
             anchors.bottomMargin: 0
             anchors.top: parent.top
             anchors.topMargin: 40
-            visible: true
+            visible: stack.subapp == "remote" | mainBar.currentMenuName == "Sync"
             snapMode: ListView.SnapToItem
             model: remoteListModel
             delegate: remoteListDelegate
@@ -1036,6 +1032,7 @@ Window { id: app
 
             FolderListModel { id: remoteListModel
                 folder: "file://" + app.homeDir + ".camctrl/remote/"
+                nameFilters: ["*.conf"]
             }
 
         }

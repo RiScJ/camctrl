@@ -8,7 +8,7 @@ class TimelapseUtils : public QObject {
 
 public:
     explicit TimelapseUtils (QObject* parent = 0) : QObject(parent) {}
-    Q_INVOKABLE static void stitch(const QString &dirPath);
+    Q_INVOKABLE static void stitch(const QString dirPath);
 };
 
 #endif // TIMELAPSE_UTILS_H

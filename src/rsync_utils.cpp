@@ -8,41 +8,41 @@
 
 #include "rsync_utils.h"
 
-QStringList RsyncUtils::readConfig(const QString &path) {
+QStringList RsyncUtils::readConfig(const QString path) {
     QStringList config;
-    QFile file(path);
-    if (file.open(QIODevice::ReadWrite | QIODevice::Text)) {
-        QTextStream in(&file);
+    QFile* file = new QFile(path);
+    if (file->open(QIODevice::ReadWrite | QIODevice::Text)) {
+        QTextStream in(file);
         config << in.readAll().remove(QChar('\n')).split("\t");
-        file.close();
-        return config;
+        file->close();
     }
+    return config;
 };
 
 
-QString RsyncUtils::getConfigParam(const QString &path, const QString &param) {
+QString RsyncUtils::getConfigParam(const QString path, const QString param) {
     QStringList config = readConfig(path);
     if (config.length() > 1) {
         if (param == "CMD") {
-            return config[0];
+            return config.at(0);
         } else if (param == "FLAGS") {
-            return config[2];
+            return config.at(2);
         } else if (param == "USER") {
-            return config[3];
+            return config.at(3);
         } else if (param == "HOST") {
-            return config[5];
+            return config.at(5);
         } else if (param == "DEST") {
-            return config[7];
+            return config.at(7);
         } else {
-            return nullptr;
+            return "";
         }
     } else {
-        return nullptr;
+        return "";
     }
 };
 
 
-void RsyncUtils::sync(const QString &projectPath, const QString &configPath) {
+void RsyncUtils::sync(const QString projectPath, const QString configPath) {
     std::string config;
     config += qPrintable(getConfigParam(configPath, "CMD"));
     if (!getConfigParam(configPath, "FLAGS").isEmpty()) {
@@ -66,7 +66,7 @@ void RsyncUtils::sync(const QString &projectPath, const QString &configPath) {
 }
 
 
-void RsyncUtils::setConfig(const QString &path, const QString &cmd, const QString &flags, const QString &user, const QString &host, const QString &dest) {
+void RsyncUtils::setConfig(const QString path, const QString cmd, const QString flags, const QString user, const QString host, const QString dest) {
     std::string config;
     config += qPrintable(cmd);
     config += "\t-\t";
@@ -78,11 +78,11 @@ void RsyncUtils::setConfig(const QString &path, const QString &cmd, const QStrin
     config += "\t:\t";
     config += qPrintable(dest);
 
-    QFile file(path);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream out(&file);
+    QFile* file = new QFile(path);
+    if (file->open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(file);
         out << config.c_str() << '\n';
-        file.close();
+        file->close();
     }
 }
 
