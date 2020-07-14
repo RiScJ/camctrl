@@ -14,22 +14,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += \
         $$PWD/../inc/ \
         $$PWD/../src/ \
-        $$PWD/../res/ \
-        /usr/include/python3.8/
+        $$PWD/../res/
 
 HEADERS += \
+    ../inc/configuration.h \
     ../inc/fileutils.h \
     ../inc/gpio.h \
     ../inc/rsync_utils.h \
     ../inc/timelapse_utils.h
 
 SOURCES += \
+        ../src/configuration.cpp \
         ../src/fileutils.cpp \
         ../src/gpio.cpp \
         ../src/main.cpp \
         ../src/rsync_utils.cpp \
-        ../src/timelapse_utils.cpp \
-        ../tests/test_rsync_utils.cpp
+        ../src/timelapse_utils.cpp
 
 RESOURCES += \
         ../res/qml.qrc

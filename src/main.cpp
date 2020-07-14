@@ -2,6 +2,10 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include <QDebug>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "fileutils.h"
 #include "gpio.h"
 #include "timelapse_utils.h"
@@ -9,6 +13,7 @@
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
+
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
