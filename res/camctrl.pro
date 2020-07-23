@@ -14,16 +14,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += \
         $$PWD/../inc/ \
         $$PWD/../src/ \
-        $$PWD/../res/ \
-        /usr/include/python3.8/
+        $$PWD/../res/
 
 HEADERS += \
+    ../inc/camera_utils.h \
     ../inc/fileutils.h \
     ../inc/gpio.h \
     ../inc/rsync_utils.h \
     ../inc/timelapse_utils.h
 
 SOURCES += \
+        ../src/camera_utils.cpp \
         ../src/fileutils.cpp \
         ../src/gpio.cpp \
         ../src/main.cpp \
@@ -33,8 +34,6 @@ SOURCES += \
 
 RESOURCES += \
         ../res/qml.qrc
-
-LIBS += -L/usr/lib -lcrypt -lpthread -ldl -lutil -lm -lm
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
