@@ -180,7 +180,7 @@ Window { id: app
             enabled: stack.depth > 1
             onClicked: {
                 mainBar.currentMenuName = stack.get(stack.currentItem.StackView.index - 1).menuTitle
-                stack.pop()
+		stack.pop()
             }
         }
 
@@ -1223,6 +1223,7 @@ Window { id: app
             text: "Projects"
             onTriggered: {
                 stack.pop(null)
+		cam.stop_preview()
                 stack.replace(projectsPane)
                 stack.subapp = "projects"
                 mainBar.currentMenuName = projectsPane.menuTitle
@@ -1233,6 +1234,9 @@ Window { id: app
             text: "Control"
             onTriggered: {
                 stack.pop(null)
+		if (stack.subapp !== "control") {
+			cam.start_preview()
+		}
                 stack.replace(controlPane)
                 stack.subapp = "control"
                 mainBar.currentMenuName = controlPane.menuTitle
@@ -1243,7 +1247,8 @@ Window { id: app
             text: "Remote"
             onTriggered: {
                 stack.pop(null)
-                stack.replace(remotePane)
+                cam.stop_preview()
+		stack.replace(remotePane)
                 stack.subapp = "remote"
                 mainBar.currentMenuName = remotePane.menuTitle
             }
@@ -1255,6 +1260,7 @@ Window { id: app
             text: "Help"
             onTriggered: {
                 stack.pop(null)
+		cam.stop_preview()
                 stack.replace(helpPane)
                 stack.subapp = "help"
                 mainBar.currentMenuName = helpPane.menuTitle
@@ -1267,6 +1273,7 @@ Window { id: app
             text: "SysInfo"
             onTriggered: {
                 stack.pop(null)
+		cam.stop_preview()
                 stack.replace(sysinfoPane)
                 stack.subapp = "sysinfo"
                 mainBar.currentMenuName = sysinfoPane.menuTitle
