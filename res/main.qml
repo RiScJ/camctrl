@@ -8,13 +8,6 @@ import QtQuick.VirtualKeyboard 2.1
 
 Window { id: app
 
-    //Connections {
-    //    target: GPIO
-    //    onRisingEdge: {
-    //       app.capturePhoto()
-    //    }
-    //}
-
     objectName: "root"
 
     title: qsTr("Hello World")
@@ -46,9 +39,9 @@ Window { id: app
 
 
     // Capture properties and methods
-    property string homeDir: "/home/zarya/"
+    property string homeDir: "/home/pi/"
 
-    property string projectPath: app.homeDir + "Projects/"
+    property string projectPath: app.homeDir + ".camctrl/Projects/"
     property string currentProject: "example"
     property string selectedProject: projectPath + currentProject
     property int currentPhoto: countIMG.count
