@@ -645,27 +645,27 @@ Window { id: app
         color: "#040404"
         visible: stack.subapp !== "projects" & stack.subapp !== "remote"
 
-        Camera {
-            id: camera
+//        Camera {
+//            id: camera
 
-            exposure {
-                exposureCompensation: 1.0
-                exposureMode: Camera.ExposurePortrait
-            }
+//            exposure {
+//                exposureCompensation: 1.0
+//                exposureMode: Camera.ExposurePortrait
+//            }
 
-            videoRecorder {
-                muted: true
-                outputLocation: app.selectedProject + "/VID_" + ("000" + app.currentVideo).slice(-4)
-                frameRate: 30
-            }
+//            videoRecorder {
+//                muted: true
+//                outputLocation: app.selectedProject + "/VID_" + ("000" + app.currentVideo).slice(-4)
+//                frameRate: 30
+//            }
 
-        }
+//        }
 
-        VideoOutput {
-            source: camera
-            fillMode: VideoOutput.PreserveAspectCrop
-            anchors.fill: parent
-        }
+//        VideoOutput {
+//            source: camera
+//            fillMode: VideoOutput.PreserveAspectCrop
+//            anchors.fill: parent
+//        }
     }
 
     // Project manager window
