@@ -3,6 +3,13 @@
 
 #include <QObject>
 
+enum Mode {
+    NUL,
+    IMG,
+    VID,
+    LPS
+};
+
 class CameraUtils : public QObject {
     Q_OBJECT
 
@@ -10,11 +17,10 @@ public:
     explicit CameraUtils (QObject* parent = 0) : QObject(parent) {}
     static void set_homeDir(std::string dir);
     Q_INVOKABLE static void set_project(QString proj);
-    Q_INVOKABLE static void start_preview(void);
-    Q_INVOKABLE static void stop_preview(void);
-    Q_INVOKABLE static void start_recording(void);
-    Q_INVOKABLE static void stop_recording(void);
-    Q_INVOKABLE static void capture(void);
+    Q_INVOKABLE static void start(QString mode);
+    Q_INVOKABLE static void stop(void);
+    Q_INVOKABLE static void capture(QString mode);
+    Q_INVOKABLE static void record(void);
 
 private:
     static std::string homeDir;
@@ -24,6 +30,18 @@ private:
     static const int CAMERA_VIEWPORT_WIDTH = 600;
     static const int CAMERA_VIEWPORT_HEIGHT = 460;
     static std::string get_preview_arg(void);
+    static void start_still(void);
+    static void capture_still(void);
+    static void stop_still(void);
+    static void start_vid(void);
+    static void stop_vid(void);
+    static void start_lapse(void);
+    static void capture_frame(void);
+    static void stop_lapse(void);
+    static Mode resolve(QString mode);
+
+
+
 };
 
 #endif // CAMERA_UTILS_H

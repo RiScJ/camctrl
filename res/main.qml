@@ -54,78 +54,80 @@ Window { id: app
         cam.capture()
     }
 
-//    function captureTimedPhotos() {
-//        app.switchStatus(1)
-//        timer.running = true
-//    }
+    function captureTimedPhotos() {
+        app.switchStatus(1)
+        timer.running = true
+    }
 
-//    function captureEXTPhotos() {
-//        app.switchStatus(3)
-//    }
+    function captureEXTPhotos() {
+        app.switchStatus(3)
+    }
 
-//    function stopTimedPhotos() {
-//        app.switchStatus(0)
-//        timer.running = false
-//    }
+    function stopTimedPhotos() {
+        app.switchStatus(0)
+        timer.running = false
+    }
 
-//    function stopEXTPhotos() {
-//        app.switchStatus(0)
-//    }
+    function stopEXTPhotos() {
+        app.switchStatus(0)
+    }
 
-//    function startRecording() {
-//        app.switchStatus(2)
-//        camera.videoRecorder.record()
-//    }
+    function startRecording() {
+        app.switchStatus(2)
+        cam.record()
+    }
 
-//    function stopRecording() {
-//        app.switchStatus(0)
-//        camera.videoRecorder.stop()
-//    }
+    function stopRecording() {
+        app.switchStatus(0)
+        cam.record()
+    }
 
-//    function startTimedRecording() {
+    function startTimedRecording() {
 
-//    }
+    }
 
-//    function stopTimedRecording() {
+    function stopTimedRecording() {
 
-//    }
+    }
 
-//    function startEXTRecording() {
-//        app.switchStatus(3)
-//    }
+    function startEXTRecording() {
+        app.switchStatus(3)
+    }
 
-//    function stopEXTRecording() {
-//        app.switchStatus(0)
-//    }
+    function stopEXTRecording() {
+        app.switchStatus(0)
+    }
 
-//    function toggleVideoState() {
-//        if (app.statusName == "IDLE") {
-//            app.startRecording()
-//        } else if (app.statusName == "RECORDING") {
-//            app.stopRecording()
-//        }
-//    }
+    function toggleVideoState() {
+        if (app.statusName == "IDLE") {
+            app.startRecording()
+        } else if (app.statusName == "RECORDING") {
+            app.stopRecording()
+        }
+    }
 
-//    function startLapse() {
-//        app.switchStatus(3)
-//        app.modeName = "FRM"
-//        if (app.trigName === "TMR") {
-//            timer.running = true
-//        }
-//    }
+    function startLapse() {
+        app.switchStatus(3)
+        app.modeName = "FRM"
+        if (app.trigName === "TMR") {
+            timer.running = true
+        }
+    }
 
-//    function captureLapseFrame() {
-//        camera.imageCapture.captureToLocation(app.selectedProject + "/FRM_" + (("000" + app.currentFrame).slice(-4)))
-//    }
+    function captureLapseFrame() {
+        cam.capture(app.modeName)
+    }
 
-//    function stopLapse() {
-//        app.modeName = "LPS"
-//        app.switchStatus(0)
-//        if (app.trigName === "TMR") {
-//            timer.running = false
-//        }
-//        TimelapseUtils.stitch(app.selectedProject)
-//    }
+    function stopLapse() {
+        app.modeName = "LPS"
+        app.switchStatus(0)
+        if (app.trigName === "TMR") {
+            timer.running = false
+        }
+        cam.stop()
+        TimelapseUtils.stitch(app.selectedProject)
+        cam.start()
+    }
 
     FolderListModel { id: countIMG
         folder: "file://" + app.selectedProject
