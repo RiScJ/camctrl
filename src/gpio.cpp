@@ -23,8 +23,24 @@ void GPIO::detach_interrupt(void) {
 };
 
 
+void GPIO::start(void) {
+    map_peripheral();
+};
+
+
+void GPIO::stop(void) {
+    unmap_peripheral();
+};
+
+
 
 // Private
+
+bool GPIO::running = false;
+int GPIO::mem_fd;
+void* GPIO::map;
+volatile unsigned int* GPIO::addr;
+
 
 void GPIO::make_input(int pin) {
     *(addr + ((pin)/10)) &= ~(7<<(((pin)%10)*3));
@@ -32,7 +48,18 @@ void GPIO::make_input(int pin) {
 
 
 void GPIO::make_output(int pin) {
+    make_input(pin);
     *(addr + ((pin)/10)) |=  (1<<(((pin)%10)*3));
+};
+
+
+void GPIO::pull_up(int pin) {
+
+};
+
+
+void GPIO::pull_down(int pin) {
+
 };
 
 
@@ -56,7 +83,6 @@ void GPIO::await_edge(int pin, bool edge, void (*callback)(void)) {
 
 void GPIO::map_peripheral(void)
 {
-   addr_p = GPIO_BASE;
    // Open /dev/mem
    if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
       printf("Failed to open /dev/mem, try checking permissions.\n");

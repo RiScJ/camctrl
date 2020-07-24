@@ -13,7 +13,6 @@
 
 #include <unistd.h>
 
-#define GPIO_BASE       (0x7E215000)	// GPIO controller
 #define BLOCK_SIZE 		(4*1024)
 
 class GPIO : public QObject {
@@ -35,10 +34,9 @@ private:
     static void make_output(int pin);
     static void pull_up(int pin);
     static void pull_down(int pin);
-    //
     static void map_peripheral(void);
     static void unmap_peripheral(void);
-    static unsigned long addr_p;
+    static const unsigned long addr_p = 0x7e215000;
     static int mem_fd;
     static void *map;
     static volatile unsigned int *addr;
