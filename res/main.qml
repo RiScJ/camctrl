@@ -113,6 +113,8 @@ Window { id: app
         app.modeName = "FRM"
         if (app.trigName === "TMR") {
             timer.running = true
+        } else if (app.trigName === "EXT") {
+            GPIO.attach_interrupt(gpioSpin.value, extEdgeCombo.model(extEdgeCombo.currentIndex), cam.capture(app.modeName))
         }
 	cam.start(app.modeName)
     }
@@ -126,7 +128,10 @@ Window { id: app
         app.switchStatus(0)
         if (app.trigName === "TMR") {
             timer.running = false
+        } else if (app.trigName === "EXT") {
+            GPIO.detach_interrupt()
         }
+
         cam.stop()
         TimelapseUtils.stitch(app.selectedProject)
         cam.start(app.modeName)
@@ -283,7 +288,7 @@ Window { id: app
             topPadding: 20
             font.pointSize: 20
             font.family: "Courier"
-            to: 15
+            to: 32
             editable: false
             scale: 0.6
         }

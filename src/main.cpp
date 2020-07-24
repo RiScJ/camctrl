@@ -42,7 +42,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     CameraUtils::start("IMG");
 
     GPIO::start();
-   // GPIO::setup_pin(10, 0, 1);
+    GPIO::setup_pin(17, 0, 1); // The GPIO stuff in general needs some love
 
     engine.load(url);
 
