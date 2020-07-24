@@ -99,7 +99,8 @@ void CameraUtils::stop_still(void) {
 void CameraUtils::start_vid(void) {
     stop();
     std::string cmd = "raspivid " + get_preview_arg() +
-            " -t 0 -b 17000000 -fps 30 -cd H264 -s -o " + homeDir + ".camctrl/Projects/" +
+            " -t 0 -b 17000000 -fps 30 -cd H264 -i pause -s -o " + 
+	homeDir + ".camctrl/Projects/" +
         project + "/vid.h264 &";
     system(cmd.c_str());
 };
