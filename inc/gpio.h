@@ -36,7 +36,7 @@ private:
     static void pull_down(int pin);
     static void map_peripheral(void);
     static void unmap_peripheral(void);
-    static const unsigned long addr_p = 0x7e215000;
+    static unsigned long addr_p;
     static int mem_fd;
     static void *map;
     static volatile unsigned int *addr;

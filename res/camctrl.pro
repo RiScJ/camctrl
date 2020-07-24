@@ -14,7 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += \
         $$PWD/../inc/ \
         $$PWD/../src/ \
-        $$PWD/../res/
+        $$PWD/../res/ \
+        /opt/vc/include
 
 HEADERS += \
     ../inc/camera_utils.h \
@@ -34,6 +35,8 @@ SOURCES += \
 
 RESOURCES += \
         ../res/qml.qrc
+
+LIBS += -L/opt/vc/lib -lbcm_host
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
