@@ -195,6 +195,8 @@ Pane {
             } else {
                 app.modeName = "IMG"
             }
+	    cam.stop()
+	    cam.start(app.modeName)
         }
     }
 

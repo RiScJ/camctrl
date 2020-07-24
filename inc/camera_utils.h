@@ -7,7 +7,8 @@ enum Mode {
     NUL,
     IMG,
     VID,
-    LPS
+    LPS,
+    FRM
 };
 
 class CameraUtils : public QObject {

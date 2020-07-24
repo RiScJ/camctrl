@@ -51,7 +51,7 @@ Window { id: app
 
 
     function capturePhoto() {
-        cam.capture()
+        cam.capture(app.modeName)
     }
 
     function captureTimedPhotos() {
@@ -80,6 +80,8 @@ Window { id: app
     function stopRecording() {
         app.switchStatus(0)
         cam.record()
+	cam.stop()
+	cam.start(app.modeName)
     }
 
     function startTimedRecording() {
@@ -112,6 +114,7 @@ Window { id: app
         if (app.trigName === "TMR") {
             timer.running = true
         }
+	cam.start(app.modeName)
     }
 
     function captureLapseFrame() {
@@ -126,7 +129,7 @@ Window { id: app
         }
         cam.stop()
         TimelapseUtils.stitch(app.selectedProject)
-        cam.start()
+        cam.start(app.modeName)
     }
 
     FolderListModel { id: countIMG
@@ -1225,7 +1228,7 @@ Window { id: app
             text: "Projects"
             onTriggered: {
                 stack.pop(null)
-		cam.stop_preview()
+		cam.stop()
                 stack.replace(projectsPane)
                 stack.subapp = "projects"
                 mainBar.currentMenuName = projectsPane.menuTitle
@@ -1237,7 +1240,7 @@ Window { id: app
             onTriggered: {
                 stack.pop(null)
 		if (stack.subapp !== "control") {
-			cam.start_preview()
+			cam.start(app.modeName)
 		}
                 stack.replace(controlPane)
                 stack.subapp = "control"
@@ -1249,7 +1252,7 @@ Window { id: app
             text: "Remote"
             onTriggered: {
                 stack.pop(null)
-                cam.stop_preview()
+                cam.stop()
 		stack.replace(remotePane)
                 stack.subapp = "remote"
                 mainBar.currentMenuName = remotePane.menuTitle
@@ -1262,7 +1265,7 @@ Window { id: app
             text: "Help"
             onTriggered: {
                 stack.pop(null)
-		cam.stop_preview()
+		cam.stop()
                 stack.replace(helpPane)
                 stack.subapp = "help"
                 mainBar.currentMenuName = helpPane.menuTitle
@@ -1275,7 +1278,7 @@ Window { id: app
             text: "SysInfo"
             onTriggered: {
                 stack.pop(null)
-		cam.stop_preview()
+		cam.stop
                 stack.replace(sysinfoPane)
                 stack.subapp = "sysinfo"
                 mainBar.currentMenuName = sysinfoPane.menuTitle

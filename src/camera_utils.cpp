@@ -30,7 +30,7 @@ void CameraUtils::stop(void) {
 void CameraUtils::capture(QString mode) {
     switch (resolve(mode)) {
     case IMG: capture_still(); break;
-    case LPS: capture_frame(); break;
+    case FRM: capture_frame(); break;
     default: break;
     };
 };
@@ -91,7 +91,7 @@ void CameraUtils::capture_still(void) {
 
 
 void CameraUtils::stop_still(void) {
-    std::string cmd = "killall raspistill";
+    std::string cmd = "killall -q raspistill";
     system(cmd.c_str());
 };
 
@@ -99,14 +99,14 @@ void CameraUtils::stop_still(void) {
 void CameraUtils::start_vid(void) {
     stop();
     std::string cmd = "raspivid " + get_preview_arg() +
-            " -t 0 -b 15000000 -fps 30 -cd H264 -s -o " + homeDir + ".camctrl/Projects/" +
+            " -t 0 -b 17000000 -fps 30 -cd H264 -s -o " + homeDir + ".camctrl/Projects/" +
         project + "/vid.h264 &";
     system(cmd.c_str());
 };
 
 
 void CameraUtils::stop_vid(void) {
-    std::string cmd = "killall raspivid";
+    std::string cmd = "killall -q raspivid";
     system(cmd.c_str());
 };
 
@@ -114,7 +114,7 @@ void CameraUtils::stop_vid(void) {
 void CameraUtils::start_lapse(void) {
     stop();
     std::string cmd = "raspistill " + get_preview_arg() +
-            " -t 0 -bm -s -o " + homeDir + ".camctrl/Projects/" +
+            " -t 0 -s -o " + homeDir + ".camctrl/Projects/" +
         project + "/lps.jpg &";
     system(cmd.c_str());
 };
@@ -130,7 +130,7 @@ void CameraUtils::capture_frame(void) {
 
 
 void CameraUtils::stop_lapse(void) {
-    std::string cmd = "killall raspistill";
+    std::string cmd = "killall -q raspistill";
     system(cmd.c_str());
 };
 
@@ -139,5 +139,6 @@ Mode CameraUtils::resolve(QString mode) {
     if (mode == "IMG") return IMG;
     if (mode == "VID") return VID;
     if (mode == "LPS") return LPS;
+    if (mode == "FRM") return FRM;
     return NUL;
 }
