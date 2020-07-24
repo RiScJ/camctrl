@@ -41,6 +41,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     CameraUtils::start("IMG");
 
+    GPIO::start();
+    GPIO::set_pin(10, 0, 1);
+
     engine.load(url);
 
     return app.exec();
