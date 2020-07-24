@@ -4,7 +4,7 @@
 
 #include "gpio.h"
 
-//#include <bcm_host.h>
+#include <bcm_host.h>
 
 
 void GPIO::setup_pin(int pin, bool pud, bool io) {
@@ -42,7 +42,7 @@ bool GPIO::running = false;
 int GPIO::mem_fd;
 void* GPIO::map;
 volatile unsigned int* GPIO::addr;
-unsigned long GPIO::addr_p = 0x7e215000; //bcm_host_get_peripheral_address();
+unsigned long GPIO::addr_p = bcm_host_get_peripheral_address() + 0x200000;
 
 
 void GPIO::make_input(int pin) {

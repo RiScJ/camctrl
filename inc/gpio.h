@@ -25,11 +25,11 @@ public:
     static void detach_interrupt(void);
     static void start(void);
     static void stop(void);
+    static bool read(int pin);
 
 private:
     static bool running;
     static void await_edge(int pin, bool edge, void (*callback)(void));
-    static bool read(int pin);
     static void make_input(int pin);
     static void make_output(int pin);
     static void pull_up(int pin);
