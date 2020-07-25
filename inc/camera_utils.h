@@ -17,6 +17,7 @@ class CameraUtils : public QObject {
 public:
     explicit CameraUtils (QObject* parent = 0) : QObject(parent) {}
     static void set_homeDir(std::string dir);
+    static void capture_frame_EXT(void);
     Q_INVOKABLE static void set_project(QString proj);
     Q_INVOKABLE static void start(QString mode);
     Q_INVOKABLE static void stop(void);

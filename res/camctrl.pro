@@ -20,14 +20,14 @@ INCLUDEPATH += \
 HEADERS += \
     ../inc/camera_utils.h \
     ../inc/fileutils.h \
-    ../inc/gpio.h \
+    ../inc/gpio_utils.h \
     ../inc/rsync_utils.h \
     ../inc/timelapse_utils.h
 
 SOURCES += \
         ../src/camera_utils.cpp \
         ../src/fileutils.cpp \
-        ../src/gpio.cpp \
+        ../src/gpio_utils.cpp \
         ../src/main.cpp \
         ../src/rsync_utils.cpp \
         ../src/timelapse_utils.cpp \

@@ -2,35 +2,54 @@
 #include <chrono>
 #include <thread>
 
-#include "gpio.h"
+#include <stdio.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpio_utils.h"
+#include "camera_utils.h"
 
 #include <bcm_host.h>
 
 
-void GPIO::setup_pin(int pin, bool pud, bool io) {
+void GPIOUtils::setup_pin(int pin, bool pud, bool io) {
     io ? make_input(pin) : make_output(pin);
     pud ? pull_up(pin) : pull_down(pin);
 };
 
 
-void GPIO::attach_interrupt(int pin, bool edge, void (*callback)(void)) {
+void GPIOUtils::trigger_frames(int pin, bool edge) {
+	attach_interrupt(pin, edge, *CameraUtils::capture_frame_EXT);
+};
+
+
+void GPIOUtils::stop_frames(void) {
+	detach_interrupt();
+};
+
+
+void GPIOUtils::attach_interrupt(int pin, bool edge, void (*callback)(void)) {
+    setup_pin(pin, 0, 1);
     running = true;
     std::thread *thd = new std::thread(await_edge, pin, edge, callback);
     thd->detach();
 };
 
 
-void GPIO::detach_interrupt(void) {
+void GPIOUtils::detach_interrupt(void) {
     running = false;
 };
 
 
-void GPIO::start(void) {
+void GPIOUtils::start(void) {
     map_peripheral();
 };
 
 
-void GPIO::stop(void) {
+void GPIOUtils::stop(void) {
     unmap_peripheral();
 };
 
@@ -38,40 +57,40 @@ void GPIO::stop(void) {
 
 // Private
 
-bool GPIO::running = false;
-int GPIO::mem_fd;
-void* GPIO::map;
-volatile unsigned int* GPIO::addr;
-unsigned long GPIO::addr_p = bcm_host_get_peripheral_address() + 0x200000;
+bool GPIOUtils::running = false;
+int GPIOUtils::mem_fd;
+void* GPIOUtils::map;
+volatile unsigned int* GPIOUtils::addr;
+unsigned long GPIOUtils::addr_p = bcm_host_get_peripheral_address() + 0x200000;
 
 
-void GPIO::make_input(int pin) {
+void GPIOUtils::make_input(int pin) {
     *(addr + ((pin)/10)) &= ~(7<<(((pin)%10)*3));
 };
 
 
-void GPIO::make_output(int pin) {
+void GPIOUtils::make_output(int pin) {
     make_input(pin);
     *(addr + ((pin)/10)) |=  (1<<(((pin)%10)*3));
 };
 
 
-void GPIO::pull_up(int pin) {
+void GPIOUtils::pull_up(int pin) {
+    *(addr + 37 + (pin/16)*2) |= 1;
+};
+
+
+void GPIOUtils::pull_down(int pin) {
 
 };
 
 
-void GPIO::pull_down(int pin) {
-
-};
-
-
-bool GPIO::read(int pin) {
+bool GPIOUtils::read(int pin) {
     return *(addr + 13 + (pin/32)) &= (1 << pin%32);
 };
 
 
-void GPIO::await_edge(int pin, bool edge, void (*callback)(void)) {
+void GPIOUtils::await_edge(int pin, bool edge, void (*callback)(void)) {
     bool prev = 0;
     bool curr = 0;
     while (running) {
@@ -84,7 +103,7 @@ void GPIO::await_edge(int pin, bool edge, void (*callback)(void)) {
 }
 
 
-void GPIO::map_peripheral(void)
+void GPIOUtils::map_peripheral(void)
 {
    // Open /dev/mem
    if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
@@ -108,7 +127,7 @@ void GPIO::map_peripheral(void)
 };
 
 
-void GPIO::unmap_peripheral(void) {
+void GPIOUtils::unmap_peripheral(void) {
     munmap(map, BLOCK_SIZE);
     close(mem_fd);
 };

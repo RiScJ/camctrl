@@ -121,6 +121,11 @@ void CameraUtils::start_lapse(void) {
 };
 
 
+void CameraUtils::capture_frame_EXT(void) {
+	capture_frame();
+};
+
+
 void CameraUtils::capture_frame(void) {
     std::string cmd;
     cmd = "pgrep raspistill | xargs -I % kill -USR1 % && \

@@ -114,7 +114,7 @@ Window { id: app
         if (app.trigName === "TMR") {
             timer.running = true
         } else if (app.trigName === "EXT") {
-            GPIO.attach_interrupt(gpioSpin.value, extEdgeCombo.model(extEdgeCombo.currentIndex), cam.capture(app.modeName))
+            gpioUtils.trigger_frames(gpioSpin.value, extEdgeCombo.currentIndex)
         }
 	cam.start(app.modeName)
     }
@@ -129,7 +129,7 @@ Window { id: app
         if (app.trigName === "TMR") {
             timer.running = false
         } else if (app.trigName === "EXT") {
-            GPIO.detach_interrupt()
+            gpioUtils.stop_frames()
         }
 
         cam.stop()

@@ -1,34 +1,26 @@
-#ifndef GPIO_H
-#define GPIO_H
+#ifndef GPIO_UTILS_H
+#define GPIO_UTILS_H
 
 #include <QObject>
-#include <thread>
-
-#include <stdio.h>
-
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#include <unistd.h>
 
 #define BLOCK_SIZE 		(4*1024)
 
-class GPIO : public QObject {
+class GPIOUtils : public QObject {
     Q_OBJECT
 
 public:
-    explicit GPIO (QObject* parent = 0) : QObject(parent) {}
+    explicit GPIOUtils (QObject* parent = 0) : QObject(parent) {}
     static void setup_pin(int pin, bool pud, bool io);
-    static void attach_interrupt(int pin, bool edge, void (*callback)(void));
-    static void detach_interrupt(void);
+    Q_INVOKABLE static void trigger_frames(int pin, bool edge);
+    Q_INVOKABLE static void stop_frames(void);
     static void start(void);
     static void stop(void);
     static bool read(int pin);
 
 private:
     static bool running;
+    static void attach_interrupt(int pin, bool edge, void (*callback)(void));
+    static void detach_interrupt(void);
     static void await_edge(int pin, bool edge, void (*callback)(void));
     static void make_input(int pin);
     static void make_output(int pin);
@@ -45,4 +37,4 @@ private:
 
 
 
-#endif // GPIO_H
+#endif // GPIO_UTILS_H

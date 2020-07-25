@@ -3,7 +3,7 @@
 #include <QQmlContext>
 
 #include "fileutils.h"
-#include "gpio.h"
+#include "gpio_utils.h"
 #include "timelapse_utils.h"
 #include "rsync_utils.h"
 #include "camera_utils.h"
@@ -27,8 +27,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     FileUtils* fileUtils = new FileUtils();
     engine.rootContext()->setContextProperty("fileUtils", fileUtils);
 
-    GPIO* gpio = new GPIO();
-    engine.rootContext()->setContextProperty("GPIO", gpio);
+    GPIOUtils* gpio = new GPIOUtils();
+    engine.rootContext()->setContextProperty("gpioUtils", gpio);
 
     TimelapseUtils* timelapseUtils = new TimelapseUtils();
     engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
@@ -41,8 +41,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     CameraUtils::start("IMG");
 
-    GPIO::start();
-    GPIO::setup_pin(17, 0, 1); // The GPIO stuff in general needs some love
+    GPIOUtils::start();
+    GPIOUtils::setup_pin(17, 1, 1); // The GPIO stuff in general needs some love
 
     engine.load(url);
 
