@@ -8,43 +8,70 @@
 #include "rsync_utils.h"
 #include "camera_utils.h"
 
+#include "test_gpio_utils.hpp"
+
+#include <unistd.h>
+
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+	int opt;
+	bool flag_test = false;
 
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	opterr = 0;
 
-    QGuiApplication app(argc, argv);
+	while ((opt = getopt(argc, argv, "t")) != -1) {
+		switch ( opt ) {
+		case 't':
+			flag_test = true;
+			break;
+		case '?':
+			break;
+		default: {
+			abort();
+		}
+		}
+	}
 
-    QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
+	if (flag_test){
+		TEST_GPIOUtils(argc, argv);
+		exit(0);
+	}
 
-    FileUtils* fileUtils = new FileUtils();
-    engine.rootContext()->setContextProperty("fileUtils", fileUtils);
+	qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
-    GPIOUtils* gpio = new GPIOUtils();
-    engine.rootContext()->setContextProperty("gpioUtils", gpio);
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    TimelapseUtils* timelapseUtils = new TimelapseUtils();
-    engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
+	QGuiApplication app(argc, argv);
 
-    RsyncUtils* rsyncUtils = new RsyncUtils();
-    engine.rootContext()->setContextProperty("rsync", rsyncUtils);
+	QQmlApplicationEngine engine;
+	const QUrl url(QStringLiteral("qrc:/main.qml"));
+	QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+					 &app, [url](QObject *obj, const QUrl &objUrl) {
+		if (!obj && url == objUrl)
+			QCoreApplication::exit(-1);
+	}, Qt::QueuedConnection);
 
-    CameraUtils* cameraUtils = new CameraUtils();
-    engine.rootContext()->setContextProperty("cam", cameraUtils);
+	FileUtils* fileUtils = new FileUtils();
+	engine.rootContext()->setContextProperty("fileUtils", fileUtils);
 
-    CameraUtils::start("IMG");
+	GPIOUtils* gpio = new GPIOUtils();
+	engine.rootContext()->setContextProperty("gpioUtils", gpio);
 
-    GPIOUtils::start();
-    GPIOUtils::setup_pin(17, 1, 1); // The GPIO stuff in general needs some love
+	TimelapseUtils* timelapseUtils = new TimelapseUtils();
+	engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
 
-    engine.load(url);
+	RsyncUtils* rsyncUtils = new RsyncUtils();
+	engine.rootContext()->setContextProperty("rsync", rsyncUtils);
 
-    return app.exec();
+	CameraUtils* cameraUtils = new CameraUtils();
+	engine.rootContext()->setContextProperty("cam", cameraUtils);
+
+	CameraUtils::start("IMG");
+
+	GPIOUtils::start();
+	GPIOUtils::setup_pin(17, 1, 1); // The GPIO stuff in general needs some love
+
+	engine.load(url);
+
+	return app.exec();
 }
