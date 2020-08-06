@@ -1,56 +1,54 @@
 #include "test_gpio_utils.hpp"
-#include "gpio_utils.h"
 
-#include <iostream>
 #include <chrono>
 
 using namespace std;
+using namespace camctrl_err;
 
 TEST_GPIOUtils::TEST_GPIOUtils(int argc, char* argv[]) {
-	cout << "[\t\t] \t\t Mapping GPIO memory address space... ";
+	GPIO_ERROR err;
+
+	cout << "[         ] \t\t Mapping GPIO memory address space... ";
 	auto start = chrono::steady_clock::now();
-	GPIOUtils::map_peripheral();
+	err = (GPIO_ERROR)GPIOUtils::map_peripheral();
 	auto end = chrono::steady_clock::now();
 	auto diff = end - start;
-	cout << "\r[\tOK\t] \t" \
-		 << chrono::duration_cast<chrono::milliseconds>(diff).count() \
-		 << " ms\t Mapping GPIO memory address space... done.\n\n" \
+	cout << "\r" << print_errorlevel(err) << "\t" \
+		 << chrono::duration_cast<chrono::microseconds>(diff).count() \
+		 << " us\t Mapping GPIO memory address space... done.\n\n" \
 		 << flush;
 
-	string msg = "OK";
 	for (int pin = 0; pin < PINC; pin++) {
 		GPIOUtils::make_input(pin);
 
 
-		cout << "[\t\t] \t\t Checking GPIO pin" << pin << " PUR... ";
+		cout << "[         ] \t\t Checking GPIO pin " << pin << " PUR... ";
 		start = chrono::steady_clock::now();
 
 		GPIOUtils::pull_up(pin);
-		if (!GPIOUtils::read(pin)) msg = "BAD_PUR";
+		if (!GPIOUtils::read(pin)) err = GPIO_ERROR::E_PUD_PUR;
 
 		end = chrono::steady_clock::now();
 		diff = end - start;
-		cout << "\r[\t" << msg << "\t] \t" \
-			 << chrono::duration_cast<chrono::milliseconds>(diff).count() \
-			 << " ms\t Checking GPIO pin " << pin << " PUR... done.\n" \
+		cout << "\r" << print_errorlevel(err) << "\t" \
+			 << chrono::duration_cast<chrono::microseconds>(diff).count() \
+			 << " us\t Checking GPIO pin " << pin << " PUR... done.\n\n" \
 			 << flush;
-		msg = "OK";
 
 
 
-		cout << "[\t\t] \t\t Checking GPIO pin" << pin << " PDR... ";
+		cout << "[         ] \t\t Checking GPIO pin " << pin << " PDR... ";
 		start = chrono::steady_clock::now();
 
 		GPIOUtils::pull_down(pin);
-		if (GPIOUtils::read(pin)) msg = "BAD_PDR";
+		if (GPIOUtils::read(pin)) err = GPIO_ERROR::E_PUD_PDR;
 
 		end = chrono::steady_clock::now();
 		diff = end - start;
-		cout << "\r[\t" << msg << "\t] \t" \
-			 << chrono::duration_cast<chrono::milliseconds>(diff).count() \
-			 << " ms\t Checking GPIO pin " << pin << " PDR... done.\n\n" \
+		cout << "\r" << print_errorlevel(err) << "\t" \
+			 << chrono::duration_cast<chrono::microseconds>(diff).count() \
+			 << " us\t Checking GPIO pin " << pin << " PDR... done.\n\n" \
 			 << flush;
-		msg = "OK";
 	};
 
 	GPIOUtils::unmap_peripheral();

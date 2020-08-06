@@ -58,8 +58,8 @@ private:
 	static void set(int pin);
 
 
-	static void map_peripheral(void);
-	static void unmap_peripheral(void);
+	static int map_peripheral(void);
+	static int unmap_peripheral(void);
 	static unsigned long addr_p;
 	static int mem_fd;
 	static void *map;

@@ -153,31 +153,32 @@ void GPIOUtils::await_edge(int pin, bool edge, void (*callback)(void)) {
 }
 
 
-void GPIOUtils::map_peripheral(void)
+int GPIOUtils::map_peripheral(void)
 {
-   // Open /dev/mem
-   if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
-	  printf("Failed to open /dev/mem, try checking permissions.\n");
-   }
+	if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
+		return 0x4011;
+	}
 
-   map = mmap(
-	  NULL,
-	  BLOCK_SIZE,
-	  PROT_READ|PROT_WRITE,
-	  MAP_SHARED,
-	  mem_fd,      // File descriptor to physical memory virtual file '/dev/mem'
-	  addr_p       // Address in physical map that we want this memory block to expose
-   );
+	map = mmap(
+			  NULL,
+			  BLOCK_SIZE,
+			  PROT_READ|PROT_WRITE,
+			  MAP_SHARED,
+			  mem_fd,      // File descriptor to physical memory virtual file '/dev/mem'
+			  addr_p       // Address in physical map that we want this memory block to expose
+			  );
 
-   if (map == MAP_FAILED) {
-		perror("mmap");
-   }
+	if (map == MAP_FAILED) {
+		return 0x3012;
+	}
 
-   addr = (volatile unsigned int *)map;
+	addr = (volatile unsigned int *)map;
+	return 0;
 };
 
 
-void GPIOUtils::unmap_peripheral(void) {
+int GPIOUtils::unmap_peripheral(void) {
 	munmap(map, BLOCK_SIZE);
 	close(mem_fd);
+	return 0;
 };

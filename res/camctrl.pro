@@ -20,6 +20,7 @@ INCLUDEPATH += \
 		/opt/vc/include
 
 HEADERS += \
+	../inc/camctrl_error.hpp \
 	../inc/camera_utils.h \
 	../inc/fileutils.h \
 	../inc/gpio_utils.h \
