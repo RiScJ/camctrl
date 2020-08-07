@@ -80,8 +80,8 @@ Window { id: app
     function stopRecording() {
         app.switchStatus(0)
         cam.record()
-	cam.stop()
-	cam.start(app.modeName)
+    cam.stop()
+    cam.start(app.modeName)
     }
 
     function startTimedRecording() {
@@ -116,7 +116,7 @@ Window { id: app
         } else if (app.trigName === "EXT") {
             gpioUtils.trigger_frames(gpioSpin.value, extEdgeCombo.currentIndex)
         }
-	cam.start(app.modeName)
+    cam.start(app.modeName)
     }
 
     function captureLapseFrame() {
@@ -190,7 +190,7 @@ Window { id: app
             enabled: stack.depth > 1
             onClicked: {
                 mainBar.currentMenuName = stack.get(stack.currentItem.StackView.index - 1).menuTitle
-		stack.pop()
+        stack.pop()
             }
         }
 
@@ -198,11 +198,14 @@ Window { id: app
             id: label
             x: 0
             y: 0
+            height: 30
             text: qsTr(mainBar.currentMenuName)
+            font.italic: true
+            font.weight: Font.DemiBold
             topPadding: 9
-            font.family: "Courier"
+//            ////font.family: "Courier"
             anchors.left: backButton.right
-            anchors.leftMargin: 0
+            anchors.leftMargin: -3
             anchors.right: toolButton1.left
             anchors.rightMargin: 0
             font.pointSize: 19
@@ -211,14 +214,18 @@ Window { id: app
             anchors.top: parent.top
             anchors.topMargin: 0
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+            anchors.bottomMargin: 10
         }
 
         ToolButton {
             id: toolButton1
             x: 12
             y: 0
+            width: 48
+            height: 40
             text: qsTr("⋮")
+            font.bold: false
+            font.pointSize: 17
             anchors.right: parent.right
             anchors.rightMargin: 0
             onClicked: {
@@ -247,20 +254,22 @@ Window { id: app
         Label {
             id: label1
             color: "#ffffff"
-            text: qsTr("TRIGGER")
+            text: qsTr("Trigger Settings")
+            font.capitalization: Font.SmallCaps
+            font.weight: Font.Normal
+            font.italic: true
             anchors.top: parent.top
-            anchors.topMargin: 9
-            font.pointSize: 19
-            font.family: "Courier"
-            anchors.horizontalCenterOffset: -36
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 0
+            font.pointSize: 20
+//            //font.family: "Courier"
         }
 
         Label {
             id: label2
             color: "#ffffff"
-            text: qsTr("EXT")
-            font.family: "Courier"
+            text: qsTr("External")
+            font.italic: true
+            //            //font.family: "Courier"
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: parent.top
@@ -271,7 +280,7 @@ Window { id: app
             id: label3
             color: "#ffffff"
             text: qsTr("GPIO")
-            font.family: "Courier"
+//            //font.family: "Courier"
             anchors.left: parent.left
             anchors.leftMargin: 15
             anchors.top: parent.top
@@ -283,11 +292,14 @@ Window { id: app
             y: 51
             width: 130
             height: 40
+            font.capitalization: Font.MixedCase
+            font.weight: Font.DemiBold
+            font.italic: true
             value: 10
             bottomPadding: 1
             topPadding: 20
             font.pointSize: 20
-            font.family: "Courier"
+//            //font.family: "Courier"
             to: 32
             editable: false
             scale: 0.6
@@ -297,7 +309,7 @@ Window { id: app
             id: label4
             color: "#ffffff"
             text: qsTr("On...")
-            font.family: "Courier"
+//            //font.family: "Courier"
             anchors.top: parent.top
             anchors.topMargin: 99
             anchors.left: parent.left
@@ -308,12 +320,14 @@ Window { id: app
             x: 64
             y: 84
             width: 130
-            height: 40
+            height: 50
+            font.weight: Font.DemiBold
+            font.italic: true
             editable: false
             padding: 0
             topPadding: 0
-            font.pointSize: 14
-            font.family: "Courier"
+            font.pointSize: 16
+//            //font.family: "Courier"
             flat: false
             textRole: ""
             currentIndex: 0
@@ -324,8 +338,9 @@ Window { id: app
         Label {
             id: label5
             color: "#ffffff"
-            text: qsTr("TMR")
-            font.family: "Courier"
+            text: qsTr("Timed")
+            font.italic: true
+            //            //font.family: "Courier"
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: parent.top
@@ -340,7 +355,7 @@ Window { id: app
             anchors.leftMargin: 15
             anchors.top: parent.top
             anchors.topMargin: 170
-            font.family: "Courier"
+//            //font.family: "Courier"
         }
 
         function formatText(count, modelData) {
@@ -364,9 +379,10 @@ Window { id: app
             y: 170
             width: 36
             height: 116
+            font.weight: Font.DemiBold
             font.wordSpacing: 0
             font.italic: true
-            font.family: "Courier"
+//            //font.family: "Courier"
             visibleItemCount: 6
             model: 60
 
@@ -378,11 +394,12 @@ Window { id: app
             y: 170
             width: 36
             height: 116
+            font.weight: Font.DemiBold
             font.italic: true
             model: 60
             visibleItemCount: 6
             font.wordSpacing: 0
-            font.family: "Courier"
+            //font.family: "Courier"
 
             delegate: tumblerDelegate
         }
@@ -396,7 +413,7 @@ Window { id: app
             font.italic: true
             font.bold: true
             font.pointSize: 15
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Label {
@@ -411,7 +428,7 @@ Window { id: app
             font.italic: true
             font.pointSize: 15
             font.bold: true
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         //
@@ -433,17 +450,19 @@ Window { id: app
         z: app.forceTop // Always shown
         width: 600
         height: 20
+        font.family: "Courier"
 
         Label { id: nameLabel
             x: 5
             y: 0
             color: "#ffffff"
             text: app.currentProject
+            font.family: "Courier"
             font.capitalization: Font.MixedCase
             font.pointSize: 11
             verticalAlignment: Text.AlignBottom
             horizontalAlignment: Text.AlignLeft
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
             anchors.top: parent.top
@@ -479,7 +498,7 @@ Window { id: app
             font.capitalization: Font.AllUppercase
             topPadding: 3
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Label { id: trigLabel
@@ -495,7 +514,7 @@ Window { id: app
             topPadding: 3
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         ToolSeparator {
@@ -545,7 +564,7 @@ Window { id: app
             topPadding: 3
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         ToolSeparator {
@@ -574,7 +593,7 @@ Window { id: app
             anchors.bottomMargin: 0
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
             visible: app.trigName == "EXT"
         }
 
@@ -592,7 +611,7 @@ Window { id: app
             anchors.bottomMargin: 0
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
             visible: app.trigName == "TMR"
         }
 
@@ -634,7 +653,7 @@ Window { id: app
             anchors.bottomMargin: 0
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
     }
 
@@ -672,130 +691,10 @@ Window { id: app
     }
 
     // Project manager window
-    Rectangle { id: projectUI
+    ProjectUI {
+        id: projectUI
         x: 0
         y: 0
-        z: app.forceTop - 1
-        width: 600
-        height: 460
-        color: "#ffffff"
-        visible: stack.subapp == "projects"
-
-        Rectangle { id: projectListTitle
-            x: 0
-            y: 0
-            z: app.forceTop + 5
-            width: 600
-            height: 40
-            color: "#000000"
-            visible: stack.subapp == "projects"
-
-            Text {
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                z: app.forceTop + 1
-                text: qsTr("Name")
-                color: "#ffffff"
-                font.pointSize: 19
-                font.bold: false
-                font.family: "Courier"
-                topPadding: 10
-                leftPadding: 10
-            }
-
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                z: app.forceTop + 1
-                text: qsTr("Last modified")
-                color: "#ffffff"
-                font.pointSize: 19
-                font.bold: false
-                font.family: "Courier"
-                topPadding: 10
-                rightPadding: 10
-            }
-
-        }
-
-        ListView {
-            id: listView
-            z: app.forceTop
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 40
-            visible: true
-            snapMode: ListView.SnapToItem
-            model: projectListModel
-            delegate: projectListDelegate
-            focus: true
-            currentIndex: 0
-            highlight: Rectangle {
-                   z: app.forceTop
-                   color:"#32fc9e"
-                   opacity: 0.5
-                   focus: true
-            }
-            highlightFollowsCurrentItem: true
-
-            Component { id: projectListDelegate
-                Rectangle {
-
-                    width: ListView.view.width
-                    height: 50
-
-                    color: fileName == app.currentProject ? "#fc9e32" : index % 2 == 0 ? "#a4a4a4" : "#444444"
-
-                    Text { id: fileNameText
-                        anchors.left: parent.left
-                        anchors.leftMargin: 0
-                        z: app.forceTop + 1
-                        text: fileName
-                        color: "#000000"
-                        font.pointSize: 19
-                        font.bold: false
-                        font.family: "Courier"
-                        topPadding: 15
-                        leftPadding: 10
-                    }
-
-                    Text { id: fileModText
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        z: app.forceTop + 1
-                        text: fileModified.toLocaleDateString(Qt.locale("en_US"), "d MMM yyyy")
-                        color: "#000000"
-                        font.pointSize: 19
-                        font.bold: false
-                        font.family: "Courier"
-                        topPadding: 15
-                        leftPadding: 10
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            listView.currentIndex = index
-                        }
-                    }
-
-                }
-
-            }
-
-            FolderListModel { id: projectListModel
-                folder: "file://" + projectPath
-            }
-
-        }
-
-
     }
 
     // New project window
@@ -823,7 +722,7 @@ Window { id: app
             font.pointSize: 17
             font.bold: false
             visible: true
-            font.family: "Courier"
+            //font.family: "Courier"
             placeholderText: qsTr("New project name")
         }
 
@@ -834,10 +733,12 @@ Window { id: app
             width: 100
             height: 60
             text: qsTr("CANCEL")
+            font.weight: Font.DemiBold
+            font.italic: true
             topPadding: 14
             font.bold: false
-            font.pointSize: 17
-            font.family: "Courier"
+            font.pointSize: 15
+            //font.family: "Courier"
             anchors.right: newProjCreateButton.left
             anchors.rightMargin: 15
 
@@ -854,9 +755,11 @@ Window { id: app
             width: 100
             height: 60
             text: qsTr("CREATE")
+            font.weight: Font.DemiBold
+            font.italic: true
             topPadding: 14
-            font.pointSize: 17
-            font.family: "Courier"
+            font.pointSize: 15
+            //font.family: "Courier"
             anchors.right: parent.right
             anchors.rightMargin: 40
 
@@ -889,7 +792,7 @@ Window { id: app
             verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 13
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Button { id: confirmDeleteProjectButton
@@ -905,7 +808,7 @@ Window { id: app
             topPadding: 14
             font.bold: false
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 fileUtils.removeDir(projectPath + projectListModel.get(listView.currentIndex, "fileName"))
@@ -926,7 +829,7 @@ Window { id: app
             anchors.rightMargin: 20
             topPadding: 14
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 delProjectUI.visible = false
@@ -961,7 +864,7 @@ Window { id: app
                 color: "#ffffff"
                 font.pointSize: 19
                 font.bold: false
-                font.family: "Courier"
+                //font.family: "Courier"
                 topPadding: 10
                 leftPadding: 10
             }
@@ -1016,7 +919,7 @@ Window { id: app
                         color: "#000000"
                         font.pointSize: 19
                         font.bold: false
-                        font.family: "Courier"
+                        //font.family: "Courier"
                         topPadding: 15
                         leftPadding: 10
                     }
@@ -1067,7 +970,7 @@ Window { id: app
             font.pointSize: 17
             font.bold: false
             visible: true
-            font.family: "Courier"
+            //font.family: "Courier"
             placeholderText: qsTr("New remote name")
         }
 
@@ -1078,10 +981,11 @@ Window { id: app
             width: 100
             height: 60
             text: qsTr("CANCEL")
+            font.italic: true
             topPadding: 14
             font.bold: false
-            font.pointSize: 17
-            font.family: "Courier"
+            font.pointSize: 15
+            //font.family: "Courier"
             anchors.right: newRemoteCreateButton.left
             anchors.rightMargin: 15
 
@@ -1098,9 +1002,10 @@ Window { id: app
             width: 100
             height: 60
             text: qsTr("CREATE")
+            font.italic: true
             topPadding: 14
-            font.pointSize: 17
-            font.family: "Courier"
+            font.pointSize: 15
+            //font.family: "Courier"
             anchors.right: parent.right
             anchors.rightMargin: 40
 
@@ -1132,7 +1037,7 @@ Window { id: app
             verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 13
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Button { id: confirmDeleteRemoteButton
@@ -1148,7 +1053,7 @@ Window { id: app
             topPadding: 14
             font.bold: false
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 fileUtils.rm(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"))
@@ -1169,7 +1074,7 @@ Window { id: app
             anchors.rightMargin: 20
             topPadding: 14
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 delRemoteUI.visible = false
@@ -1233,7 +1138,7 @@ Window { id: app
             text: "Projects"
             onTriggered: {
                 stack.pop(null)
-		cam.stop()
+        cam.stop()
                 stack.replace(projectsPane)
                 stack.subapp = "projects"
                 mainBar.currentMenuName = projectsPane.menuTitle
@@ -1244,9 +1149,9 @@ Window { id: app
             text: "Control"
             onTriggered: {
                 stack.pop(null)
-		if (stack.subapp !== "control") {
-			cam.start(app.modeName)
-		}
+        if (stack.subapp !== "control") {
+            cam.start(app.modeName)
+        }
                 stack.replace(controlPane)
                 stack.subapp = "control"
                 mainBar.currentMenuName = controlPane.menuTitle
@@ -1258,7 +1163,7 @@ Window { id: app
             onTriggered: {
                 stack.pop(null)
                 cam.stop()
-		stack.replace(remotePane)
+        stack.replace(remotePane)
                 stack.subapp = "remote"
                 mainBar.currentMenuName = remotePane.menuTitle
             }
@@ -1270,7 +1175,7 @@ Window { id: app
             text: "Help"
             onTriggered: {
                 stack.pop(null)
-		cam.stop()
+        cam.stop()
                 stack.replace(helpPane)
                 stack.subapp = "help"
                 mainBar.currentMenuName = helpPane.menuTitle
@@ -1283,7 +1188,7 @@ Window { id: app
             text: "SysInfo"
             onTriggered: {
                 stack.pop(null)
-		cam.stop
+        cam.stop
                 stack.replace(sysinfoPane)
                 stack.subapp = "sysinfo"
                 mainBar.currentMenuName = sysinfoPane.menuTitle
@@ -1292,26 +1197,31 @@ Window { id: app
 
     }
 
-    InputPanel {
-            id: inputPanel
-            y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
-            z: app.forceTop + 10
-            anchors.left: parent.left
-            anchors.right: parent.right
-    }
+//    InputPanel {
+//            id: inputPanel
+//            y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
+//            z: app.forceTop + 10
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//    }
 
 }
+
+
 
 /*##^##
 Designer {
     D{i:0;formeditorColor:"#4c4e50"}D{i:2;anchors_height:400;anchors_width:200;anchors_x:77;anchors_y:25}
-D{i:6;anchors_height:150;anchors_width:166;anchors_x:0;anchors_y:267}D{i:7;anchors_height:150;anchors_width:166;anchors_x:0;anchors_y:267}
-D{i:8;anchors_x:71}D{i:5;invisible:true}D{i:14;anchors_height:400;anchors_width:200}
-D{i:15;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}D{i:16;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}
-D{i:17;anchors_x:130;anchors_y:8}D{i:18;anchors_x:204}D{i:19;anchors_x:190}D{i:20;anchors_x:190}
-D{i:9;invisible:true}D{i:23;invisible:true}D{i:33;invisible:true}D{i:47;invisible:true}
-D{i:57;invisible:true}D{i:58;invisible:true}D{i:54;invisible:true}D{i:68;invisible:true}
-D{i:69;invisible:true}D{i:70;invisible:true}D{i:71;invisible:true}D{i:72;invisible:true}
-D{i:80;invisible:true}D{i:81;invisible:true}D{i:82;invisible:true}
+D{i:5;invisible:true}D{i:7;anchors_height:150;anchors_width:166;anchors_x:0;anchors_y:267;invisible:true}
+D{i:8;anchors_x:71}D{i:9;invisible:true}D{i:6;anchors_height:150;anchors_width:166;anchors_x:0;anchors_y:267;invisible:true}
+D{i:14;anchors_height:400;anchors_width:200}D{i:15;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}
+D{i:16;anchors_height:400;anchors_width:200;anchors_x:37;anchors_y:8}D{i:17;anchors_x:130;anchors_y:8}
+D{i:18;anchors_x:204}D{i:19;anchors_x:190}D{i:20;anchors_x:190}D{i:23;invisible:true}
+D{i:10;invisible:true}D{i:26;invisible:true}D{i:33;invisible:true}D{i:27;invisible:true}
+D{i:41;invisible:true}D{i:42;invisible:true}D{i:46;invisible:true}D{i:43;invisible:true}
+D{i:47;invisible:true}D{i:58;invisible:true}D{i:59;invisible:true}D{i:57;invisible:true}
+D{i:60;invisible:true}D{i:51;invisible:true}D{i:65;invisible:true}D{i:69;invisible:true}
+D{i:70;invisible:true}D{i:71;invisible:true}D{i:72;invisible:true}D{i:73;invisible:true}
+D{i:74;invisible:true}D{i:75;invisible:true}D{i:76;invisible:true}
 }
 ##^##*/

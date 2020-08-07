@@ -19,11 +19,14 @@ Pane {
     Button { id: newRemoteButton
         enabled: remotePane.visible
         width: 80
-        height: 79
+        height: 48
         text: "NEW"
+        bottomPadding: 14
+        rightPadding: 11
+        font.italic: true
         topPadding: 15
-        font.pointSize: 24
-        font.family: "Courier"
+        font.pointSize: 15
+        //font.family: "Courier"
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.top: parent.top
@@ -37,11 +40,14 @@ Pane {
     Button { id: deleteRemoteButton
         enabled: remotePane.visible
         width: 80
-        height: 79
+        height: 48
         text: qsTr("DEL")
+        bottomPadding: 14
+        rightPadding: 11
+        font.italic: true
         topPadding: 15
-        font.pointSize: 24
-        font.family: "Courier"
+        font.pointSize: 15
+        //font.family: "Courier"
         anchors.left: parent.left
         anchors.leftMargin: 95
         anchors.top: parent.top
@@ -56,7 +62,7 @@ Pane {
     ToolSeparator {
         id: toolSeparator6
         anchors.top: parent.top
-        anchors.topMargin: 90
+        anchors.topMargin: 44
         anchors.right: parent.right
         anchors.rightMargin: 0
         anchors.left: parent.left
@@ -67,15 +73,18 @@ Pane {
     Button { id: configRemoteButton
         enabled: remotePane.visible
         width: 176
-        height: 79
+        height: 48
         text: "CONFIG"
+        rightPadding: 13
+        bottomPadding: 14
+        font.italic: true
         anchors.left: parent.left
         anchors.leftMargin: 0
         topPadding: 15
         anchors.top: parent.top
-        anchors.topMargin: 109
-        font.pointSize: 24
-        font.family: "Courier"
+        anchors.topMargin: 61
+        font.pointSize: 15
+        //font.family: "Courier"
 
         onClicked: {
             configRemoteUI.visible = true
@@ -90,7 +99,7 @@ Pane {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 194
+        anchors.topMargin: 103
         anchors.rightMargin: 0
     }
 }

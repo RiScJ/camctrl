@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 
 Pane {
+    id: pane
     background: Rectangle {
         color: "#444444"
         border.width: 0
@@ -42,11 +43,14 @@ Pane {
                                     :
                                         qsTr("STOP\nEXT\nCAPTURE")
         }
+        font.weight: Font.DemiBold
+        font.bold: false
+        font.italic: true
         wheelEnabled: false
-        font.family: "Courier"
-        font.pointSize: 23
-        bottomPadding: 0
-        rightPadding: 0
+//        font.family: "Courier"
+        font.pointSize: 18
+        bottomPadding: 6
+        rightPadding: 1
         leftPadding: 0
         topPadding: 10
         anchors.top: toolSeparator.bottom
@@ -93,10 +97,12 @@ Pane {
                                     :
                                         qsTr("STOP\nEXT\nRECORD")
         }
-        font.family: "Courier"
-        font.pointSize: 23
-        bottomPadding: 0
-        rightPadding: 0
+        font.weight: Font.DemiBold
+        font.italic: true
+//        font.family: "Courier"
+        font.pointSize: 18
+        bottomPadding: 6
+        rightPadding: 1
         leftPadding: 0
         topPadding: 10
         anchors.top: toolSeparator.bottom
@@ -121,14 +127,16 @@ Pane {
     Button { id: lapseButton
         width: 150
         text: app.modeName === "LPS" ? qsTr("LAPSE") : qsTr("STOP")
-        font.family: "Courier"
-        font.pointSize: 23
-        bottomPadding: 0
-        rightPadding: 0
+        font.weight: Font.DemiBold
+        font.italic: true
+//        font.family: "Courier"
+        font.pointSize: 18
+        bottomPadding: 9
+        rightPadding: 1
         leftPadding: 0
         topPadding: 10
         anchors.top: toolSeparator.bottom
-        anchors.topMargin: app.modeName === "LPS" ? 10 : app.trigName === "USR" ? 90 : 10
+        anchors.topMargin: app.modeName === "LPS" ? 10 : app.trigName === "USR" ? 70 : 10
         anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.right: parent.right
@@ -144,11 +152,14 @@ Pane {
 
     Button { id: captureFrame
         width: 150
+        height: 55
         text: qsTr("CAPTURE")
-        font.family: "Courier"
-        font.pointSize: 23
-        bottomPadding: 0
-        rightPadding: 0
+        font.weight: Font.DemiBold
+        font.italic: true
+//        font.family: "Courier"
+        font.pointSize: 18
+        bottomPadding: 11
+        rightPadding: 4
         leftPadding: 0
         topPadding: 10
         anchors.top: toolSeparator.bottom
@@ -157,8 +168,6 @@ Pane {
         anchors.leftMargin: 10
         anchors.right: parent.right
         anchors.rightMargin: 10
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 90
         visible: app.modeName === "FRM" & app.trigName === "USR"
         enabled: app.modeName === "FRM" & app.trigName === "USR"
         onClicked: {
@@ -168,7 +177,8 @@ Pane {
 
     ToolSeparator {
         id: toolSeparator
-        y: 235
+        anchors.top: optionsButton.bottom
+        anchors.topMargin: 100
         anchors.right: parent.right
         anchors.rightMargin: 0
         anchors.left: parent.left
@@ -177,15 +187,18 @@ Pane {
     }
 
     Button { id: modeButton
-        x: 10
-        y: 12
-        width: 72
-        height: 64
+        x: 0
+        y: 2
+        width: 82
+        height: 48
         text: qsTr("MODE")
+        rightPadding: 10
+        font.weight: Font.Normal
+        font.italic: true
         font.bold: false
         topPadding: 12
-        font.family: "Courier"
-        font.pointSize: 15
+        //        font.family: "Courier"
+        font.pointSize: 13
         enabled: app.statusName === "IDLE"
         onClicked: {
             if (app.modeName === "IMG") {
@@ -195,20 +208,22 @@ Pane {
             } else {
                 app.modeName = "IMG"
             }
-	    cam.stop()
-	    cam.start(app.modeName)
+        cam.stop()
+        cam.start(app.modeName)
         }
     }
 
     Button { id: trigButton
         x: 94
-        y: 12
-        width: 72
-        height: 64
+        y: 2
+        width: 82
+        height: 48
         text: qsTr("TRIG")
-        font.family: "Courier"
+        rightPadding: 11
+        font.italic: true
+//        font.family: "Courier"
         topPadding: 12
-        font.pointSize: 15
+        font.pointSize: 13
         enabled: app.statusName === "IDLE"
         onClicked: {
             if (app.trigName === "USR") {
@@ -222,15 +237,18 @@ Pane {
     }
 
     Button { id: overlaysButton
-        x: 10
-        y: 87
-        width: 156
-        height: 64
+        x: 0
+        width: 176
+        height: 48
         text: qsTr("OVERLAYS")
+        rightPadding: 10
+        font.italic: true
+        anchors.top: modeButton.bottom
+        anchors.topMargin: 0
         topPadding: 12
         font.pointSize: 15
         font.bold: false
-        font.family: "Courier"
+//        font.family: "Courier"
         enabled: false
         onClicked: {
             stack.pop()
@@ -238,15 +256,18 @@ Pane {
     }
 
     Button { id: optionsButton
-        x: 10
-        y: 162
-        width: 156
-        height: 64
+        x: 0
+        width: 176
+        height: 48
         text: qsTr("OPTIONS")
+        rightPadding: 10
+        font.italic: true
+        anchors.top: overlaysButton.bottom
+        anchors.topMargin: 0
         topPadding: 12
         font.pointSize: 15
         font.bold: false
-        font.family: "Courier"
+//        font.family: "Courier"
         enabled: app.statusName === "IDLE"
         onClicked: {
             stack.push(optionsPane)
@@ -254,3 +275,10 @@ Pane {
         }
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;height:440;width:200}D{i:2;invisible:true}D{i:3;invisible:true}D{i:4;invisible:true}
+D{i:6;anchors_y:235}D{i:9;anchors_y:59}D{i:10;anchors_y:107}
+}
+##^##*/

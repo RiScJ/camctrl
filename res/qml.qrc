@@ -10,5 +10,6 @@
         <file>UI_Remote_Config.qml</file>
         <file>UI_Help.qml</file>
         <file>Pane_Sync.qml</file>
+        <file>ProjectUI.qml</file>
     </qresource>
 </RCC>

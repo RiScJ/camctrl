@@ -38,7 +38,7 @@ SOURCES += \
 		../src/rsync_utils.cpp \
 		../src/timelapse_utils.cpp \
 		../tests/src/test_gpio_utils.cpp \
-		../tests/src/test_rsync_utils.cpp \
+		../tests/src/test_rsync_utils.cpp #\
 		../tests/src/test_gpio.cpp
 
 RESOURCES += \

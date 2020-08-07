@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 
 Pane {
+    id: pane
     background: Rectangle {
         color: "#444444"
         border.width: 0
@@ -22,11 +23,14 @@ Pane {
     Button { id: addSync_Button
         enabled: true
         width: 80
-        height: 79
+        height: 48
         text: "SELECT"
+        rightPadding: 10
+        bottomPadding: 14
+        font.italic: true
         topPadding: 15
-        font.pointSize: 24
-        font.family: "Courier"
+        font.pointSize: 15
+        //font.family: "Courier"
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.right: parent.right
@@ -47,17 +51,21 @@ Pane {
     }
 
     Button { id: removeSync_Button
+        y: 60
         width: 176
-        height: 79
+        height: 48
         text: "REMOVE"
+        rightPadding: 10
+        bottomPadding: 14
+        font.italic: true
         anchors.left: parent.left
         anchors.leftMargin: 0
         topPadding: 15
-        anchors.top: parent.top
+        anchors.top: addSync_Button.bottom
         visible: true
-        anchors.topMargin: 99
-        font.pointSize: 24
-        font.family: "Courier"
+        anchors.topMargin: 10
+        font.pointSize: 15
+        //font.family: "Courier"
 
         onClicked: {
             syncPane.selectedRemote = ""
@@ -69,25 +77,28 @@ Pane {
         anchors.left: parent.left
         orientation: Qt.Horizontal
         anchors.leftMargin: 0
-        anchors.top: parent.top
+        anchors.top: removeSync_Button.bottom
         anchors.right: parent.right
-        anchors.topMargin: 184
+        anchors.topMargin: 5
         anchors.rightMargin: 0
     }
 
     Button { id: pushSync_Button
         enabled: true
         width: 176
-        height: 79
+        height: 48
         text: "PUSH"
+        anchors.top: removeSync_Button.bottom
+        anchors.topMargin: 33
+        rightPadding: 10
+        bottomPadding: 14
+        font.italic: true
         anchors.left: parent.left
         anchors.leftMargin: 0
         topPadding: 15
-        anchors.top: parent.top
         visible: true
-        anchors.topMargin: 203
-        font.pointSize: 24
-        font.family: "Courier"
+        font.pointSize: 15
+        //font.family: "Courier"
         onClicked: {
             rsync.sync(app.selectedProject, app.homeDir + ".camctrl/remote/" + syncPane.selectedRemote)
         }

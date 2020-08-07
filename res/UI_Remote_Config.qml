@@ -19,16 +19,18 @@ Rectangle {
     Button { id: configRemoteCancelButton
         enabled: configRemoteUI.visible
         x: 534
-        y: 36
-        width: 110
-        height: 152
+        y: 120
+        width: 240
+        height: 68
         text: qsTr("CANCEL")
+        rightPadding: 12
+        bottomPadding: 14
+        font.weight: Font.DemiBold
+        font.italic: true
         topPadding: 14
         font.bold: false
         font.pointSize: 17
-        font.family: "Courier"
-        anchors.right: configRemoteApplyButton.left
-        anchors.rightMargin: 20
+//        font.family: "Courier"
 
         onClicked: {
             configRemoteUI.visible = false
@@ -37,14 +39,18 @@ Rectangle {
 
     Button { id: configRemoteApplyButton
         enabled: configRemoteUI.visible
-        x: 664
+        x: 534
         y: 36
-        width: 110
-        height: 152
+        width: 240
+        height: 68
         text: qsTr("APPLY")
+        rightPadding: 12
+        bottomPadding: 14
+        font.weight: Font.DemiBold
+        font.italic: true
         topPadding: 14
         font.pointSize: 17
-        font.family: "Courier"
+//        font.family: "Courier"
         anchors.right: parent.right
         anchors.rightMargin: 26
 

@@ -19,16 +19,17 @@ Pane {
     Button { id: newProjButton
         enabled: true
         width: 80
-        height: 79
+        height: 48
         text: "NEW"
+        font.italic: true
         topPadding: 15
-        font.pointSize: 24
-        font.family: "Courier"
+        font.pointSize: 15
+//        font.family: "Courier"
         display: AbstractButton.TextBesideIcon
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.top: parent.top
-        anchors.topMargin: 3
+        anchors.topMargin: -3
         visible: true
 
         onClicked: {
@@ -39,16 +40,17 @@ Pane {
     Button { id: deleteProjButton
         enabled: true
         width: 80
-        height: 79
+        height: 48
         text: qsTr("DEL")
+        font.italic: true
         topPadding: 15
-        font.pointSize: 24
-        font.family: "Courier"
+        font.pointSize: 15
+//        font.family: "Courier"
         anchors.left: parent.left
         anchors.leftMargin: 95
         anchors.top: parent.top
         visible: true
-        anchors.topMargin: 3
+        anchors.topMargin: -3
 
         onClicked: {
             delProjectUI.visible = true
@@ -59,7 +61,7 @@ Pane {
     ToolSeparator {
         id: toolSeparator6
         anchors.top: parent.top
-        anchors.topMargin: 90
+        anchors.topMargin: 39
         anchors.right: parent.right
         anchors.rightMargin: 0
         anchors.left: parent.left
@@ -69,17 +71,18 @@ Pane {
 
     Button { id: selectProjButton
         width: 176
-        height: 79
+        height: 48
         text: "SELECT"
+        font.italic: true
         anchors.left: parent.left
         anchors.leftMargin: 0
         topPadding: 15
         anchors.top: parent.top
         visible: true
-        anchors.topMargin: 109
+        anchors.topMargin: 57
         display: AbstractButton.TextBesideIcon
-        font.pointSize: 24
-        font.family: "Courier"
+        font.pointSize: 15
+//        font.family: "Courier"
 
         onClicked: {
             app.currentProject = projectListModel.get(listView.currentIndex, "fileName")
@@ -95,28 +98,29 @@ Pane {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 194
+        anchors.topMargin: 98
         anchors.rightMargin: 0
     }
 
     Button { id: openProjButton
         enabled: false
         width: 176
-        height: 79
+        height: 48
         text: "OPEN"
+        font.italic: true
         anchors.left: parent.left
         anchors.leftMargin: 0
         topPadding: 15
         anchors.top: parent.top
         visible: true
-        anchors.topMargin: 213
-        font.pointSize: 24
+        anchors.topMargin: 115
+        font.pointSize: 15
         display: AbstractButton.TextBesideIcon
-        font.family: "Courier"
+//        font.family: "Courier"
     }
 
     ToolSeparator {
-        anchors.topMargin: 298
+        anchors.topMargin: 154
         anchors.leftMargin: 0
         anchors.left: parent.left
         anchors.rightMargin: 0
@@ -127,16 +131,17 @@ Pane {
 
     Button { id: syncProj_Button
         width: 176
-        height: 79
+        height: 48
         text: "SYNC"
-        anchors.topMargin: 317
+        font.italic: true
+        anchors.topMargin: 171
         visible: true
         anchors.leftMargin: 0
         anchors.left: parent.left
-        font.pointSize: 24
+        font.pointSize: 15
         enabled: true
         anchors.top: parent.top
-        font.family: "Courier"
+//        font.family: "Courier"
         topPadding: 15
 
         onClicked: {
