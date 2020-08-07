@@ -24,6 +24,7 @@ enum Bank {			    // Qty.	// Description							//
 };
 
 class TEST_GPIOUtils;
+class TEST_GPIO;
 
 class GPIOUtils : public QObject {
 	Q_OBJECT
@@ -40,6 +41,7 @@ public:
 
 private:
 	friend class TEST_GPIOUtils;
+	friend class TEST_GPIO;
 	static bool running;
 
 	static void attach_interrupt(int pin, bool edge, void (*callback)(void));

@@ -26,9 +26,11 @@ HEADERS += \
 	../inc/gpio_utils.h \
 	../inc/rsync_utils.h \
 	../inc/timelapse_utils.h \
-	../tests/inc/test_gpio_utils.hpp
+	../tests/inc/test_gpio_utils.hpp \
+	../tests/inc/test_gpio.hpp
 
 SOURCES += \
+		../src/camctrl_error.cpp \
 		../src/camera_utils.cpp \
 		../src/fileutils.cpp \
 		../src/gpio_utils.cpp \
@@ -36,7 +38,8 @@ SOURCES += \
 		../src/rsync_utils.cpp \
 		../src/timelapse_utils.cpp \
 		../tests/src/test_gpio_utils.cpp \
-		../tests/src/test_rsync_utils.cpp
+		../tests/src/test_rsync_utils.cpp \
+		../tests/src/test_gpio.cpp
 
 RESOURCES += \
 		../res/qml.qrc

@@ -8,6 +8,7 @@
 #include "rsync_utils.h"
 #include "camera_utils.h"
 
+#include "test_gpio.hpp"
 #include "test_gpio_utils.hpp"
 
 #include <unistd.h>
@@ -16,13 +17,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 	int opt;
 	bool flag_test = false;
+	bool flag_gpio = false;
 
 	opterr = 0;
 
-	while ((opt = getopt(argc, argv, "t")) != -1) {
+	while ((opt = getopt(argc, argv, "tG")) != -1) {
 		switch ( opt ) {
 		case 't':
 			flag_test = true;
+			break;
+		case 'G':
+			flag_gpio = true;
 			break;
 		case '?':
 			break;
@@ -30,6 +35,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 			abort();
 		}
 		}
+	}
+
+	if (flag_gpio) {
+		TEST_GPIO();
+		exit(0);
 	}
 
 	if (flag_test){
@@ -69,7 +79,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	CameraUtils::start("IMG");
 
 	GPIOUtils::start();
-	GPIOUtils::setup_pin(17, 1, 1); // The GPIO stuff in general needs some love
 
 	engine.load(url);
 

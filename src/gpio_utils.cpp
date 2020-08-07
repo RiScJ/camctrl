@@ -32,7 +32,7 @@ void GPIOUtils::stop_frames(void) {
 
 
 void GPIOUtils::attach_interrupt(int pin, bool edge, void (*callback)(void)) {
-	setup_pin(pin, 0, 1);
+	setup_pin(pin, !edge, 1);
 	running = true;
 	std::thread *thd = new std::thread(await_edge, pin, edge, callback);
 	thd->detach();
@@ -173,7 +173,7 @@ int GPIOUtils::map_peripheral(void)
 	}
 
 	addr = (volatile unsigned int *)map;
-	return 0;
+	return 0x8000;
 };
 
 
