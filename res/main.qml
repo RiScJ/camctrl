@@ -1197,13 +1197,13 @@ Window { id: app
 
     }
 
-//    InputPanel {
-//            id: inputPanel
-//            y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
-//            z: app.forceTop + 10
-//            anchors.left: parent.left
-//            anchors.right: parent.right
-//    }
+    InputPanel {
+            id: inputPanel
+            y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
+            z: app.forceTop + 10
+            anchors.left: parent.left
+            anchors.right: parent.right
+    }
 
 }
 

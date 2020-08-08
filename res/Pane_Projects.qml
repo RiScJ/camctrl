@@ -85,7 +85,7 @@ Pane {
 //        font.family: "Courier"
 
         onClicked: {
-            app.currentProject = projectListModel.get(listView.currentIndex, "fileName")
+            app.currentProject = projectUI.projectListModel.get(listView.currentIndex, "fileName")
             cam.set_project(app.currentProject)
         }
 
