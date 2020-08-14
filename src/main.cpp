@@ -3,13 +3,13 @@
 #include <QQmlContext>
 
 #include "fileutils.h"
-#include "gpio_utils.h"
+//#include "gpio_utils.h"
 #include "timelapse_utils.h"
 #include "rsync_utils.h"
 #include "camera_utils.h"
 
-#include "test_gpio.hpp"
-#include "test_gpio_utils.hpp"
+//#include "test_gpio.hpp"
+//#include "test_gpio_utils.hpp"
 
 #include <unistd.h>
 
@@ -38,12 +38,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	}
 
 	if (flag_gpio) {
-		TEST_GPIO();
+//		TEST_GPIO();
 		exit(0);
 	}
 
 	if (flag_test){
-		TEST_GPIOUtils(argc, argv);
+//		TEST_GPIOUtils(argc, argv);
 		exit(0);
 	}
 
@@ -64,8 +64,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	FileUtils* fileUtils = new FileUtils();
 	engine.rootContext()->setContextProperty("fileUtils", fileUtils);
 
-	GPIOUtils* gpio = new GPIOUtils();
-	engine.rootContext()->setContextProperty("gpioUtils", gpio);
+//	GPIOUtils* gpio = new GPIOUtils();
+//	engine.rootContext()->setContextProperty("gpioUtils", gpio);
 
 	TimelapseUtils* timelapseUtils = new TimelapseUtils();
 	engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
@@ -78,7 +78,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 	CameraUtils::start("IMG");
 
-	GPIOUtils::start();
+//	GPIOUtils::start();
 
 	engine.load(url);
 

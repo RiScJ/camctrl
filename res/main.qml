@@ -5,8 +5,18 @@ import QtMultimedia 5
 import Qt.labs.folderlistmodel 1
 import QtQuick.VirtualKeyboard 2.1
 
+import QtQuick.Controls.Material 2.0
+
 
 Window { id: app
+
+    Material.theme: Material.Dark
+//    Material.accent: Material.Red
+    Material.foreground: "#e9e9e9"
+//    Material.background: Material.Teal
+//    Material.primary: Material.BlueGrey
+
+    UI_Main { id: mainUI }
 
     objectName: "root"
 
@@ -80,8 +90,8 @@ Window { id: app
     function stopRecording() {
         app.switchStatus(0)
         cam.record()
-	cam.stop()
-	cam.start(app.modeName)
+    cam.stop()
+    cam.start(app.modeName)
     }
 
     function startTimedRecording() {
@@ -116,7 +126,7 @@ Window { id: app
         } else if (app.trigName === "EXT") {
             gpioUtils.trigger_frames(gpioSpin.value, extEdgeCombo.currentIndex)
         }
-	cam.start(app.modeName)
+    cam.start(app.modeName)
     }
 
     function captureLapseFrame() {
@@ -190,7 +200,7 @@ Window { id: app
             enabled: stack.depth > 1
             onClicked: {
                 mainBar.currentMenuName = stack.get(stack.currentItem.StackView.index - 1).menuTitle
-		stack.pop()
+        stack.pop()
             }
         }
 
@@ -200,7 +210,7 @@ Window { id: app
             y: 0
             text: qsTr(mainBar.currentMenuName)
             topPadding: 9
-            font.family: "Courier"
+            ////font.family: "Courier"
             anchors.left: backButton.right
             anchors.leftMargin: 0
             anchors.right: toolButton1.left
@@ -251,7 +261,7 @@ Window { id: app
             anchors.top: parent.top
             anchors.topMargin: 9
             font.pointSize: 19
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.horizontalCenterOffset: -36
             anchors.horizontalCenter: parent.horizontalCenter
         }
@@ -260,7 +270,7 @@ Window { id: app
             id: label2
             color: "#ffffff"
             text: qsTr("EXT")
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: parent.top
@@ -271,7 +281,7 @@ Window { id: app
             id: label3
             color: "#ffffff"
             text: qsTr("GPIO")
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.left: parent.left
             anchors.leftMargin: 15
             anchors.top: parent.top
@@ -287,7 +297,7 @@ Window { id: app
             bottomPadding: 1
             topPadding: 20
             font.pointSize: 20
-            font.family: "Courier"
+            //font.family: "Courier"
             to: 32
             editable: false
             scale: 0.6
@@ -297,7 +307,7 @@ Window { id: app
             id: label4
             color: "#ffffff"
             text: qsTr("On...")
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.top: parent.top
             anchors.topMargin: 99
             anchors.left: parent.left
@@ -313,7 +323,7 @@ Window { id: app
             padding: 0
             topPadding: 0
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
             flat: false
             textRole: ""
             currentIndex: 0
@@ -325,7 +335,7 @@ Window { id: app
             id: label5
             color: "#ffffff"
             text: qsTr("TMR")
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: parent.top
@@ -340,7 +350,7 @@ Window { id: app
             anchors.leftMargin: 15
             anchors.top: parent.top
             anchors.topMargin: 170
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         function formatText(count, modelData) {
@@ -366,7 +376,7 @@ Window { id: app
             height: 116
             font.wordSpacing: 0
             font.italic: true
-            font.family: "Courier"
+            //font.family: "Courier"
             visibleItemCount: 6
             model: 60
 
@@ -382,7 +392,7 @@ Window { id: app
             model: 60
             visibleItemCount: 6
             font.wordSpacing: 0
-            font.family: "Courier"
+            //font.family: "Courier"
 
             delegate: tumblerDelegate
         }
@@ -396,7 +406,7 @@ Window { id: app
             font.italic: true
             font.bold: true
             font.pointSize: 15
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Label {
@@ -411,7 +421,7 @@ Window { id: app
             font.italic: true
             font.pointSize: 15
             font.bold: true
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         //
@@ -443,7 +453,7 @@ Window { id: app
             font.pointSize: 11
             verticalAlignment: Text.AlignBottom
             horizontalAlignment: Text.AlignLeft
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
             anchors.top: parent.top
@@ -479,7 +489,7 @@ Window { id: app
             font.capitalization: Font.AllUppercase
             topPadding: 3
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Label { id: trigLabel
@@ -495,7 +505,7 @@ Window { id: app
             topPadding: 3
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         ToolSeparator {
@@ -545,7 +555,7 @@ Window { id: app
             topPadding: 3
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         ToolSeparator {
@@ -574,7 +584,7 @@ Window { id: app
             anchors.bottomMargin: 0
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
             visible: app.trigName == "EXT"
         }
 
@@ -592,7 +602,7 @@ Window { id: app
             anchors.bottomMargin: 0
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
             visible: app.trigName == "TMR"
         }
 
@@ -634,7 +644,7 @@ Window { id: app
             anchors.bottomMargin: 0
             font.capitalization: Font.AllUppercase
             font.pointSize: 14
-            font.family: "Courier"
+            //font.family: "Courier"
         }
     }
 
@@ -698,7 +708,7 @@ Window { id: app
                 color: "#ffffff"
                 font.pointSize: 19
                 font.bold: false
-                font.family: "Courier"
+                //font.family: "Courier"
                 topPadding: 10
                 leftPadding: 10
             }
@@ -711,7 +721,7 @@ Window { id: app
                 color: "#ffffff"
                 font.pointSize: 19
                 font.bold: false
-                font.family: "Courier"
+                //font.family: "Courier"
                 topPadding: 10
                 rightPadding: 10
             }
@@ -759,7 +769,7 @@ Window { id: app
                         color: "#000000"
                         font.pointSize: 19
                         font.bold: false
-                        font.family: "Courier"
+                        //font.family: "Courier"
                         topPadding: 15
                         leftPadding: 10
                     }
@@ -772,7 +782,7 @@ Window { id: app
                         color: "#000000"
                         font.pointSize: 19
                         font.bold: false
-                        font.family: "Courier"
+                        //font.family: "Courier"
                         topPadding: 15
                         leftPadding: 10
                     }
@@ -823,7 +833,7 @@ Window { id: app
             font.pointSize: 17
             font.bold: false
             visible: true
-            font.family: "Courier"
+            //font.family: "Courier"
             placeholderText: qsTr("New project name")
         }
 
@@ -837,7 +847,7 @@ Window { id: app
             topPadding: 14
             font.bold: false
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.right: newProjCreateButton.left
             anchors.rightMargin: 15
 
@@ -856,7 +866,7 @@ Window { id: app
             text: qsTr("CREATE")
             topPadding: 14
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.right: parent.right
             anchors.rightMargin: 40
 
@@ -889,7 +899,7 @@ Window { id: app
             verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 13
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Button { id: confirmDeleteProjectButton
@@ -905,7 +915,7 @@ Window { id: app
             topPadding: 14
             font.bold: false
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 fileUtils.removeDir(projectPath + projectListModel.get(listView.currentIndex, "fileName"))
@@ -926,7 +936,7 @@ Window { id: app
             anchors.rightMargin: 20
             topPadding: 14
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 delProjectUI.visible = false
@@ -961,7 +971,7 @@ Window { id: app
                 color: "#ffffff"
                 font.pointSize: 19
                 font.bold: false
-                font.family: "Courier"
+                //font.family: "Courier"
                 topPadding: 10
                 leftPadding: 10
             }
@@ -1016,7 +1026,7 @@ Window { id: app
                         color: "#000000"
                         font.pointSize: 19
                         font.bold: false
-                        font.family: "Courier"
+                        //font.family: "Courier"
                         topPadding: 15
                         leftPadding: 10
                     }
@@ -1067,7 +1077,7 @@ Window { id: app
             font.pointSize: 17
             font.bold: false
             visible: true
-            font.family: "Courier"
+            //font.family: "Courier"
             placeholderText: qsTr("New remote name")
         }
 
@@ -1081,7 +1091,7 @@ Window { id: app
             topPadding: 14
             font.bold: false
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.right: newRemoteCreateButton.left
             anchors.rightMargin: 15
 
@@ -1100,7 +1110,7 @@ Window { id: app
             text: qsTr("CREATE")
             topPadding: 14
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
             anchors.right: parent.right
             anchors.rightMargin: 40
 
@@ -1132,7 +1142,7 @@ Window { id: app
             verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 13
-            font.family: "Courier"
+            //font.family: "Courier"
         }
 
         Button { id: confirmDeleteRemoteButton
@@ -1148,7 +1158,7 @@ Window { id: app
             topPadding: 14
             font.bold: false
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 fileUtils.rm(app.homeDir + ".camctrl/remote/" + remoteListModel.get(remoteListView.currentIndex, "fileName"))
@@ -1169,7 +1179,7 @@ Window { id: app
             anchors.rightMargin: 20
             topPadding: 14
             font.pointSize: 17
-            font.family: "Courier"
+            //font.family: "Courier"
 
             onClicked: {
                 delRemoteUI.visible = false
@@ -1233,7 +1243,7 @@ Window { id: app
             text: "Projects"
             onTriggered: {
                 stack.pop(null)
-		cam.stop()
+        cam.stop()
                 stack.replace(projectsPane)
                 stack.subapp = "projects"
                 mainBar.currentMenuName = projectsPane.menuTitle
@@ -1244,9 +1254,9 @@ Window { id: app
             text: "Control"
             onTriggered: {
                 stack.pop(null)
-		if (stack.subapp !== "control") {
-			cam.start(app.modeName)
-		}
+        if (stack.subapp !== "control") {
+            cam.start(app.modeName)
+        }
                 stack.replace(controlPane)
                 stack.subapp = "control"
                 mainBar.currentMenuName = controlPane.menuTitle
@@ -1258,7 +1268,7 @@ Window { id: app
             onTriggered: {
                 stack.pop(null)
                 cam.stop()
-		stack.replace(remotePane)
+        stack.replace(remotePane)
                 stack.subapp = "remote"
                 mainBar.currentMenuName = remotePane.menuTitle
             }
@@ -1270,7 +1280,7 @@ Window { id: app
             text: "Help"
             onTriggered: {
                 stack.pop(null)
-		cam.stop()
+        cam.stop()
                 stack.replace(helpPane)
                 stack.subapp = "help"
                 mainBar.currentMenuName = helpPane.menuTitle
@@ -1283,7 +1293,7 @@ Window { id: app
             text: "SysInfo"
             onTriggered: {
                 stack.pop(null)
-		cam.stop
+        cam.stop
                 stack.replace(sysinfoPane)
                 stack.subapp = "sysinfo"
                 mainBar.currentMenuName = sysinfoPane.menuTitle
