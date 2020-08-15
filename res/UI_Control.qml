@@ -459,7 +459,9 @@ Rectangle {
                     cam.start(app.modeName)
                 } else if (text == "STOP") {
                     app.statusName = "IDLE"
-                    if (app.modeName == "VID") {
+                    if (app.modeName === "IMG") {
+			timer.running = false
+		    } else if (app.modeName == "VID") {
                         cam.stop()
                         cam.start(app.modeName)
                     } else {

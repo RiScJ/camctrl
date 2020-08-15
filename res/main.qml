@@ -112,8 +112,11 @@ Window {
 
         onOpenRemoteUI: stack.push(remoteUI)
         onOpenProjectUI: stack.push(projectUI)
-        onOpenControlUI: stack.push(controlUI)
-        onOpenTriggerUI: stack.push(triggerUI)
+        onOpenControlUI: {
+		stack.push(controlUI)
+		cam.start(app.modeName)
+        }
+	onOpenTriggerUI: stack.push(triggerUI)
         onOpenHelpUI: stack.push(helpUI)
         onOpenInfoUI: stack.push(infoUI)
         onOpenSetupUI: stack.push(setupUI)
@@ -156,7 +159,10 @@ Window {
     UI_Control {
         id: controlUI
 
-        onOpenMainUI: stack.pop()
+        onOpenMainUI: {
+		stack.pop()
+		cam.stop()
+	}
     }
 
 //    UI_Trigger {
