@@ -3,18 +3,19 @@
         <file>qtquickcontrols2.conf</file>
         <file>main.qml</file>
         <file>Pane_SysInfo.qml</file>
-        <file>Pane_Help.qml</file>
         <file>Pane_Remote.qml</file>
-        <file>Pane_Projects.qml</file>
         <file>UI_Remote_Config.qml</file>
-        <file>UI_Help.qml</file>
         <file>Pane_Sync.qml</file>
         <file>UI_Main.qml</file>
-        <file>UI_Remote.qml</file>
-        <file>UI_Project.qml</file>
-        <file>UI_Trigger.qml</file>
-        <file>UI_Info.qml</file>
-        <file>UI_Setup.qml</file>
         <file>UI_Control.qml</file>
+        <file>UI_Project.qml</file>
+        <file>UI_Remote.qml</file>
+        <file>UI_Setup.qml</file>
+        <file>UI_Help.qml</file>
+        <file>UI_Info.qml</file>
+        <file>UI_Trigger.qml</file>
+        <file>UI_Project_New.qml</file>
+        <file>UI_Project_Delete.qml</file>
+        <file>UI_Project_Open.qml</file>
     </qresource>
 </RCC>

@@ -12,7 +12,7 @@ Rectangle {
     height: 480
     color: "#1a2026"
 
-    visible: true
+//    visible: true
     enabled: visible
 
     signal openRemoteUI
@@ -173,7 +173,7 @@ Rectangle {
         id: button_openInfoUI
 
         x: 625
-        y: 190
+        y: 189
         width: 145
         height: 100
         text: qsTr("INFO")
@@ -197,7 +197,7 @@ Rectangle {
         id: button_openSetupUI
 
         x: 625
-        y: 109
+        y: 107
         width: 145
         height: 69
         text: qsTr("SETUP")

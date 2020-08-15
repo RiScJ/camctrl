@@ -11,12 +11,17 @@ Rectangle {
     z: app.forceTop - 1
     width: 600
     height: 480
-    color: "#ffffff"
+    color: "#261a20"
 
-    visible: true
+    visible: false
     enabled: visible
 
     signal openMainUI
+
+    signal newProject
+    signal deleteProject
+    signal selectProject
+    signal openProject
 
     Pane {
         id: pane
@@ -30,7 +35,8 @@ Rectangle {
         height: 480
 
         Button {
-            id: button
+            id: button_newProject
+
             x: 0
             y: 42
             width: 162
@@ -42,10 +48,16 @@ Rectangle {
             font.family: "CMU Concrete"
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
+
+            onClicked: {
+                newProject()
+            }
+
         }
 
         Button {
-            id: button1
+            id: button_deleteProject
+
             x: 1
             y: 123
             width: 162
@@ -57,10 +69,14 @@ Rectangle {
             bottomPadding: 30
             font.pointSize: 17
             rightPadding: 55
+
+            onClicked: {
+                deleteProject()
+            }
+
         }
 
         ToolSeparator {
-            id: toolSeparator
             y: 199
             anchors.left: parent.left
             anchors.leftMargin: 0
@@ -70,7 +86,8 @@ Rectangle {
         }
 
         Button {
-            id: button2
+            id: button_selectProject
+
             x: 2
             y: 224
             width: 162
@@ -82,16 +99,41 @@ Rectangle {
             font.family: "CMU Concrete"
             rightPadding: 58
             font.pointSize: 17
+
+            onClicked: {
+                app.currentProject = projectListModel.get(listView.currentIndex, "fileName")
+            }
+
         }
 
         ToolSeparator {
-            id: toolSeparator1
             y: 299
             anchors.right: parent.right
             orientation: Qt.Horizontal
             anchors.rightMargin: 0
             anchors.left: parent.left
             anchors.leftMargin: 0
+        }
+
+        Button {
+            id: button_openProject
+
+            x: 9
+            y: 324
+            width: 162
+            height: 132
+            text: qsTr("OPEN")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenterOffset: 0
+            bottomPadding: 84
+            font.family: "CMU Concrete"
+            rightPadding: 84
+            font.pointSize: 17
+
+            onClicked: {
+                openProject()
+            }
+
         }
 
     }
@@ -268,6 +310,6 @@ Rectangle {
 
 /*##^##
 Designer {
-    D{i:5;anchors_x:56}D{i:7;anchors_x:56}D{i:20;anchors_x:66}D{i:19;anchors_width:360}
+    D{i:5;anchors_x:56}D{i:7;anchors_x:56}D{i:21;anchors_x:66}D{i:20;anchors_width:360}
 }
 ##^##*/

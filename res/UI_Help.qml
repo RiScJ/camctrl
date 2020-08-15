@@ -10,6 +10,8 @@ Rectangle {
     height: 480
     color: "#4e4e4e"
 
+    signal openMainUI
+
     ScrollView {
         x: 0
         y: 0

@@ -18,6 +18,8 @@ Pane { id: optionsPane
     property string menuTitle: "Options"
     property int delayTime: 4000
 
+    signal openMainUI
+
     Label {
         id: label1
         color: "#ffffff"

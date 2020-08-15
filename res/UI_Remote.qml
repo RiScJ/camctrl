@@ -12,6 +12,9 @@ Rectangle {
     color: "#ffffff"
     visible: stack.subapp == "remote" | mainBar.currentMenuName == "Sync"
 
+
+    signal openMainUI
+
     Rectangle { id: remoteListTitle
         x: 0
         y: 0
