@@ -11,7 +11,8 @@ Rectangle { id: delProjectUI
 
     visible: false
 
-    signal done
+    signal cancel
+    signal del
 
     Label { id: deleteProjectLabel
         x: 11
@@ -46,9 +47,8 @@ Rectangle { id: delProjectUI
         //font.family: "Courier"
 
         onClicked: {
-            fileUtils.removeDir(projectPath + projectListModel.get(listView.currentIndex, "fileName"))
             delProjectUI.visible = false
-            done()
+            del()
         }
     }
 
@@ -70,7 +70,7 @@ Rectangle { id: delProjectUI
 
         onClicked: {
             delProjectUI.visible = false
-            done()
+            cancel()
         }
     }
 }

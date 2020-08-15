@@ -2,193 +2,248 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.0
 
-Pane { id: optionsPane
-    background: Rectangle {
-        color: "#444444"
-        border.width: 0
-    }
-    x: 600
-    width: 200
-    height: 440
-    anchors.top: mainBar.bottom
-    anchors.topMargin: 0
-    anchors.right: parent.right
-    anchors.rightMargin: 0
+Rectangle {
+	id: triggerUI
 
-    property string menuTitle: "Options"
-    property int delayTime: 4000
+	x: 0
+	y: 0
+	z: app.forceTop + 2
+	width: 800
+	height: 480
+	color: "#1a2026"
 
-    signal openMainUI
+	visible: false
+	enabled: visible
 
-    Label {
-        id: label1
-        color: "#ffffff"
-        text: qsTr("TRIGGER")
-        anchors.top: parent.top
-        anchors.topMargin: 9
-        font.pointSize: 19
-        //font.family: "Courier"
-        anchors.horizontalCenterOffset: -36
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
+	signal openMainUI
 
-    Label {
-        id: label2
-        color: "#ffffff"
-        text: qsTr("EXT")
-        //font.family: "Courier"
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 40
-    }
+	function updateTimers() {
+		app.delayTime = 60 * tumbler_delayMin.currentIndex + tumbler_delaySec.currentIndex
+		app.durationTime = 60 * tumbler_durationMin.currentIndex + tumbler_durationSec.currentIndex
+	}
 
-    Label {
-        id: label3
-        color: "#ffffff"
-        text: qsTr("GPIO")
-        //font.family: "Courier"
-        anchors.left: parent.left
-        anchors.leftMargin: 15
-        anchors.top: parent.top
-        anchors.topMargin: 65
-    }
+	ToolBar {
+		id: toolBar
+		width: 800
+		height: 40
+		Label {
+			id: label
+			y: 22
+			color: "#ffffff"
+			text: "Trigger"
+			horizontalAlignment: Text.AlignLeft
+			verticalAlignment: Text.AlignTop
+			renderType: Text.QtRendering
+			textFormat: Text.AutoText
+			anchors.verticalCenterOffset: 2
+			font.family: "cmmi10"
+			font.bold: false
+			font.pointSize: 20
+			anchors.verticalCenter: parent.verticalCenter
+			font.capitalization: Font.MixedCase
+			anchors.left: parent.left
+			anchors.leftMargin: 18
+			font.italic: false
+		}
 
-    SpinBox { id: gpioSpin
-        x: 64
-        y: 51
-        width: 130
-        height: 40
-        value: 10
-        bottomPadding: 1
-        topPadding: 20
-        font.pointSize: 20
-        //font.family: "Courier"
-        to: 32
-        editable: false
-        scale: 0.6
-    }
+		RoundButton {
+			x: 150
+			y: 0
+			width: 38
+			height: 38
+			text: "*"
+			clip: false
+			anchors.verticalCenterOffset: 1
+			font.family: "cmsy10"
+			bottomPadding: 5
+			font.bold: false
+			anchors.right: parent.right
+			topPadding: 28
+			font.pointSize: 19
+			rightPadding: 12
+			anchors.verticalCenter: parent.verticalCenter
+			anchors.rightMargin: 10
+			font.capitalization: Font.AllLowercase
 
-    Label {
-        id: label4
-        color: "#ffffff"
-        text: qsTr("On...")
-        //font.family: "Courier"
-        anchors.top: parent.top
-        anchors.topMargin: 99
-        anchors.left: parent.left
-        anchors.leftMargin: 15
-    }
+			onClicked: {
+				openMainUI()
+				updateTimers()
+			}
+		}
 
-    ComboBox { id: extEdgeCombo
-        x: 64
-        y: 84
-        width: 130
-        height: 40
-        editable: false
-        padding: 0
-        topPadding: 0
-        font.pointSize: 14
-        //font.family: "Courier"
-        flat: false
-        textRole: ""
-        currentIndex: 0
-        scale: 0.6
-        model: ["RISE", "FALL"]
-    }
+		Label {
+			id: label1
+			y: 22
+			color: "#ffffff"
+			text: "Configuration"
+			anchors.verticalCenterOffset: 2
+			verticalAlignment: Text.AlignTop
+			font.bold: false
+			font.family: "cmmi10"
+			textFormat: Text.AutoText
+			renderType: Text.QtRendering
+			font.pointSize: 20
+			horizontalAlignment: Text.AlignLeft
+			anchors.verticalCenter: parent.verticalCenter
+			font.capitalization: Font.MixedCase
+			anchors.left: parent.left
+			anchors.leftMargin: 116
+			font.italic: false
+		}
+		anchors.topMargin: 0
+		anchors.top: parent.top
+		anchors.left: parent.left
+		anchors.leftMargin: 0
+		Material.primary: "#413a48"
+	}
 
-    Label {
-        id: label5
-        color: "#ffffff"
-        text: qsTr("TMR")
-        //font.family: "Courier"
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 150
-    }
+	Button {
+		id: button_gpioNumber
+		x: 29
+		y: 66
+		width: 362
+		height: 87
+		text: qsTr("GPIO")
+		rightPadding: 290
+		bottomPadding: 40
+		font.italic: false
+		font.pointSize: 17
+		font.family: "CMU Concrete"
 
-    Label {
-        id: label6
-        color: "#ffffff"
-        text: qsTr("Delay")
-        anchors.left: parent.left
-        anchors.leftMargin: 15
-        anchors.top: parent.top
-        anchors.topMargin: 170
-        //font.family: "Courier"
-    }
+		SpinBox {
+			id: spin_gpioNumber
+			x: 99
+			y: 18
+			width: 243
+			height: 55
+			value: 3
+			to: 30
+			topPadding: 52
+			font.italic: true
+			font.family: "CMU Typewriter Text"
+			font.pointSize: 30
 
-    function formatText(count, modelData) {
-            var data = count === 12 ? modelData + 1 : modelData;
-            return data.toString().length < 2 ? "0" + data : data;
-    }
+			onValueModified: {
+				app.gpio = value
+			}
+		}
+	}
 
-    Component {
-        id: tumblerDelegate
+	Button {
+		id: button_gpioEdge
+		x: 29
+		y: 169
+		width: 362
+		height: 87
+		text: qsTr("EDGE")
+		font.family: "CMU Concrete"
+		bottomPadding: 40
+		font.pointSize: 17
+		rightPadding: 281
+		font.italic: false
 
-        Label {
-            text: optionsPane.formatText(Tumbler.tumbler.count, modelData)
-            opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
-            color: "#000000"
-            font.pointSize: 15
-        }
-    }
+		ComboBox {
+			id: combo_gpioEdge
+			x: 192
+			y: 15
+			width: 151
+			height: 56
+			topPadding: 3
+			font.capitalization: Font.SmallCaps
+			font.pointSize: 21
+			font.family: "cmmi10"
+			model: ["Falling", "Rising"]
+			editable: false
+			currentIndex: 0
 
-    Tumbler { id: minTumbler
-        x: 70
-        y: 170
-        width: 36
-        height: 116
-        font.wordSpacing: 0
-        font.italic: true
-        //font.family: "Courier"
-        visibleItemCount: 6
-        model: 60
+			onCurrentIndexChanged: {
+				app.edge = currentIndex
+			}
+		}
+	}
 
-        delegate: tumblerDelegate
-    }
+	Button {
+		id: button
+		x: 418
+		y: 66
+		width: 351
+		height: 190
+		text: qsTr("TIMER")
+		rightPadding: 250
+		bottomPadding: 140
+		font.pointSize: 17
+		font.family: "CMU Concrete"
 
-    Tumbler { id: secTumbler
-        x: 112
-        y: 170
-        width: 36
-        height: 116
-        font.italic: true
-        model: 60
-        visibleItemCount: 6
-        font.wordSpacing: 0
-        //font.family: "Courier"
+		Tumbler {
+			id: tumbler_delayMin
+			x: 112
+			y: 16
+			width: 40
+			height: 162
+			font.pointSize: 20
+			font.italic: true
+			font.family: "CMU Typewriter Text"
+			currentIndex: 0
+			visibleItemCount: 5
+			model: 60
+		}
 
-        delegate: tumblerDelegate
-    }
+		Tumbler {
+			id: tumbler_delaySec
+			x: 163
+			y: 16
+			width: 35
+			height: 162
+			font.pointSize: 20
+			font.family: "CMU Typewriter Text"
+			model: 60
+			currentIndex: 0
+			visibleItemCount: 5
+			font.italic: true
+		}
 
-    Label {
-        id: label7
-        x: 96
-        y: 214
-        color: "#ffffff"
-        text: qsTr("'")
-        font.italic: true
-        font.bold: true
-        font.pointSize: 15
-        //font.family: "Courier"
-    }
+		Label {
+			x: 155
+			y: 82
+			text: qsTr(":")
+			font.family: "cmr10"
+			font.pointSize: 20
+		}
 
-    Label {
-        id: label8
-        x: 140
-        y: 214
-        width: 26
-        height: 21
-        color: "#ffffff"
-        text: qsTr("''")
-        font.letterSpacing: -5
-        font.italic: true
-        font.pointSize: 15
-        font.bold: true
-        //font.family: "Courier"
-    }
+		Tumbler {
+			id: tumbler_durationMin
+			x: 231
+			y: 16
+			width: 40
+			height: 162
+			font.family: "CMU Typewriter Text"
+			model: 60
+			currentIndex: 0
+			font.pointSize: 20
+			visibleItemCount: 5
+			font.italic: true
+		}
 
-    //
+		Tumbler {
+			id: tumbler_durationSec
+			x: 282
+			y: 16
+			width: 35
+			height: 162
+			font.family: "CMU Typewriter Text"
+			model: 60
+			currentIndex: 0
+			font.pointSize: 20
+			visibleItemCount: 5
+			font.italic: true
+		}
+
+		Label {
+			x: 274
+			y: 82
+			text: qsTr(":")
+			font.family: "cmr10"
+			font.pointSize: 20
+		}
+	}
 }
