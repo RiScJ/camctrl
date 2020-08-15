@@ -174,8 +174,33 @@ Rectangle {
         bottomPadding: 7
         font.family: "CMU Bright"
         font.pointSize: 30
+
+        onClicked: {
+            miscMenu.popup()
+        }
+
     }
 
+    Menu {
+        id: miscMenu
+
+        MenuItem {
+            text: "Beepboop"
+            onTriggered: {
+
+            }
+        }
+
+        MenuSeparator { }
+
+        MenuItem {
+            text: "Quit"
+            onTriggered: {
+                Qt.quit()
+            }
+        }
+
+    }
 
 }
 

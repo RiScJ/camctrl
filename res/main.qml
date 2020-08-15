@@ -8,7 +8,9 @@ import QtQuick.VirtualKeyboard 2.1
 import QtQuick.Controls.Material 2.0
 
 
-Window { id: app
+Window {
+    id: app
+    objectName: "root"
 
     Material.theme: Material.Dark
 //    Material.accent: Material.Red
@@ -16,9 +18,6 @@ Window { id: app
 //    Material.background: Material.Teal
 //    Material.primary: Material.BlueGrey
 
-    UI_Main { id: mainUI }
-
-    objectName: "root"
 
     title: qsTr("Hello World")
     width: 800
@@ -236,6 +235,22 @@ Window { id: app
             }
         }
     }
+
+
+    /*
+     * UI WINDOWS BE HERE
+     *
+     *
+     */
+
+    UI_Main { id: mainUI }
+
+    /*
+     *
+     *
+     *
+     */
+
 
     // Options menu pane
     Pane { id: optionsPane

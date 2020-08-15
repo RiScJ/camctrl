@@ -11,45 +11,5 @@
         <file>UI_Help.qml</file>
         <file>Pane_Sync.qml</file>
         <file>UI_Main.qml</file>
-        <file>fonts/DejaVuMathTeXGyre.ttf</file>
-        <file>fonts/couri.ttf</file>
-        <file>fonts/courbi.ttf</file>
-        <file>fonts/courbd.ttf</file>
-        <file>fonts/cour.ttf</file>
-        <file>fonts/comicbd.ttf</file>
-        <file>fonts/comic.ttf</file>
-        <file>fonts/cmsy10.ttf</file>
-        <file>fonts/cmr10.ttf</file>
-        <file>fonts/cmmi10.ttf</file>
-        <file>fonts/cmex10.ttf</file>
-        <file>fonts/cmunvt.ttf</file>
-        <file>fonts/cmunvi.ttf</file>
-        <file>fonts/cmunui.ttf</file>
-        <file>fonts/cmuntx.ttf</file>
-        <file>fonts/cmuntt.ttf</file>
-        <file>fonts/cmunti.ttf</file>
-        <file>fonts/cmuntb.ttf</file>
-        <file>fonts/cmunsx.ttf</file>
-        <file>fonts/cmunssdc.ttf</file>
-        <file>fonts/cmunss.ttf</file>
-        <file>fonts/cmunso.ttf</file>
-        <file>fonts/cmunsl.ttf</file>
-        <file>fonts/cmunsi.ttf</file>
-        <file>fonts/cmunrm.ttf</file>
-        <file>fonts/cmunoti.ttf</file>
-        <file>fonts/cmunorm.ttf</file>
-        <file>fonts/cmunobx.ttf</file>
-        <file>fonts/cmunobi.ttf</file>
-        <file>fonts/cmunit.ttf</file>
-        <file>fonts/cmunci.ttf</file>
-        <file>fonts/cmunbx.ttf</file>
-        <file>fonts/cmunbto.ttf</file>
-        <file>fonts/cmunbtl.ttf</file>
-        <file>fonts/cmunbsr.ttf</file>
-        <file>fonts/cmunbso.ttf</file>
-        <file>fonts/cmunbmr.ttf</file>
-        <file>fonts/cmunbmo.ttf</file>
-        <file>fonts/cmunbl.ttf</file>
-        <file>fonts/cmunbi.ttf</file>
     </qresource>
 </RCC>
