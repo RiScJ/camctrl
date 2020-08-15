@@ -243,7 +243,40 @@ Window {
      *
      */
 
-    UI_Main { id: mainUI }
+    UI_Main {
+        id: mainUI
+
+        onOpenRemoteUI: remoteUI.enabled = true
+        onOpenProjectUI: projectUI.enabled = true
+        onOpenTriggerUI: triggerUI.enabled = true
+        onOpenHelpUI: helpUI.enabled = true
+        onOpenInfoUI: infoUI.enabled = true
+        onOpenSetupUI: setupUI.enabled = true
+    }
+
+    UI_Remote {
+        id: remoteUI
+    }
+
+    UI_Project {
+        id: projectUI
+    }
+
+    UI_Trigger {
+        id: triggerUI
+    }
+
+    UI_Help {
+        id: helpUI
+    }
+
+    UI_Info {
+        id: infoUI
+    }
+
+    UI_Setup {
+        id: setupUI
+    }
 
     /*
      *

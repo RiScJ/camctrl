@@ -10,6 +10,14 @@ Rectangle {
     height: 480
     color: "#1a2026"
 
+    signal openRemoteUI
+    signal openProjectUI
+    signal openControlUI
+    signal openTriggerUI
+    signal openHelpUI
+    signal openInfoUI
+    signal openSetupUI
+
     Label {
         width: 280
         height: 69
@@ -45,6 +53,11 @@ Rectangle {
         bottomPadding: 110
         font.pointSize: 17
         font.family: "CMU Concrete"
+
+        onClicked: {
+            openRemoteUI()
+        }
+
     }
 
     Button {
