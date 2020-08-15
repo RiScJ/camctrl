@@ -13,10 +13,10 @@ Window {
     objectName: "root"
 
     Material.theme: Material.Dark
-//    Material.accent: Material.Red
+    Material.accent: Material.Red
     Material.foreground: "#e9e9e9"
-//    Material.background: Material.Teal
-//    Material.primary: Material.BlueGrey
+    Material.background: Material.Teal
+    Material.primary: Material.BlueGrey
 
 
     title: qsTr("Hello World")
@@ -166,75 +166,21 @@ Window {
         nameFilters: ["FRM_*"]
     }
 
-    // Timer object for timed capture control
-    Timer { id: timer
-        interval: optionsPane.delayTime
-        running: false
-        repeat: true
-        onTriggered: {
-            if (app.modeName === "IMG"){
-                app.capturePhoto()
-            } else if (app.modeName === "VID") {
+//    // Timer object for timed capture control
+//    Timer { id: timer
+//        interval: optionsPane.delayTime
+//        running: false
+//        repeat: true
+//        onTriggered: {
+//            if (app.modeName === "IMG"){
+//                app.capturePhoto()
+//            } else if (app.modeName === "VID") {
 
-            } else if (app.modeName === "FRM") {
-                app.captureLapseFrame()
-            }
-        }
-    }
-
-    // Main menu toolbar
-    ToolBar { id: mainBar
-        x: 600
-        y: 0
-        width: 200
-        height: 40
-
-        property string currentMenuName: "Control"
-
-        ToolButton { id: backButton
-            y: 0
-            text: stack.depth > 1 ? qsTr("‹") : qsTr("")
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            enabled: stack.depth > 1
-            onClicked: {
-                mainBar.currentMenuName = stack.get(stack.currentItem.StackView.index - 1).menuTitle
-        stack.pop()
-            }
-        }
-
-        Label {
-            id: label
-            x: 0
-            y: 0
-            text: qsTr(mainBar.currentMenuName)
-            topPadding: 9
-            ////font.family: "Courier"
-            anchors.left: backButton.right
-            anchors.leftMargin: 0
-            anchors.right: toolButton1.left
-            anchors.rightMargin: 0
-            font.pointSize: 19
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-        }
-
-        ToolButton {
-            id: toolButton1
-            x: 12
-            y: 0
-            text: qsTr("⋮")
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            onClicked: {
-                mainMenu.popup()
-            }
-        }
-    }
+//            } else if (app.modeName === "FRM") {
+//                app.captureLapseFrame()
+//            }
+//        }
+//    }
 
 
     /*
@@ -246,37 +192,46 @@ Window {
     UI_Main {
         id: mainUI
 
-        onOpenRemoteUI: remoteUI.enabled = true
-        onOpenProjectUI: projectUI.enabled = true
-        onOpenTriggerUI: triggerUI.enabled = true
-        onOpenHelpUI: helpUI.enabled = true
-        onOpenInfoUI: infoUI.enabled = true
-        onOpenSetupUI: setupUI.enabled = true
+        onOpenRemoteUI: remoteUI.visible = true
+        onOpenProjectUI: projectUI.visible = true
+        onOpenControlUI: controlUI.visible = true
+        onOpenTriggerUI: triggerUI.visible = true
+        onOpenHelpUI: helpUI.visible = true
+        onOpenInfoUI: infoUI.visible = true
+        onOpenSetupUI: setupUI.visible = true
     }
 
-    UI_Remote {
-        id: remoteUI
-    }
+//    UI_Remote {
+//        id: remoteUI
+//    }
 
     UI_Project {
         id: projectUI
+
+        onOpenMainUI: mainUI.visible = true
     }
 
-    UI_Trigger {
-        id: triggerUI
+    UI_Control {
+        id: controlUI
+
+        onOpenMainUI: mainUI.visible = true
     }
 
-    UI_Help {
-        id: helpUI
-    }
+//    UI_Trigger {
+//        id: triggerUI
+//    }
 
-    UI_Info {
-        id: infoUI
-    }
+//    UI_Help {
+//        id: helpUI
+//    }
 
-    UI_Setup {
-        id: setupUI
-    }
+//    UI_Info {
+//        id: infoUI
+//    }
+
+//    UI_Setup {
+//        id: setupUI
+//    }
 
     /*
      *
@@ -285,576 +240,18 @@ Window {
      */
 
 
-    // Options menu pane
-    Pane { id: optionsPane
-        background: Rectangle {
-            color: "#444444"
-            border.width: 0
-        }
-        x: 600
-        width: 200
-        height: 440
-        anchors.top: mainBar.bottom
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
 
-        property string menuTitle: "Options"
-        property int delayTime: 4000
 
-        Label {
-            id: label1
-            color: "#ffffff"
-            text: qsTr("TRIGGER")
-            anchors.top: parent.top
-            anchors.topMargin: 9
-            font.pointSize: 19
-            //font.family: "Courier"
-            anchors.horizontalCenterOffset: -36
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
 
-        Label {
-            id: label2
-            color: "#ffffff"
-            text: qsTr("EXT")
-            //font.family: "Courier"
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 40
-        }
 
-        Label {
-            id: label3
-            color: "#ffffff"
-            text: qsTr("GPIO")
-            //font.family: "Courier"
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.top: parent.top
-            anchors.topMargin: 65
-        }
-
-        SpinBox { id: gpioSpin
-            x: 64
-            y: 51
-            width: 130
-            height: 40
-            value: 10
-            bottomPadding: 1
-            topPadding: 20
-            font.pointSize: 20
-            //font.family: "Courier"
-            to: 32
-            editable: false
-            scale: 0.6
-        }
-
-        Label {
-            id: label4
-            color: "#ffffff"
-            text: qsTr("On...")
-            //font.family: "Courier"
-            anchors.top: parent.top
-            anchors.topMargin: 99
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-        }
-
-        ComboBox { id: extEdgeCombo
-            x: 64
-            y: 84
-            width: 130
-            height: 40
-            editable: false
-            padding: 0
-            topPadding: 0
-            font.pointSize: 14
-            //font.family: "Courier"
-            flat: false
-            textRole: ""
-            currentIndex: 0
-            scale: 0.6
-            model: ["RISE", "FALL"]
-        }
-
-        Label {
-            id: label5
-            color: "#ffffff"
-            text: qsTr("TMR")
-            //font.family: "Courier"
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 150
-        }
-
-        Label {
-            id: label6
-            color: "#ffffff"
-            text: qsTr("Delay")
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.top: parent.top
-            anchors.topMargin: 170
-            //font.family: "Courier"
-        }
-
-        function formatText(count, modelData) {
-                var data = count === 12 ? modelData + 1 : modelData;
-                return data.toString().length < 2 ? "0" + data : data;
-        }
-
-        Component {
-            id: tumblerDelegate
-
-            Label {
-                text: optionsPane.formatText(Tumbler.tumbler.count, modelData)
-                opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
-                color: "#000000"
-                font.pointSize: 15
-            }
-        }
-
-        Tumbler { id: minTumbler
-            x: 70
-            y: 170
-            width: 36
-            height: 116
-            font.wordSpacing: 0
-            font.italic: true
-            //font.family: "Courier"
-            visibleItemCount: 6
-            model: 60
-
-            delegate: tumblerDelegate
-        }
-
-        Tumbler { id: secTumbler
-            x: 112
-            y: 170
-            width: 36
-            height: 116
-            font.italic: true
-            model: 60
-            visibleItemCount: 6
-            font.wordSpacing: 0
-            //font.family: "Courier"
-
-            delegate: tumblerDelegate
-        }
-
-        Label {
-            id: label7
-            x: 96
-            y: 214
-            color: "#ffffff"
-            text: qsTr("'")
-            font.italic: true
-            font.bold: true
-            font.pointSize: 15
-            //font.family: "Courier"
-        }
-
-        Label {
-            id: label8
-            x: 140
-            y: 214
-            width: 26
-            height: 21
-            color: "#ffffff"
-            text: qsTr("''")
-            font.letterSpacing: -5
-            font.italic: true
-            font.pointSize: 15
-            font.bold: true
-            //font.family: "Courier"
-        }
-
-        //
-    }
-
-    // Control menu pane
-    Pane_Controls {
-        id: controlPane
-    }
 
     // Status bar, gives user additional information about app states
-    ToolBar { id: statusBar
-        background: Rectangle {
-            color: "#000000"
-            border.width: 0
-        }
-        x: 0
-        y: 460
-        z: app.forceTop // Always shown
-        width: 600
-        height: 20
-
-        Label { id: nameLabel
-            x: 5
-            y: 0
-            color: "#ffffff"
-            text: app.currentProject
-            font.capitalization: Font.MixedCase
-            font.pointSize: 11
-            verticalAlignment: Text.AlignBottom
-            horizontalAlignment: Text.AlignLeft
-            //font.family: "Courier"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 5
-        }
-
-        ToolSeparator {
-            id: toolSeparator1
-            x: 125
-            y: 0
-            scale: 1
-            anchors.left: parent.left
-            anchors.leftMargin: 125
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-        }
-
-        Label { id: modeLabel
-            x: 130
-            y: 0
-            color: "#19ff1c"
-            text: qsTr(app.modeName)
-            anchors.left: toolSeparator1.right
-            anchors.leftMargin: 5
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            font.capitalization: Font.AllUppercase
-            topPadding: 3
-            font.pointSize: 14
-            //font.family: "Courier"
-        }
-
-        Label { id: trigLabel
-            y: 0
-            color: "#19ff1c"
-            text: qsTr(app.trigName)
-            anchors.left: toolSeparator2.right
-            anchors.leftMargin: 5
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            topPadding: 3
-            font.capitalization: Font.AllUppercase
-            font.pointSize: 14
-            //font.family: "Courier"
-        }
-
-        ToolSeparator {
-            id: toolSeparator2
-            x: 185
-            y: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 185
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-        }
-
-        ToolSeparator {
-            id: toolSeparator3
-            x: 242
-            y: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 242
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-        }
-
-        Label { id: statusLabel
-            y: 0
-            color: {
-                if (app.statusName == "IDLE") {
-                    "#575c60"
-                } else if (app.statusName == "CAPTURING") {
-                    "#ff0000"
-                } else if (app.statusName == "RECORDING") {
-                    "#ff0000"
-                } else if (app.statusName == "LISTENING") {
-                    "#0000ff"
-                }
-            }
-            text: qsTr(app.statusName)
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 5
-            topPadding: 3
-            font.capitalization: Font.AllUppercase
-            font.pointSize: 14
-            //font.family: "Courier"
-        }
-
-        ToolSeparator {
-            id: toolSeparator4
-            x: 247
-            y: -2
-            anchors.left: parent.left
-            anchors.leftMargin: 345
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 0
-            anchors.bottomMargin: 0
-        }
-
-        Label {
-            id: extLabel
-            y: 0
-            color: "#74ccfe"
-            text: "GPIO " + gpioSpin.value.toString()
-            anchors.left: toolSeparator3.right
-            anchors.leftMargin: 5
-            topPadding: 3
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 0
-            anchors.bottomMargin: 0
-            font.capitalization: Font.AllUppercase
-            font.pointSize: 14
-            //font.family: "Courier"
-            visible: app.trigName == "EXT"
-        }
-
-        Label {
-            id: tmrLabel
-            y: 0
-            color: "#74ccfe"
-            text: minTumbler.currentIndex.toString() + "\' " + secTumbler.currentIndex.toString() + "\""
-            anchors.left: toolSeparator3.right
-            anchors.leftMargin: 5
-            topPadding: 3
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 0
-            anchors.bottomMargin: 0
-            font.capitalization: Font.AllUppercase
-            font.pointSize: 14
-            //font.family: "Courier"
-            visible: app.trigName == "TMR"
-        }
-
-        ToolSeparator {
-            id: toolSeparator5
-            x: 242
-            y: 2
-            anchors.left: parent.left
-            anchors.leftMargin: 412
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 0
-            anchors.bottomMargin: 0
-        }
-
-        Label {
-            id: countLabel
-            y: 0
-            color: "#d673ff"
-            text: {
-                if (app.modeName == "IMG") {
-                   ("000" + app.currentPhoto).slice(-4)
-                } else if (app.modeName == "VID") {
-                    ("000" + app.currentVideo).slice(-4)
-                } else if (app.modeName == "LPS") {
-                    ("000" + app.currentLapse).slice(-4)
-                } else if (app.modeName === "FRM") {
-                    ("000" + app.currentFrame).slice(-4)
-                } else {
-                    console.log("ERROR: Unknown application mode.")
-                }
-            }
-            anchors.left: toolSeparator4.right
-            anchors.leftMargin: 4
-            topPadding: 3
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 0
-            anchors.bottomMargin: 0
-            font.capitalization: Font.AllUppercase
-            font.pointSize: 14
-            //font.family: "Courier"
-        }
-    }
-
-    // Camera viewframe
-    Rectangle { id: cameraUI
-        x: 0
-        y: 0
-        z: app.forceTop
-        width: 600
-        height: 460
-        color: "#040404"
-        visible: stack.subapp !== "projects" & stack.subapp !== "remote"
-
-//        Camera {
-//            id: camera
-
-//            exposure {
-//                exposureCompensation: 1.0
-//                exposureMode: Camera.ExposurePortrait
-//            }
-
-//            videoRecorder {
-//                muted: true
-//                outputLocation: app.selectedProject + "/VID_" + ("000" + app.currentVideo).slice(-4)
-//                frameRate: 30
-//            }
-
-//        }
-
-//        VideoOutput {
-//            source: camera
-//            fillMode: VideoOutput.PreserveAspectCrop
-//            anchors.fill: parent
-//        }
-    }
-
-    // Project manager window
-    Rectangle { id: projectUI
-        x: 0
-        y: 0
-        z: app.forceTop - 1
-        width: 600
-        height: 460
-        color: "#ffffff"
-        visible: stack.subapp == "projects"
-
-        Rectangle { id: projectListTitle
-            x: 0
-            y: 0
-            z: app.forceTop + 5
-            width: 600
-            height: 40
-            color: "#000000"
-            visible: stack.subapp == "projects"
-
-            Text {
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                z: app.forceTop + 1
-                text: qsTr("Name")
-                color: "#ffffff"
-                font.pointSize: 19
-                font.bold: false
-                //font.family: "Courier"
-                topPadding: 10
-                leftPadding: 10
-            }
-
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                z: app.forceTop + 1
-                text: qsTr("Last modified")
-                color: "#ffffff"
-                font.pointSize: 19
-                font.bold: false
-                //font.family: "Courier"
-                topPadding: 10
-                rightPadding: 10
-            }
-
-        }
-
-        ListView {
-            id: listView
-            z: app.forceTop
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 40
-            visible: true
-            snapMode: ListView.SnapToItem
-            model: projectListModel
-            delegate: projectListDelegate
-            focus: true
-            currentIndex: 0
-            highlight: Rectangle {
-                   z: app.forceTop
-                   color:"#32fc9e"
-                   opacity: 0.5
-                   focus: true
-            }
-            highlightFollowsCurrentItem: true
-
-            Component { id: projectListDelegate
-                Rectangle {
-
-                    width: ListView.view.width
-                    height: 50
-
-                    color: fileName == app.currentProject ? "#fc9e32" : index % 2 == 0 ? "#a4a4a4" : "#444444"
-
-                    Text { id: fileNameText
-                        anchors.left: parent.left
-                        anchors.leftMargin: 0
-                        z: app.forceTop + 1
-                        text: fileName
-                        color: "#000000"
-                        font.pointSize: 19
-                        font.bold: false
-                        //font.family: "Courier"
-                        topPadding: 15
-                        leftPadding: 10
-                    }
-
-                    Text { id: fileModText
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        z: app.forceTop + 1
-                        text: fileModified.toLocaleDateString(Qt.locale("en_US"), "d MMM yyyy")
-                        color: "#000000"
-                        font.pointSize: 19
-                        font.bold: false
-                        //font.family: "Courier"
-                        topPadding: 15
-                        leftPadding: 10
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            listView.currentIndex = index
-                        }
-                    }
-
-                }
-
-            }
-
-            FolderListModel { id: projectListModel
-                folder: "file://" + projectPath
-            }
-
-        }
 
 
-    }
+
+
+
+
 
     // New project window
     Rectangle { id: newProjectUI
@@ -992,115 +389,6 @@ Window {
         }
 }
 
-    // Remote manager window
-    Rectangle { id: remoteUI
-        x: 0
-        y: 0
-        z: app.forceTop - 1
-        width: 600
-        height: 460
-        color: "#ffffff"
-        visible: stack.subapp == "remote" | mainBar.currentMenuName == "Sync"
-
-        Rectangle { id: remoteListTitle
-            x: 0
-            y: 0
-            z: app.forceTop + 5
-            width: 600
-            height: 40
-            color: "#000000"
-            visible: stack.subapp == "remote"
-
-            Text {
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                z: app.forceTop + 1
-                text: qsTr("Name")
-                color: "#ffffff"
-                font.pointSize: 19
-                font.bold: false
-                //font.family: "Courier"
-                topPadding: 10
-                leftPadding: 10
-            }
-
-        }
-
-        ListView {
-            id: remoteListView
-            z: app.forceTop
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 40
-            visible: stack.subapp == "remote" | mainBar.currentMenuName == "Sync"
-            snapMode: ListView.SnapToItem
-            model: remoteListModel
-            delegate: remoteListDelegate
-            focus: true
-            currentIndex: 0
-            highlight: Rectangle {
-                   z: app.forceTop
-                   color:"#32fc9e"
-                   opacity: 0.5
-                   focus: true
-            }
-            highlightFollowsCurrentItem: true
-
-            Component { id: remoteListDelegate
-                Rectangle {
-
-                    width: ListView.view.width
-                    height: 50
-
-                    color: {
-                        if (mainBar.currentMenuName === "Sync") {
-                        syncPane.selectedRemote === fileName ? "#fc9e32" : index % 2 == 0 ? "#a4a4a4" : "#444444"
-                        } else {
-                            index % 2 == 0 ? "#a4a4a4" : "#444444"
-                        }
-                    }
-
-
-                    Text { id: remoteNameText
-                        anchors.left: parent.left
-                        anchors.leftMargin: 0
-                        z: app.forceTop + 1
-                        text: fileName.slice(0, -5);
-                        color: "#000000"
-                        font.pointSize: 19
-                        font.bold: false
-                        //font.family: "Courier"
-                        topPadding: 15
-                        leftPadding: 10
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            remoteListView.currentIndex = index
-                        }
-                    }
-
-                }
-
-            }
-
-            FolderListModel { id: remoteListModel
-                folder: "file://" + app.homeDir + ".camctrl/remote/"
-                nameFilters: ["*.conf"]
-            }
-
-        }
-
-
-    }
-
     Rectangle { id: newRemoteUI
         x: 0
         y: 0
@@ -1235,120 +523,8 @@ Window {
         }
 }
 
-    UI_Remote_Config {
-         id: configRemoteUI
-    }
 
-    // Help documentation window
-    UI_Help { id: helpUI
-        visible: stack.subapp == "help"
-    }
 
-    // Control pane stack
-    StackView {
-        id: stack
-        x: 600
-        y: 40
-        width: 200
-        height: 440
-        initialItem: controlPane
-
-        property string subapp: "control"
-
-    }
-
-    // Project manager control pane
-    Pane_Projects {
-        id: projectsPane
-        visible: stack.subapp == "projects"
-    }
-
-    // Remote access/hosting/etc pane
-    Pane_Remote {
-        id: remotePane
-        visible: stack.subapp == "remote"
-    }
-
-    // Help documentation for the user
-    Pane_Help {
-        id: helpPane
-        visible: stack.subapp == "help"
-    }
-
-    // Display information about the system
-    Pane_SysInfo {
-        id: sysinfoPane
-        visible: stack.subapp == "sysinfo"
-    }
-
-    Pane_Sync {
-        id: syncPane
-    }
-
-    Menu { id: mainMenu
-
-        MenuItem {
-            text: "Projects"
-            onTriggered: {
-                stack.pop(null)
-        cam.stop()
-                stack.replace(projectsPane)
-                stack.subapp = "projects"
-                mainBar.currentMenuName = projectsPane.menuTitle
-            }
-        }
-
-        MenuItem {
-            text: "Control"
-            onTriggered: {
-                stack.pop(null)
-        if (stack.subapp !== "control") {
-            cam.start(app.modeName)
-        }
-                stack.replace(controlPane)
-                stack.subapp = "control"
-                mainBar.currentMenuName = controlPane.menuTitle
-            }
-        }
-
-        MenuItem {
-            text: "Remote"
-            onTriggered: {
-                stack.pop(null)
-                cam.stop()
-        stack.replace(remotePane)
-                stack.subapp = "remote"
-                mainBar.currentMenuName = remotePane.menuTitle
-            }
-        }
-
-        MenuSeparator { }
-
-        MenuItem {
-            text: "Help"
-            onTriggered: {
-                stack.pop(null)
-        cam.stop()
-                stack.replace(helpPane)
-                stack.subapp = "help"
-                mainBar.currentMenuName = helpPane.menuTitle
-            }
-        }
-
-        MenuSeparator { }
-
-        MenuItem {
-            text: "SysInfo"
-            onTriggered: {
-                stack.pop(null)
-        cam.stop
-                stack.replace(sysinfoPane)
-                stack.subapp = "sysinfo"
-                mainBar.currentMenuName = sysinfoPane.menuTitle
-            }
-        }
-
-    }
 
     InputPanel {
             id: inputPanel

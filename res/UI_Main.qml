@@ -3,12 +3,17 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.0
 
 Rectangle {
+    id: mainUI
+
     x: 0
     y: 0
     z: app.forceTop + 2
     width: 800
     height: 480
     color: "#1a2026"
+
+    visible: true
+    enabled: visible
 
     signal openRemoteUI
     signal openProjectUI
@@ -56,6 +61,7 @@ Rectangle {
 
         onClicked: {
             openRemoteUI()
+            mainUI.visible = false
         }
 
     }
@@ -79,6 +85,12 @@ Rectangle {
         font.bold: false
         font.capitalization: Font.MixedCase
         font.weight: Font.Normal
+
+        onClicked: {
+            openProjectUI()
+            mainUI.visible = false
+        }
+
     }
 
     Button {
@@ -101,6 +113,12 @@ Rectangle {
         font.capitalization: Font.AllUppercase
         font.italic: false
         leftPadding: 0
+
+        onClicked: {
+            openControlUI()
+            mainUI.visible = false
+        }
+
     }
 
     Button {
@@ -119,6 +137,12 @@ Rectangle {
         topPadding: 0
         padding: 0
         leftPadding: 0
+
+        onClicked: {
+            openTriggerUI()
+            mainUI.visible = false
+        }
+
     }
 
     Button {
@@ -137,6 +161,12 @@ Rectangle {
         rightPadding: 60
         font.pointSize: 17
         leftPadding: 0
+
+        onClicked: {
+            openHelpUI()
+            mainUI.visible = false
+        }
+
     }
 
     Button {
@@ -155,6 +185,12 @@ Rectangle {
         topPadding: 0
         padding: 0
         leftPadding: 0
+
+        onClicked: {
+            openInfoUI()
+            mainUI.visible = false
+        }
+
     }
 
     Button {
@@ -173,6 +209,12 @@ Rectangle {
         rightPadding: 50
         font.pointSize: 17
         leftPadding: 0
+
+        onClicked: {
+            openSetupUI()
+            mainUI.visible = false
+        }
+
     }
 
     RoundButton {
