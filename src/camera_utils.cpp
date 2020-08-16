@@ -82,7 +82,8 @@ std::string CameraUtils::get_preview_arg(void) {
 void CameraUtils::start_still(void) {
 	stop();
 	std::string cmd = "raspistill " + get_preview_arg() +
-			" -t 0 -s -o " + homeDir + ".camctrl/Projects/" +
+			" -t 0 " + get_annotation_arg() +
+					  "-s -o " + homeDir + ".camctrl/Projects/" +
 		project + "/img.jpg &";
 	system(cmd.c_str());
 };
@@ -106,7 +107,8 @@ void CameraUtils::stop_still(void) {
 void CameraUtils::start_vid(void) {
 	stop();
 	std::string cmd = "raspivid " + get_preview_arg() +
-			" -t 0 -b 17000000 -fps 30 -cd H264 -i pause -s -o " +
+			" -t 0 " + get_annotation_arg() +
+					  "-b 17000000 -fps 30 -cd H264 -i pause -s -o " +
 	homeDir + ".camctrl/Projects/" +
 		project + "/vid.h264 &";
 	system(cmd.c_str());

@@ -464,6 +464,7 @@ Rectangle {
 					app.statusName = "IDLE"
 					if (app.modeName === "IMG") {
 						timer.running = false
+						remainingTime = app.delayTime
 					} else if (app.modeName == "VID") {
 						cam.record()
 						cam.stop()
@@ -472,6 +473,7 @@ Rectangle {
 						app.modeName = "LPS"
 						if (app.trigName == "TMR") {
 							timer.running = false
+							remainingTime = app.delayTime
 						} else if (app.trigName == "EXT") {
 							gpioUtils.stop_frames()
 						}

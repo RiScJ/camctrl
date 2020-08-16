@@ -19,7 +19,7 @@ public:
 	static void set_homeDir(std::string dir);
 	static void capture_frame_EXT(void);
 	Q_INVOKABLE static void set_project(QString proj);
-	Q_INVOKABLE static void update_annotations(signed int anot);
+	Q_INVOKABLE static void update_annotations(int anot);
 	Q_INVOKABLE static void start(QString mode);
 	Q_INVOKABLE static void stop(void);
 	Q_INVOKABLE static void capture(QString mode);
@@ -28,7 +28,7 @@ public:
 private:
 	static std::string homeDir;
 	static std::string project;
-	static signed int annotation;
+	static int annotation;
 	static const int CAMERA_VIEWPORT_X = 0;
 	static const int CAMERA_VIEWPORT_Y = 0;
 	static const int CAMERA_VIEWPORT_WIDTH = 600;
