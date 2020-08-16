@@ -109,6 +109,7 @@ Rectangle {
 			onClicked: {
 				app.currentProject = projectListModel.get(
 							listView.currentIndex, "fileName")
+				cam.set_project(app.currentProject)
 			}
 		}
 
