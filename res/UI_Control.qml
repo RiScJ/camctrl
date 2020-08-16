@@ -16,6 +16,8 @@ Rectangle {
 
 	signal openMainUI
 
+	property int remainingTime: app.delayTime
+
 	ToolBar {
 		id: statusBar
 		background: Rectangle {
@@ -178,7 +180,7 @@ Rectangle {
 			y: 0
 			color: "#74ccfe"
 			text: Math.floor(
-					  app.delayTime / 60) + "\' " + app.delayTime % 60 + "\""
+					  remainingTime / 60) + "\' " + remainingTime % 60 + "\""
 			anchors.left: toolSeparator3.right
 			anchors.leftMargin: 8
 			topPadding: 3
@@ -463,6 +465,7 @@ Rectangle {
 					if (app.modeName === "IMG") {
 						timer.running = false
 					} else if (app.modeName == "VID") {
+						cam.record()
 						cam.stop()
 						cam.start(app.modeName)
 					} else {
@@ -548,7 +551,7 @@ Rectangle {
 		color: "#000000"
 	}
 
-	// Timer object for timed capture control
+	// Timer for timed triggering
 	Timer {
 		id: timer
 		interval: app.delayTime * 1000
@@ -562,6 +565,20 @@ Rectangle {
 				// Will think of the "right way" to do this later
 			} else if (app.modeName === "FRM") {
 				app.capture(app.modeName)
+			}
+		}
+	}
+
+	// Timer to update remaining time until next trigger
+	Timer {
+		interval: 1000
+		running: timer.running
+		repeat: true
+		onTriggered: {
+			if (remainingTime == 0) {
+				remainingTime = app.delayTime
+			} else {
+				remainingTime--
 			}
 		}
 	}
