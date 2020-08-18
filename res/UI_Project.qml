@@ -31,6 +31,11 @@ Rectangle {
 		app.projectCount = listView.count
 	}
 
+	function updateCurrentOpenProject() {
+		app.currentOpenProject = app.projectPath + projectListModel.get(
+					listView.currentIndex, "fileName")
+	}
+
 	Pane {
 		id: pane
 		background: Rectangle {
@@ -138,6 +143,7 @@ Rectangle {
 			font.pointSize: 17
 
 			onClicked: {
+				updateCurrentOpenProject()
 				openProject()
 			}
 		}

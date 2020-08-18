@@ -36,7 +36,7 @@ Window {
 	property bool edge: false
 
 	// Capture properties and methods
-	property string homeDir: "/home/pi/"
+	property string homeDir: "/home/zarya/"
 
 	property string projectPath: app.homeDir + ".camctrl/Projects/"
 	property string currentProject: "example"
@@ -46,6 +46,10 @@ Window {
 	property int currentVideo: countVID.count
 	property int currentLapse: countLPS.count
 	property int currentFrame: countFRM.count
+
+	property string currentOpenProject: ""
+	property string currentViewedFile: ""
+	property string currentViewedFileType: ""
 
 	FolderListModel {
 		id: countIMG
@@ -144,7 +148,10 @@ Window {
 			deleteProjectUI.visible = true
 			projectUI.enabled = false
 		}
-		onOpenProject: stack.push(openProjectUI)
+		onOpenProject: {
+			openProjectUI.setCurrentlyOpenProject()
+			stack.push(openProjectUI)
+		}
 	}
 
 	UI_Project_New {
@@ -165,6 +172,17 @@ Window {
 
 	UI_Project_Open {
 		id: openProjectUI
+
+		onPop: stack.pop()
+		onViewMedia: {
+			viewProjectUI.setCurrentlyViewedFile()
+			viewProjectUI.setCurrentlyViewedFileType()
+			stack.push(viewProjectUI)
+		}
+	}
+
+	UI_Project_View {
+		id: viewProjectUI
 
 		onPop: stack.pop()
 	}

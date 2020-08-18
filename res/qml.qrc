@@ -17,5 +17,6 @@
         <file>UI_Project_New.qml</file>
         <file>UI_Project_Delete.qml</file>
         <file>UI_Project_Open.qml</file>
+        <file>UI_Project_View.qml</file>
     </qresource>
 </RCC>
