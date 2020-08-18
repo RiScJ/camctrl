@@ -36,7 +36,7 @@ Window {
 	property bool edge: false
 
 	// Capture properties and methods
-	property string homeDir: "/home/zarya/"
+	property string homeDir: "/home/pi/"
 
 	property string projectPath: app.homeDir + ".camctrl/Projects/"
 	property string currentProject: "example"
