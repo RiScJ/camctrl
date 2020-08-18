@@ -76,8 +76,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	CameraUtils* cameraUtils = new CameraUtils();
 	engine.rootContext()->setContextProperty("cam", cameraUtils);
 
-	CameraUtils::start("IMG");
-
 	GPIOUtils::start();
 
 	engine.load(url);
