@@ -35,13 +35,6 @@ Window {
 	property int gpio: 3
 	property bool edge: false
 
-	// Capture properties and methods
-	property string homeDir: "/home/pi/"
-
-	property string projectPath: app.homeDir + ".camctrl/Projects/"
-	property string currentProject: "example"
-	property string selectedProject: projectPath + currentProject
-
 	property int currentPhoto: countIMG.count
 	property int currentVideo: countVID.count
 	property int currentLapse: countLPS.count
@@ -50,6 +43,19 @@ Window {
 	property string currentOpenProject: ""
 	property string currentViewedFile: ""
 	property string currentViewedFileType: ""
+
+	property string currentOpenRemote: "__local__"
+
+	// Capture properties and methods
+	property string homeDir: "/home/" + fileUtils.whoami() + "/"
+
+	property string projectPath: {
+		if (currentOpenRemote == "__local__") {
+			app.homeDir + ".camctrl/Projects/"
+		}
+	}
+	property string currentProject: "example"
+	property string selectedProject: projectPath + currentProject
 
 	FolderListModel {
 		id: countIMG
@@ -135,9 +141,10 @@ Window {
 		onOpenSetupUI: stack.push(setupUI)
 	}
 
-	//    UI_Remote {
-	//        id: remoteUI
-	//    }
+	UI_Remote {
+		id: remoteUI
+	}
+
 	UI_Project {
 		id: projectUI
 
@@ -218,150 +225,6 @@ Window {
 		id: setupUI
 
 		onOpenMainUI: stack.pop()
-	}
-
-	Rectangle {
-		id: newRemoteUI
-		x: 0
-		y: 0
-		z: app.forceTop + 2
-		width: 800
-		height: 480
-		color: "#4e4e4e"
-		visible: false
-
-		TextField {
-			id: newRemoteTextField
-			enabled: newRemoteUI.visible
-			y: 52
-			height: 60
-			z: app.forceTop + 5
-			text: ""
-			anchors.right: newRemoteCancelButton.left
-			anchors.rightMargin: 15
-			anchors.left: parent.left
-			anchors.leftMargin: 40
-			leftPadding: 15
-			topPadding: 14
-			font.pointSize: 17
-			font.bold: false
-			visible: true
-			//font.family: "Courier"
-			placeholderText: qsTr("New remote name")
-		}
-
-		Button {
-			id: newRemoteCancelButton
-			enabled: newRemoteUI.visible
-			x: 533
-			y: 52
-			width: 100
-			height: 60
-			text: qsTr("CANCEL")
-			topPadding: 14
-			font.bold: false
-			font.pointSize: 17
-			//font.family: "Courier"
-			anchors.right: newRemoteCreateButton.left
-			anchors.rightMargin: 15
-
-			onClicked: {
-				newRemoteTextField.text = ""
-				newRemoteUI.visible = false
-			}
-		}
-
-		Button {
-			id: newRemoteCreateButton
-			enabled: newRemoteUI.visible
-			x: 685
-			y: 52
-			width: 100
-			height: 60
-			text: qsTr("CREATE")
-			topPadding: 14
-			font.pointSize: 17
-			//font.family: "Courier"
-			anchors.right: parent.right
-			anchors.rightMargin: 40
-
-			onClicked: {
-				fileUtils.touch(
-							app.homeDir + ".camctrl/remote/" + newRemoteTextField.text + ".conf")
-				newRemoteTextField.text = ""
-				newRemoteUI.visible = false
-			}
-		}
-	}
-
-	Rectangle {
-		id: delRemoteUI
-		x: 100
-		y: 150
-		z: app.forceTop + 2
-		width: 400
-		height: 200
-		color: "#000000"
-		visible: false
-
-		Label {
-			id: deleteRemoteLabel
-			x: 50
-			y: 12
-			z: app.forceTop + 2
-			width: 300
-			height: 30
-			color: "#ffffff"
-			text: qsTr("Are you sure you want to delete the\nhighlighted remote?\nThis cannot be undone.")
-			verticalAlignment: Text.AlignTop
-			horizontalAlignment: Text.AlignHCenter
-			font.pointSize: 13
-			//font.family: "Courier"
-		}
-
-		Button {
-			id: confirmDeleteRemoteButton
-			enabled: delRemoteUI.visible
-			y: 70
-			width: 170
-			height: 107
-			text: qsTr("CONFIRM")
-			anchors.bottom: parent.bottom
-			anchors.bottomMargin: 20
-			anchors.left: parent.left
-			anchors.leftMargin: 20
-			topPadding: 14
-			font.bold: false
-			font.pointSize: 17
-
-			//font.family: "Courier"
-			onClicked: {
-				fileUtils.rm(app.homeDir + ".camctrl/remote/" + remoteListModel.get(
-								 remoteListView.currentIndex, "fileName"))
-				delRemoteUI.visible = false
-			}
-		}
-
-		Button {
-			id: cancelDeleteRemoteButton
-			enabled: delRemoteUI.visible
-			x: 210
-			y: 73
-			width: 170
-			height: 107
-			text: qsTr("CANCEL")
-			anchors.bottom: parent.bottom
-			anchors.bottomMargin: 20
-			anchors.right: parent.right
-			anchors.rightMargin: 20
-			topPadding: 14
-			font.pointSize: 17
-
-			//font.family: "Courier"
-			onClicked: {
-				delRemoteUI.visible = false
-			}
-		}
 	}
 
 	InputPanel {

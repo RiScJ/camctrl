@@ -58,6 +58,7 @@ Rectangle {
 		Image {
 			id: image
 
+			anchors.fill: parent
 			enabled: isPhoto
 			source: isPhoto ? currentlyViewedFile : ""
 		}
