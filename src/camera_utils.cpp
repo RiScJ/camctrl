@@ -142,8 +142,18 @@ std::string CameraUtils::get_annotation_arg(void) {
 }
 
 
+void CameraUtils::capture_image_EXT(void) {
+	capture_still();
+};
+
+
 void CameraUtils::capture_frame_EXT(void) {
 	capture_frame();
+};
+
+
+void CameraUtils::capture_video_EXT(void) {
+	record();
 };
 
 

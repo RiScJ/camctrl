@@ -1,15 +1,20 @@
+// Outcomment during non-BCM development
+// START BLOCK
+
+#include "gpio_utils.h"
+#include "test_gpio.hpp"
+#include "test_gpio_utils.hpp"
+
+// END BLOCK
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
 #include "fileutils.h"
-#include "gpio_utils.h"
 #include "timelapse_utils.h"
 #include "rsync_utils.h"
 #include "camera_utils.h"
-
-#include "test_gpio.hpp"
-#include "test_gpio_utils.hpp"
 
 #include <unistd.h>
 

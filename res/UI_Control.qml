@@ -17,6 +17,7 @@ Rectangle {
 	signal openMainUI
 
 	property int remainingTime: app.delayTime
+	property bool recording: app.statusName == "RECORDING"
 
 	ToolBar {
 		id: statusBar
@@ -274,6 +275,8 @@ Rectangle {
 			text: "Image"
 			onTriggered: {
 				app.modeName = "IMG"
+				cam.stop()
+				cam.start(app.modeName)
 			}
 		}
 
@@ -281,6 +284,8 @@ Rectangle {
 			text: "Video"
 			onTriggered: {
 				app.modeName = "VID"
+				cam.stop()
+				cam.start(app.modeName)
 			}
 		}
 
@@ -288,6 +293,8 @@ Rectangle {
 			text: "Timelapse"
 			onTriggered: {
 				app.modeName = "LPS"
+				cam.stop()
+				cam.start(app.modeName)
 			}
 		}
 	}
@@ -444,13 +451,21 @@ Rectangle {
 						timer.running = true
 					} else if (app.trigName == "EXT") {
 						app.statusName = "LISTENING"
-						// do something to do the thing, you know
+						gpioUtils.trigger_images(app.gpio, app.edge)
 					} else if (app.trigName == "USR") {
 						cam.capture(app.modeName)
 					}
 				} else if (text == "RECORD") {
-					app.statusName = "RECORDING"
-					cam.record()
+					if (app.trigName == "USR") {
+						app.statusName = "RECORDING"
+						cam.record()
+					} else if (app.trigName == "EXT") {
+						app.statusName = "LISTENING"
+						gpioUtils.trigger_video(app.gpio)
+					} else if (app.trigName == "TMR") {
+						app.statusName = "LISTENING"
+						timer_videoDelay.running = true
+					}
 				} else if (text == "LAPSE") {
 					app.statusName = "LISTENING"
 					app.modeName = "FRM"
@@ -461,14 +476,35 @@ Rectangle {
 					}
 					cam.start(app.modeName)
 				} else if (text == "STOP") {
-					app.statusName = "IDLE"
 					if (app.modeName === "IMG") {
-						timer.running = false
-						remainingTime = app.delayTime
+						if (app.trigName === "EXT") {
+							gpioUtils.stop_images()
+						} else if (app.trigName === "TMR") {
+							timer.running = false
+							remainingTime = app.delayTime
+						}
 					} else if (app.modeName == "VID") {
-						cam.record()
-						cam.stop()
-						cam.start(app.modeName)
+						if (app.trigName === "USR") {
+							cam.record()
+							cam.stop()
+							cam.start(app.modeName)
+						} else if (app.trigName === "EXT") {
+							if (recording) {
+								cam.record()
+							}
+							gpioUtils.stop_video()
+							cam.stop()
+							cam.start(app.modeName)
+						} else if (app.trigName === "TMR") {
+							timer_videoDelay.running = false
+							timer_videoDuration.running = false
+							remainingTime = app.delayTime
+							if (recording) {
+								cam.record()
+							}
+							cam.stop()
+							cam.start(app.modeName)
+						}
 					} else {
 						app.modeName = "LPS"
 						if (app.trigName == "TMR") {
@@ -481,6 +517,7 @@ Rectangle {
 						TimelapseUtils.stitch(app.selectedProject)
 						cam.start(app.modeName)
 					}
+					app.statusName = "IDLE"
 				}
 			}
 		}
@@ -553,6 +590,32 @@ Rectangle {
 		color: "#000000"
 	}
 
+	Timer {
+		id: timer_videoDuration
+
+		interval: 1000 * app.durationTime
+		running: false
+		repeat: false
+		onTriggered: {
+			cam.record()
+			app.statusName = "LISTENING"
+			timer_videoDelay.running = true
+		}
+	}
+
+	Timer {
+		id: timer_videoDelay
+
+		interval: 1000 * app.delayTime
+		running: false
+		repeat: false
+		onTriggered: {
+			cam.record()
+			app.statusName = "RECORDING"
+			timer_videoDuration.running = false
+		}
+	}
+
 	// Timer for timed triggering
 	Timer {
 		id: timer
@@ -574,13 +637,43 @@ Rectangle {
 	// Timer to update remaining time until next trigger
 	Timer {
 		interval: 1000
-		running: timer.running
+		running: timer.running || timer_videoDelay.running
+				 || timer_videoDuration.running
 		repeat: true
-		onTriggered: {
-			if (remainingTime == 0) {
-				remainingTime = app.delayTime
+
+		property string owner: {
+			if (timer.running) {
+				"timer"
+			} else if (timer_videoDelay) {
+				"video_delay"
+			} else if (timer_videoDuration) {
+				"video_duration"
 			} else {
-				remainingTime--
+				""
+			}
+		}
+
+		onTriggered: {
+			console.log(owner)
+
+			if (owner == "timer") {
+				if (remainingTime == 0) {
+					remainingTime = app.delayTime
+				} else {
+					remainingTime--
+				}
+			} else if (owner == "video_delay") {
+				if (remainingTime == 0) {
+					remainingTime = app.delayTime
+				} else {
+					remainingTime--
+				}
+			} else if (owner == "video_duration") {
+				if (remainingTime == 0) {
+					remainingTime = app.durationTime
+				} else {
+					remainingTime--
+				}
 			}
 		}
 	}

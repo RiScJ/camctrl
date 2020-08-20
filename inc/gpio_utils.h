@@ -34,6 +34,10 @@ public:
 	static void setup_pin(int pin, bool pud, bool io);
 	Q_INVOKABLE static void trigger_frames(int pin, bool edge);
 	Q_INVOKABLE static void stop_frames(void);
+	Q_INVOKABLE static void trigger_images(int pin, bool edge);
+	Q_INVOKABLE static void stop_images(void);
+	Q_INVOKABLE static void trigger_video(int pin);
+	Q_INVOKABLE static void stop_video(void);
 	static void start(void);
 	static void stop(void);
 	static bool read(int pin);
@@ -45,6 +49,7 @@ private:
 	static bool running;
 
 	static void attach_interrupt(int pin, bool edge, void (*callback)(void));
+	static void attach_interrupt(int pin, void (*callback)(void));
 	static void detach_interrupt(void);
 	static void await_edge(int pin, bool edge, void (*callback)(void));
 

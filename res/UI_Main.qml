@@ -59,7 +59,7 @@ Rectangle {
 		font.pointSize: 17
 		font.family: "CMU Concrete"
 
-		enabled: true
+		enabled: false
 
 		onClicked: {
 			openRemoteUI()

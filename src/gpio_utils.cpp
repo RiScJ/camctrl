@@ -21,12 +21,32 @@ void GPIOUtils::setup_pin(int pin, bool pud, bool io) {
 };
 
 
+void GPIOUtils::trigger_images(int pin, bool edge) {
+	attach_interrupt(pin, edge, *CameraUtils::capture_image_EXT);
+};
+
+
 void GPIOUtils::trigger_frames(int pin, bool edge) {
 	attach_interrupt(pin, edge, *CameraUtils::capture_frame_EXT);
 };
 
 
+void GPIOUtils::trigger_video(int pin) {
+	attach_interrupt(pin, *CameraUtils::capture_video_EXT);
+}
+
+
+void GPIOUtils::stop_images(void) {
+	detach_interrupt();
+};
+
+
 void GPIOUtils::stop_frames(void) {
+	detach_interrupt();
+};
+
+
+void GPIOUtils::stop_video(void) {
 	detach_interrupt();
 };
 
@@ -36,6 +56,16 @@ void GPIOUtils::attach_interrupt(int pin, bool edge, void (*callback)(void)) {
 	running = true;
 	std::thread *thd = new std::thread(await_edge, pin, edge, callback);
 	thd->detach();
+};
+
+
+void GPIOUtils::attach_interrupt(int pin, void (*callback)()) {
+	setup_pin(pin, 1, 1);
+	running = true;
+	std::thread *thd_0 = new std::thread(await_edge, pin, 0, callback);
+	std::thread *thd_1 = new std::thread(await_edge, pin, 1, callback);
+	thd_0->detach();
+	thd_1->detach();
 };
 
 
