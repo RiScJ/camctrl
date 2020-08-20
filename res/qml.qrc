@@ -4,7 +4,6 @@
         <file>main.qml</file>
         <file>Pane_SysInfo.qml</file>
         <file>Pane_Remote.qml</file>
-        <file>UI_Remote_Config.qml</file>
         <file>Pane_Sync.qml</file>
         <file>UI_Main.qml</file>
         <file>UI_Control.qml</file>
@@ -18,5 +17,7 @@
         <file>UI_Project_Delete.qml</file>
         <file>UI_Project_Open.qml</file>
         <file>UI_Project_View.qml</file>
+        <file>UI_Remote_New.qml</file>
+        <file>UI_Remote_Delete.qml</file>
     </qresource>
 </RCC>

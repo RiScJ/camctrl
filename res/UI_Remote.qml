@@ -20,6 +20,7 @@ Rectangle {
 
 	signal newRemote
 	signal deleteRemote
+	signal selectRemote
 
 	function del() {}
 
@@ -33,7 +34,6 @@ Rectangle {
 	}
 
 	Pane {
-		id: pane
 		background: Rectangle {
 			color: "#261a20"
 			border.width: 0
@@ -44,7 +44,7 @@ Rectangle {
 		height: 480
 
 		Button {
-			id: button_newProject
+			id: button_newRemote
 
 			x: 0
 			y: 42
@@ -59,12 +59,12 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			onClicked: {
-				newProject()
+				newRemote()
 			}
 		}
 
 		Button {
-			id: button_deleteProject
+			id: button_deleteRemote
 
 			x: 1
 			y: 123
@@ -79,7 +79,7 @@ Rectangle {
 			rightPadding: 55
 
 			onClicked: {
-				deleteProject()
+				deleteRemote()
 			}
 		}
 
@@ -93,13 +93,13 @@ Rectangle {
 		}
 
 		Button {
-			id: button_selectProject
+			id: button_reservedRemote
 
 			x: 2
 			y: 224
 			width: 162
 			height: 75
-			text: qsTr("SELECT")
+			text: qsTr("")
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.horizontalCenterOffset: 0
 			bottomPadding: 30
@@ -108,10 +108,10 @@ Rectangle {
 			font.pointSize: 17
 
 			onClicked: {
-				app.currentProject = projectListModel.get(
-							listView.currentIndex, "fileName")
-				cam.set_project(app.currentProject)
+
 			}
+
+			enabled: false
 		}
 
 		ToolSeparator {
@@ -124,29 +124,30 @@ Rectangle {
 		}
 
 		Button {
-			id: button_openProject
+			id: button_selectRemote
 
 			x: 9
 			y: 324
 			width: 162
 			height: 132
-			text: qsTr("OPEN")
+			text: qsTr("SELECT")
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.horizontalCenterOffset: 0
 			bottomPadding: 84
 			font.family: "CMU Concrete"
-			rightPadding: 84
+			rightPadding: 55
 			font.pointSize: 17
 
 			onClicked: {
-				updateCurrentOpenProject()
-				openProject()
+				app.currentOpenRemote = remoteListModel.get(
+							remoteListView.currentIndex, "fileName")
+				selectRemote()
 			}
 		}
 	}
 
 	Rectangle {
-		id: projectListTitle
+		id: remoteListTitle
 		x: 0
 		y: 0
 		z: app.forceTop + 5
@@ -169,20 +170,6 @@ Rectangle {
 			topPadding: 6
 			leftPadding: 10
 		}
-
-		Text {
-			anchors.right: parent.right
-			anchors.rightMargin: 0
-			z: app.forceTop + 1
-			text: qsTr("Last modified")
-			font.family: "CMU Concrete"
-			color: "#ffffff"
-			font.pointSize: 19
-			font.bold: false
-			//font.family: "Courier"
-			topPadding: 6
-			rightPadding: 10
-		}
 	}
 
 	ListView {
@@ -197,8 +184,8 @@ Rectangle {
 		anchors.top: parent.top
 		anchors.topMargin: 40
 		snapMode: ListView.SnapToItem
-		model: projectListModel
-		delegate: projectListDelegate
+		model: remoteListModel
+		delegate: remoteListDelegate
 		focus: true
 		currentIndex: 0
 		highlight: Rectangle {
@@ -210,34 +197,20 @@ Rectangle {
 		highlightFollowsCurrentItem: true
 
 		Component {
-			id: projectListDelegate
-			Rectangle {
+			id: remoteListDelegate
 
+			Rectangle {
 				width: ListView.view.width
 				height: 50
 
-				color: fileName == app.currentProject ? "#e8dfd7" : index % 2
-														== 0 ? "#456160" : "#698483"
+				color: fileName == app.currentOpenRemote ? "#e8dfd7" : index % 2
+														   == 0 ? "#456160" : "#698483"
 
 				Text {
 					id: fileNameText
 					anchors.left: parent.left
 					anchors.leftMargin: 0
 					text: fileName
-					color: "#000000"
-					font.pointSize: 19
-					font.bold: false
-					font.family: "CMU Typewriter Text"
-					topPadding: 15
-					leftPadding: 10
-				}
-
-				Text {
-					id: fileModText
-					anchors.right: parent.right
-					anchors.rightMargin: 10
-					text: fileModified.toLocaleDateString(Qt.locale("en_US"),
-														  "d MMM yyyy")
 					color: "#000000"
 					font.pointSize: 19
 					font.bold: false
@@ -257,20 +230,18 @@ Rectangle {
 		}
 
 		FolderListModel {
-			id: projectListModel
-			folder: "file://" + projectPath
+			id: remoteListModel
+			folder: "file://" + app.remotePath
 		}
 	}
 
 	ToolBar {
-		id: toolBar
 		width: 200
 		height: 40
 		Label {
-			id: label
 			y: 22
 			color: "#ffffff"
-			text: qsTr("Projects")
+			text: qsTr("Remotes")
 			anchors.verticalCenterOffset: 2
 			font.family: "cmmi10"
 			font.bold: false
@@ -283,7 +254,6 @@ Rectangle {
 		}
 
 		RoundButton {
-			id: roundButton
 			x: 150
 			y: 0
 			width: 38

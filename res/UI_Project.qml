@@ -36,6 +36,10 @@ Rectangle {
 					listView.currentIndex, "fileName")
 	}
 
+	function test() {
+		console.log(projectListModel.status)
+	}
+
 	Pane {
 		id: pane
 		background: Rectangle {
@@ -262,7 +266,7 @@ Rectangle {
 
 		FolderListModel {
 			id: projectListModel
-			folder: "file://" + projectPath
+			folder: "file://" + app.projectPath
 		}
 	}
 

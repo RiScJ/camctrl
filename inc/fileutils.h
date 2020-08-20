@@ -17,7 +17,9 @@ public:
 	Q_INVOKABLE static void touch(const QString path);
 	Q_INVOKABLE static void rm(const QString path);
 	Q_INVOKABLE static QString readFile(const QString path);
+	Q_INVOKABLE static void writeFile(const QString path, const QString txt);
 	Q_INVOKABLE static QString whoami(void);
+	Q_INVOKABLE static void mount(const QString configPath, const QString remotePath);
 private:
 	static std::string exec(const char* cmd);
 };

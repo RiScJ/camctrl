@@ -123,6 +123,34 @@ QString FileUtils::readFile(const QString path) {
 };
 
 
+void FileUtils::writeFile(const QString path, const QString txt) {
+	QFile* file = new QFile(path);
+	file->open(QIODevice::WriteOnly);
+	file->write(txt.toStdString().c_str());
+	file->close();
+};
+
+
+void FileUtils::mount(const QString configPath, const QString remotePath) {
+	QString config = readFile(configPath);
+	QString type = config.split("\n\n").at(0);
+	if (type == "sshfs") {
+		QStringList argv = config.split("\n\n").at(1).split("\n");
+		QString user = argv.at(0);
+		QString host = argv.at(1);
+		QString port = argv.at(2);
+		QString dir = argv.at(3);
+
+		QString cmd = "sshfs -o allow_other " + user + "@" +
+					  host + ":/" + dir + " " + remotePath + " -C -p " + port;
+
+		exec(cmd.toStdString().c_str());
+	} else {
+		// Nothing
+	}
+};
+
+
 QString FileUtils::whoami(void) {
 	QString user = QString::fromStdString(exec("whoami"));
 	user.chop(1);

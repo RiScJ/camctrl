@@ -49,11 +49,17 @@ Window {
 	// Capture properties and methods
 	property string homeDir: "/home/" + fileUtils.whoami() + "/"
 
+	property string remotePath: homeDir + ".camctrl/remote/"
+	property string remoteProjectPath: homeDir + ".camctrl/Remotes/"
+
 	property string projectPath: {
 		if (currentOpenRemote == "__local__") {
-			app.homeDir + ".camctrl/Projects/"
+			homeDir + ".camctrl/Projects/"
+		} else {
+			remoteProjectPath + currentOpenRemote + "/"
 		}
 	}
+
 	property string currentProject: "example"
 	property string selectedProject: projectPath + currentProject
 
@@ -143,6 +149,36 @@ Window {
 
 	UI_Remote {
 		id: remoteUI
+
+		onOpenMainUI: stack.pop()
+
+		onNewRemote: stack.push(newRemoteUI)
+		onDeleteRemote: {
+			deleteRemoteUI.visible = true
+			remoteUI.enabled = false
+		}
+		onSelectRemote: {
+			if (currentOpenRemote != "__local__") {
+				fileUtils.mount(remotePath + currentOpenRemote, projectPath)
+			}
+			console.log(projectPath)
+		}
+	}
+
+	UI_Remote_New {
+		id: newRemoteUI
+
+		onCancel: stack.pop()
+	}
+
+	UI_Remote_Delete {
+		id: deleteRemoteUI
+
+		onCancel: remoteUI.enabled = true
+		onDel: {
+			remoteUI.del()
+			remoteUI.enabled = true
+		}
 	}
 
 	UI_Project {
