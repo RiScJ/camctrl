@@ -170,15 +170,23 @@ void GPIOUtils::write(int pin) {
 };
 
 
-void GPIOUtils::await_edge(int pin, bool edge, void (*callback)(void)) {
-	bool prev = 0;
-	bool curr = 0;
+bool GPIOUtils::check(const std::vector<bool> vec) {
+	return std::all_of(vec.begin(), vec.end(), [&] (int i) {return i == vec[0];});
+};
+
+
+void GPIOUtils::await_edge(const int pin, const bool edge, void (*callback)(void)) {
+	bool prev = edge;
+	int len = 5;
+	std::vector<bool> stack(len, prev);
 	while (running) {
-		curr = read(pin);
-		if (prev != curr) {
+		std::rotate(stack.begin(), stack.begin() + 1, stack.end());
+		stack[len - 1] = read(pin);
+		if (check(stack) && stack[0] != prev) {
 			if (prev ^ edge) callback();
 			prev ^= 1;
 		}
+		std::this_thread::sleep_for(std::chrono::microseconds(1000));
 	}
 }
 

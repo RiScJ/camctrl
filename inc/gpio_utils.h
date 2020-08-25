@@ -51,7 +51,7 @@ private:
 	static void attach_interrupt(int pin, bool edge, void (*callback)(void));
 	static void attach_interrupt(int pin, void (*callback)(void));
 	static void detach_interrupt(void);
-	static void await_edge(int pin, bool edge, void (*callback)(void));
+	static void await_edge(const int pin, const bool edge, void (*callback)(void));
 
 
 	static void make_input(int pin);
@@ -71,6 +71,8 @@ private:
 	static int mem_fd;
 	static void *map;
 	static volatile unsigned int *addr;
+
+	static bool check(const std::vector<bool> vec);
 };
 
 
