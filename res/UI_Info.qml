@@ -500,12 +500,3 @@ Rectangle {
 		enabled: false
 	}
 }
-
-/*##^##
-Designer {
-	D{i:11;anchors_x:13;anchors_y:172}D{i:14;anchors_x:129}D{i:15;anchors_x:130}D{i:17;anchors_x:134}
-D{i:31;anchors_x:219}D{i:32;anchors_x:241}D{i:33;anchors_x:303}D{i:34;anchors_height:35;anchors_width:73;anchors_x:381;anchors_y:13}
-D{i:35;anchors_x:382}
-}
-##^##*/
-

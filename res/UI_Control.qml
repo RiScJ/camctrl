@@ -678,14 +678,3 @@ Rectangle {
 		}
 	}
 }
-
-/*##^##
-Designer {
-	D{i:3;invisible:true}D{i:4;invisible:true}D{i:5;invisible:true}D{i:6;invisible:true}
-D{i:7;invisible:true}D{i:8;invisible:true}D{i:9;invisible:true}D{i:10;invisible:true}
-D{i:12;invisible:true}D{i:13;invisible:true}D{i:14;invisible:true}D{i:15;anchors_width:14;anchors_x:346}
-D{i:16;anchors_width:14;anchors_x:346}D{i:20;anchors_x:56}D{i:22;anchors_x:56}D{i:24;anchors_width:360}
-D{i:25;anchors_x:66}
-}
-##^##*/
-

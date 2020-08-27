@@ -203,11 +203,3 @@ Rectangle {
 		}
 	}
 }
-
-/*##^##
-Designer {
-	D{i:3;anchors_height:439;anchors_width:600;anchors_x:6;anchors_y:19}D{i:2;anchors_height:200;anchors_width:200;anchors_x:0;anchors_y:12}
-D{i:1;anchors_height:200;anchors_width:200;anchors_x:0;anchors_y:0}
-}
-##^##*/
-

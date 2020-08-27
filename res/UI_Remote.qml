@@ -285,9 +285,3 @@ Rectangle {
 	}
 }
 
-/*##^##
-Designer {
-	D{i:5;anchors_x:56}D{i:7;anchors_x:56}D{i:21;anchors_x:66}D{i:20;anchors_width:360}
-}
-##^##*/
-
