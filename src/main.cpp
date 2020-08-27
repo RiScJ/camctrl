@@ -22,7 +22,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 	int opt;
 	bool flag_test = false;
-	bool flag_gpio = false;
+	bool flag_cli_gpio = false;
 
 	opterr = 0;
 
@@ -32,7 +32,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 			flag_test = true;
 			break;
 		case 'G':
-			flag_gpio = true;
+			flag_cli_gpio = true;
 			break;
 		case '?':
 			break;
@@ -42,7 +42,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 		}
 	}
 
-	if (flag_gpio) {
+	if (flag_cli_gpio) {
 //		TEST_GPIO();
 		exit(0);
 	}
