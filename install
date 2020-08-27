@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+sudo mv camctrl /usr/local/bin/camctrl
+sudo mkdir /usr/local/share/camctrl
+sudo mkdir /usr/local/share/camctrl/docs
+sudo cp docs/* /usr/local/share/camctrl/docs/*

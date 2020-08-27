@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+echo "Installing dependencies..."
+sudo apt-get install -y xargs
+cat cfg/dependencies | xargs sudo apt-get install -y
