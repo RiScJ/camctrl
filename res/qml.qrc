@@ -19,5 +19,12 @@
         <file>UI_Project_View.qml</file>
         <file>UI_Remote_New.qml</file>
         <file>UI_Remote_Delete.qml</file>
+        <file>icons/aperture.png</file>
+        <file>icons/project.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/timer.png</file>
+        <file>icons/remote-access.png</file>
+        <file>icons/paper.png</file>
+        <file>icons/statistics.png</file>
     </qresource>
 </RCC>
