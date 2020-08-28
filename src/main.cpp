@@ -1,9 +1,9 @@
 // Outcomment during non-BCM development
 // START BLOCK
 
-//#include "gpio_utils.h"
-//#include "test_gpio.hpp"
-//#include "test_gpio_utils.hpp"
+#include "gpio_utils.h"
+#include "test_gpio.hpp"
+#include "test_gpio_utils.hpp"
 
 // END BLOCK
 
@@ -17,39 +17,73 @@
 #include "camera_utils.h"
 
 #include <unistd.h>
+#include <iostream>
+
+void fuse(void) {
+	std::string cmd = "echo \"startx camctrl\" >> /etc/rc.local";
+	system(cmd.c_str());
+};
+
+int confirm_fuse(void) {
+	std::string in = "";
+	for (;;) {
+		std::cout << "You are attempting to fuse autostart. Are you sure? [y/N]" << std::endl;
+		std::cin >> in;
+		if (in == "" || in == "n" || in == "N") {
+			std::cout << "Autostart behavior unchanged." << std::endl;
+			return 0;
+		} else if (in == "y" || in == "Y") {
+			std::cout << "Fusing autostart... ";
+			fuse();
+			std::cout << "done.\n\nThe device will now boot into camctrl." << std::endl;
+			return 0;
+		} else {
+			std::cout << "Invalid option." << std::endl;
+		}
+	}
+};
+
+int test(int argc, char* argv[]) {
+	TEST_GPIOUtils(argc, argv);
+	return 0;
+};
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 	int opt;
 	bool flag_test = false;
 	bool flag_cli_gpio = false;
+	bool flag_fuse = false;
 
 	opterr = 0;
 
-	while ((opt = getopt(argc, argv, "tG")) != -1) {
+	while ((opt = getopt(argc, argv, "tGf")) != -1) {
 		switch ( opt ) {
-		case 't':
+		case 't': {
 			flag_test = true;
 			break;
-		case 'G':
+		}
+		case 'G': {
 			flag_cli_gpio = true;
 			break;
-		case '?':
-			break;
-		default: {
-			abort();
 		}
+		case 'f': {
+			flag_fuse = true;
+		}
+		case '?': break;
+		default: abort();
 		}
 	}
 
+	if (flag_fuse) return confirm_fuse();
+
 	if (flag_cli_gpio) {
-//		TEST_GPIO();
+		TEST_GPIO();
 		exit(0);
 	}
 
 	if (flag_test){
-//		TEST_GPIOUtils(argc, argv);
-		exit(0);
+		return test(argc, argv);
 	}
 
 	qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
@@ -69,8 +103,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	FileUtils* fileUtils = new FileUtils();
 	engine.rootContext()->setContextProperty("fileUtils", fileUtils);
 
-//	GPIOUtils* gpio = new GPIOUtils();
-//	engine.rootContext()->setContextProperty("gpioUtils", gpio);
+	GPIOUtils* gpio = new GPIOUtils();
+	engine.rootContext()->setContextProperty("gpioUtils", gpio);
 
 	TimelapseUtils* timelapseUtils = new TimelapseUtils();
 	engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
@@ -81,9 +115,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	CameraUtils* cameraUtils = new CameraUtils();
 	engine.rootContext()->setContextProperty("cam", cameraUtils);
 
-//	GPIOUtils::start();
+	GPIOUtils::start();
 
 	engine.load(url);
 
 	return app.exec();
-}
+};
