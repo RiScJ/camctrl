@@ -57,13 +57,13 @@ If you want to retain the sources, but remove the intermediary build files, you 
 
 ## §2.1 Commandline
 
-### -t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--test
+### -t
 Runs a series of tests on the application. Prints their results as they come in. At the end, a report is generated detailing any problems.
 
-### -G&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--gpio
+### -G
 Displays a live reading in the commandline of measured GPIO levels. Good for testing your external triggering circuits.
 
-### -f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--fuse
+### -f
 Enables autostart, beginning with the next boot. You'll be asked to confirm before continuing. This is of course just a software behavior, and not a real fuse. I call it that because if at a later time you decide you want to disable the autostart behavior, it's going to be somewhat of a nuisance. You'll have to remove the SD card, mount it on another machine, and edit rc.local.
 
 ## §2.2 Graphical interface
