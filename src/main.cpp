@@ -1,9 +1,9 @@
 // Outcomment during non-BCM development
 // START BLOCK
 
-#include "gpio_utils.h"
-#include "test_gpio.hpp"
-#include "test_gpio_utils.hpp"
+//#include "gpio_utils.h"
+//#include "test_gpio.hpp"
+//#include "test_gpio_utils.hpp"
 
 // END BLOCK
 
@@ -43,12 +43,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	}
 
 	if (flag_cli_gpio) {
-		TEST_GPIO();
+//		TEST_GPIO();
 		exit(0);
 	}
 
 	if (flag_test){
-		TEST_GPIOUtils(argc, argv);
+//		TEST_GPIOUtils(argc, argv);
 		exit(0);
 	}
 
@@ -69,8 +69,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	FileUtils* fileUtils = new FileUtils();
 	engine.rootContext()->setContextProperty("fileUtils", fileUtils);
 
-	GPIOUtils* gpio = new GPIOUtils();
-	engine.rootContext()->setContextProperty("gpioUtils", gpio);
+//	GPIOUtils* gpio = new GPIOUtils();
+//	engine.rootContext()->setContextProperty("gpioUtils", gpio);
 
 	TimelapseUtils* timelapseUtils = new TimelapseUtils();
 	engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
@@ -81,7 +81,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	CameraUtils* cameraUtils = new CameraUtils();
 	engine.rootContext()->setContextProperty("cam", cameraUtils);
 
-	GPIOUtils::start();
+//	GPIOUtils::start();
 
 	engine.load(url);
 

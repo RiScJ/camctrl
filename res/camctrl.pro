@@ -45,14 +45,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 # Outcomment these during non-BCM development
 
-HEADERS += \
-	../inc/gpio_utils.h \
-	../tests/inc/test_gpio_utils.hpp \
-	../tests/inc/test_gpio.hpp
+#HEADERS += \
+#	../inc/gpio_utils.h \
+#	../tests/inc/test_gpio_utils.hpp \
+#	../tests/inc/test_gpio.hpp
 
-SOURCES += \
-		../src/gpio_utils.cpp \
-		../tests/src/test_gpio_utils.cpp \
-		../tests/src/test_gpio.cpp
+#SOURCES += \
+#		../src/gpio_utils.cpp \
+#		../tests/src/test_gpio_utils.cpp \
+#		../tests/src/test_gpio.cpp
 
-LIBS += -L/opt/vc/lib -lbcm_host
+#LIBS += -L/opt/vc/lib -lbcm_host
