@@ -1,6 +1,7 @@
-#!/usr/bin/bash
+#!/bin/bash
 
+make
 sudo mv camctrl /usr/local/bin/camctrl
-sudo mkdir /usr/local/share/camctrl
-sudo mkdir /usr/local/share/camctrl/docs
-sudo cp docs/* /usr/local/share/camctrl/docs/*
+sudo mkdir -p /usr/local/share/camctrl/docs
+sudo cp docs/* /usr/local/share/camctrl/docs/
+rm *.o *.cpp *.h Makefile
