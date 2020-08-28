@@ -8,9 +8,9 @@ Qt-based UI for camera control on the Raspberry Pi's 7" touch display.
 
 - Embedded DIY DSLM camera
 - Synchronous timelapse controller for CNC manufacturing processes, such as 3D printing, milling, or turning
-- Camera controller for optical microscopy
-
-## Examples
+- Optical microscopy
+- Astrophotography
+- Etc.
 
 # §1 Installation
 ###### Before proceeding, please read the notice at the bottom of this README
@@ -193,15 +193,25 @@ To serve as a trigger event, the application will use...
 
 The project manager consists of two main areas: a list view on the left, and a control panel on the right.  
 
+![](docs/projects.png)
+
 The list view contains entries for each of your projects, displaying both their names and the last time you modified the project.  
 
 The control panel contains an assortment of tiles which allow you to interact with the projects. You will find the ability to create new projects, delete projects, select the project you want to work on, and open them to see previews of the media you've captured.
 
 #### §2.2.2.1 Creating a new project
-To create a new project, tap the "Projects" tile to enter the project manager. Once there, tap the "New" tile. You'll be taken to a context with a single text input, and two buttons to either confirm or cancel. Tap the text input and an on-screen keyboard will appear. Type the desired name for your new project, and tap "Create". If successful, you should see a new project with the name you entered appear in the list view on the left side of the project manager.
+To create a new project, tap the "Projects" tile to enter the project manager. Once there, tap the "New" tile. You'll be taken to a context with a single text input, and two buttons to either confirm or cancel. 
+
+![](docs/new-project.png)
+
+Tap the text input and an on-screen keyboard will appear. Type the desired name for your new project, and tap "Create". If successful, you should see a new project with the name you entered appear in the list view on the left side of the project manager.
 
 #### §2.2.2.2 Deleting a project
-Scroll through the list view on the left side of the project manager until you find the project you want to delete. Tap its entry, and a highlight bar will move over it. Once highlighted, tap the "Delete" tile. A popup window will appear letting you know that this action cannot be undone, and to make sure you are certain before continuing. If you are sure, tap "Confirm". You should see the project disappear from the list view.
+Scroll through the list view on the left side of the project manager until you find the project you want to delete. Tap its entry, and a highlight bar will move over it. Once highlighted, tap the "Delete" tile. A popup window will appear letting you know that this action cannot be undone, and to make sure you are certain before continuing. 
+
+![](delete-project.png)
+
+If you are sure, tap "Confirm". You should see the project disappear from the list view.
 
 #### §2.2.2.3 Selecting a project
 To select a project to work on, scroll through the list view until you find it. Tap on it to move the highlight bar over the project in question. Once highlighted, tap the "Select" tile. The project's background color in the list view will change to a bright off-white.
@@ -209,12 +219,18 @@ To select a project to work on, scroll through the list view until you find it. 
 #### §2.2.2.4 Using the media previewer
 Once you have captured media for a project, you may wish to preview them. To do so, scroll through the list view to find the project in question. Highlight it by tapping its name, as above. Once highlighted, tap the "Open" tile. You will be taken to the media viewer's menu.
 
+![](docs/inside-project.png)
+
 The media viewer's menu is similar to that of the project manager, composed of a list view on the left, and a control panel on the right.
 
 The list view contains entries for each media file within the project. The control panel contains an interface for filtering the media, and opening them.
 
 ##### §2.2.2.4.1 Choosing a file
-Choosing a media file is similar to choosing a project: simply scroll through the list, and select a file by tapping on it. Tap the "Open" tile to view the mediafile. If the mediafile is a video, after opening you will have to tap the screen to start playback.
+Choosing a media file is similar to choosing a project: simply scroll through the list, and select a file by tapping on it. Tap the "Open" tile to view the mediafile. 
+
+![](docs/view-media.png)
+
+If the mediafile is a video, after opening you will have to tap the screen to start playback.
 
 ##### §2.2.2.4.2 Filtering the media
 If your project has a substantial number of mediafiles, you may wish to filter them to make them easier to manage. You can do so by checking and unchecking the boxes in the control panel. By default, all filetypes are checked.
@@ -223,13 +239,21 @@ If your project has a substantial number of mediafiles, you may wish to filter t
 
 #### §2.2.3.1 Trigger configuration
 
-To configure options for both timed and external triggering, tap on the "Trigger Setup" tile from the main window. Here you may select the GPIO pin for external triggering as well as whether to listen for rising or falling edges  
+To configure options for both timed and external triggering, tap on the "Trigger Setup" tile from the main window. 
+
+![](docs/trigger-settings.png)
+
+Here you may select the GPIO pin for external triggering as well as whether to listen for rising or falling edges  
 
 The tumblers in the "Timer" tile control intervals for timed triggering. The left tumbler controls the delay time, and the right tumbler controls the duration time.
 
 #### §2.2.3.2 Miscellaneous settings
 
-From the main window, tap the "Settings" tile. Here are options to add annotations to the captured media (such as timestamps or exposure settings), and change the framerate of the encoded timelapse.
+From the main window, tap the "Settings" tile. 
+
+![](docs/app-config.png)
+
+Here are options to add annotations to the captured media (such as timestamps or exposure settings), and change the framerate of the encoded timelapse.
 
 #  
 #  
