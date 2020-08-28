@@ -27,7 +27,7 @@ Clone the repository and change working directory:
 The list of dependencies is located in cfg/dependencies.
 
 #### §1.3 Configuration
-The configuration script will make certain modifications to the programs behavior, including such things as autostart. While you can choose to enable autostart on your first installation, it isn't recommended you do so. Instead, you should ensure the program runs as expected for you first. When you are satisfied with your installation and its behavior for your application, you can enable it then. Details on how to do this are found below. To configure, run:
+The configuration script will make certain modifications to the programs behavior, including such things as autostart. While you can choose to enable autostart on your first installation, it isn't recommended you do so. Instead, you should ensure the program runs as expected for you first. When you are satisfied with your installation and its behavior for your application, you can enable it then. Details on how to do this are found in §2.1. To configure, run:
 
 `$ ./configure`
 
