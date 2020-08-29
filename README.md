@@ -209,7 +209,7 @@ Tap the text input and an on-screen keyboard will appear. Type the desired name 
 #### §2.2.2.2 Deleting a project
 Scroll through the list view on the left side of the project manager until you find the project you want to delete. Tap its entry, and a highlight bar will move over it. Once highlighted, tap the "Delete" tile. A popup window will appear letting you know that this action cannot be undone, and to make sure you are certain before continuing. 
 
-![](delete-project.png)
+![](docs/delete-project.png)
 
 If you are sure, tap "Confirm". You should see the project disappear from the list view.
 
