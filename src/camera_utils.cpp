@@ -112,11 +112,16 @@ void CameraUtils::stop_still(void) {
 };
 
 
+void CameraUtils::update_frameRate(int rate) {
+	frameRate = std::to_string(rate);
+};
+
+
 void CameraUtils::start_vid(void) {
 	stop();
 	std::string cmd = "raspivid " + get_preview_arg() +
 			" -t 0 " + get_annotation_arg() +
-					  "-b 17000000 -fps 30 -cd H264 -i pause -s -o /usr/share/camctrl/Projects/" +
+					  "-b 17000000 -fps " + frameRate + " -cd H264 -i pause -s -o /usr/share/camctrl/Projects/" +
 		project + "/vid.h264 &";
 	system(cmd.c_str());
 };

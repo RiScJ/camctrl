@@ -257,4 +257,58 @@ Rectangle {
 			font.italic: true
 		}
 	}
+
+	Button {
+		id: button_frameRate
+		x: 266
+		y: 206
+		width: 511
+		height: 140
+		text: qsTr("VIDEO FRAMERATE")
+		Slider {
+			id: slider_frameRate
+			x: 8
+			y: 68
+			width: 353
+			height: 48
+			value: 30
+			to: 240
+			from: 1
+
+			onMoved: {
+				TimelapseUtils.update_frameRate(Math.floor(value))
+			}
+		}
+
+		Label {
+			id: label_frameRate
+			x: 393
+			y: 49
+			width: 48
+			height: 52
+			text: Math.floor(slider_frameRate.value)
+			font.italic: true
+			font.pointSize: 30
+			font.family: "CMU Typewriter Text"
+			rightPadding: 5
+			horizontalAlignment: Text.AlignRight
+		}
+
+		Label {
+			x: 436
+			y: 68
+			width: 48
+			height: 52
+			text: qsTr("fps")
+			font.italic: true
+			font.pointSize: 20
+			font.family: "CMU Typewriter Text"
+			rightPadding: 5
+			horizontalAlignment: Text.AlignRight
+		}
+		font.pointSize: 17
+		font.family: "CMU Concrete"
+		rightPadding: 260
+		bottomPadding: 80
+	}
 }

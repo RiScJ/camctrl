@@ -17,4 +17,4 @@ void TimelapseUtils::stitch(const QString dirPath) {
 
 void TimelapseUtils::update_encodingRate(int rate) {
 	encodingRate = rate;
-}
+};
