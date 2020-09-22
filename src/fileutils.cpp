@@ -158,6 +158,12 @@ QString FileUtils::whoami(void) {
 };
 
 
+QString FileUtils::exec(const QString cmd) {
+	std::string tmp = cmd.toStdString();
+	return QString::fromStdString(exec(tmp.c_str()));
+}
+
+
 std::string FileUtils::exec(const char* cmd) {
 	std::array<char, 128> buffer;
 	std::string result;

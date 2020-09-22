@@ -46,17 +46,11 @@ Window {
 
 	property string currentOpenRemote: "__local__"
 
-	// Capture properties and methods
-	property string homeDir: "/home/" + fileUtils.whoami() + "/"
-
-	property string remotePath: homeDir + ".camctrl/remote/"
-	property string remoteProjectPath: homeDir + ".camctrl/Remotes/"
-
 	property string projectPath: {
 		if (currentOpenRemote == "__local__") {
-			homeDir + ".camctrl/Projects/"
+			"/usr/share/camctrl/Projects/"
 		} else {
-			remoteProjectPath + currentOpenRemote + "/"
+			"/usr/share/camctrl/Projects/"
 		}
 	}
 
@@ -145,6 +139,10 @@ Window {
 			stack.push(infoUI)
 		}
 		onOpenSetupUI: stack.push(setupUI)
+		onMountRemote: {
+			projectPath = ""
+			projectPath = "/usr/share/camctrl/Projects/"
+		}
 	}
 
 	UI_Remote {

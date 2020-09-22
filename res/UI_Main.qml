@@ -22,6 +22,7 @@ Rectangle {
 	signal openHelpUI
 	signal openInfoUI
 	signal openSetupUI
+	signal mountRemote
 
 	Button {
 		id: button_openRemoteUI
@@ -40,11 +41,15 @@ Rectangle {
 		font.pointSize: 17
 		font.family: "CMU Concrete"
 
-		enabled: false
+		// enabled: false
 
 		onClicked: {
-			openRemoteUI()
-			mainUI.visible = false
+			fileUtils.exec("mount /usr/share/camctrl")
+			mountRemote()
+			fileUtils.exec("mkdir -p /usr/share/camctrl/Projects")
+			button_openRemoteUI.enabled = false
+			//openRemoteUI()
+			//mainUI.visible = false
 		}
 
 		Image {

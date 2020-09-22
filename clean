@@ -1,0 +1,1 @@
+rm Makefile *.o *.cpp *.h

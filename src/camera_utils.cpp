@@ -9,6 +9,7 @@
 #include "camera_utils.h"
 
 
+bool CameraUtils::recording = false;
 
 void CameraUtils::start(QString mode) {
 	switch (resolve(mode)) {
@@ -27,6 +28,11 @@ void CameraUtils::stop(void) {
 };
 
 
+bool CameraUtils::get_status(void) {
+	return recording;
+};
+
+
 void CameraUtils::capture(QString mode) {
 	switch (resolve(mode)) {
 	case IMG: capture_still(); break;
@@ -39,9 +45,11 @@ void CameraUtils::capture(QString mode) {
 void CameraUtils::record(void) {
 	std::string cmd;
 	cmd = "pgrep raspivid | xargs -I % kill -USR1 % && \
-		cd " + homeDir + ".camctrl/Projects/" + project + " && \
+		cd /usr/share/camctrl/Projects/" + project + " && \
 		ls -1 | grep VID | wc -l | xargs printf \"%04d\" | xargs -I % mv vid.h264 VID_%.h264";
 	system(cmd.c_str());
+	recording ^= 1;
+	std::cout << "Flipped: " << recording << std::endl;
 };
 
 
@@ -83,7 +91,7 @@ void CameraUtils::start_still(void) {
 	stop();
 	std::string cmd = "raspistill " + get_preview_arg() +
 			" -t 0 " + get_annotation_arg() +
-					  "-s -o " + homeDir + ".camctrl/Projects/" +
+					  "-s -o /usr/share/camctrl/Projects/" +
 		project + "/img.jpg &";
 	system(cmd.c_str());
 };
@@ -92,7 +100,7 @@ void CameraUtils::start_still(void) {
 void CameraUtils::capture_still(void) {
 	std::string cmd;
 	cmd = "pgrep raspistill | xargs -I % kill -USR1 % && \
-		cd " + homeDir + ".camctrl/Projects/" + project + " && \
+		cd /usr/share/camctrl/Projects/" + project + " && \
 		ls -1 | grep IMG | wc -l | xargs printf \"%04d\" | xargs -I % mv img.jpg IMG_%.jpg";
 	system(cmd.c_str());
 };
@@ -108,8 +116,7 @@ void CameraUtils::start_vid(void) {
 	stop();
 	std::string cmd = "raspivid " + get_preview_arg() +
 			" -t 0 " + get_annotation_arg() +
-					  "-b 17000000 -fps 30 -cd H264 -i pause -s -o " +
-	homeDir + ".camctrl/Projects/" +
+					  "-b 17000000 -fps 30 -cd H264 -i pause -s -o /usr/share/camctrl/Projects/" +
 		project + "/vid.h264 &";
 	system(cmd.c_str());
 };
@@ -125,7 +132,7 @@ void CameraUtils::start_lapse(void) {
 	stop();
 	std::string cmd = "raspistill " + get_preview_arg() +
 			" --mode 4 -t 0 " + get_annotation_arg() +
-					  "-s -o " + homeDir + ".camctrl/Projects/" +
+					  "-s -o /usr/share/camctrl/Projects/" +
 		project + "/lps.jpg &";
 	system(cmd.c_str());
 };
@@ -160,7 +167,7 @@ void CameraUtils::capture_video_EXT(void) {
 void CameraUtils::capture_frame(void) {
 	std::string cmd;
 	cmd = "pgrep raspistill | xargs -I % kill -USR1 % && \
-		cd " + homeDir + ".camctrl/Projects/" + project + " && \
+		cd /usr/share/camctrl/Projects/" + project + " && \
 		ls -1 | grep FRM | wc -l | xargs printf \"%04d\" | xargs -I % mv lps.jpg FRM_%.jpg";
 	system(cmd.c_str());
 };

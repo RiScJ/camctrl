@@ -20,7 +20,7 @@ public:
 	Q_INVOKABLE static void writeFile(const QString path, const QString txt);
 	Q_INVOKABLE static QString whoami(void);
 	Q_INVOKABLE static void mount(const QString configPath, const QString remotePath);
-private:
+	Q_INVOKABLE static QString exec(const QString cmd);
 	static std::string exec(const char* cmd);
 };
 

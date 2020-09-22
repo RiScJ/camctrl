@@ -3,4 +3,9 @@
 make
 sudo mv camctrl /usr/local/bin/camctrl
 sudo mkdir -p /usr/local/share/camctrl/docs
+sudo mkdir -p /usr/local/camctrl/local/Projects/example
+sudo mkdir -p /usr/local/camctrl/remote
 sudo cp res/docs/* /usr/local/share/camctrl/docs/
+sudo cp cfg/init /usr/share/camctrl/init
+sudo cp cfg/.bashrc /home/pi/.bashrc
+sudo cp cfg/autologin.conf /etc/systemd/system/getty@tty1.service.d/autologin.conf

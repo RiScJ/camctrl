@@ -460,7 +460,7 @@ Rectangle {
 						app.statusName = "RECORDING"
 						cam.record()
 					} else if (app.trigName == "EXT") {
-						app.statusName = "LISTENING"
+						app.statusName = cam.get_status() ? "RECORDING" : "LISTENING"
 						gpioUtils.trigger_video(app.gpio)
 					} else if (app.trigName == "TMR") {
 						app.statusName = "LISTENING"

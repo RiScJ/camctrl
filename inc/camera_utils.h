@@ -26,6 +26,8 @@ public:
 	Q_INVOKABLE static void stop(void);
 	Q_INVOKABLE static void capture(QString mode);
 	Q_INVOKABLE static void record(void);
+	Q_INVOKABLE static bool get_status(void);
+	static bool recording;
 
 private:
 	static std::string homeDir;

@@ -113,6 +113,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	engine.rootContext()->setContextProperty("rsync", rsyncUtils);
 
 	CameraUtils* cameraUtils = new CameraUtils();
+	CameraUtils::set_homeDir("/" + FileUtils::whoami().toStdString() + "/");
 	engine.rootContext()->setContextProperty("cam", cameraUtils);
 
 	GPIOUtils::start();
