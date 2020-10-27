@@ -10,6 +10,7 @@
 
 
 bool CameraUtils::recording = false;
+std::string CameraUtils::frameRate = "30";
 
 void CameraUtils::start(QString mode) {
 	switch (resolve(mode)) {

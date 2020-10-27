@@ -3,7 +3,7 @@ import QtQuick.Window 2.6
 import QtQuick.Controls 2.2
 import QtMultimedia 5.0
 import Qt.labs.folderlistmodel 1.0
-import QtQuick.VirtualKeyboard 2.1
+import QtQuick.VirtualKeyboard 2.0
 import QtQuick.Controls.Material 2.0
 
 Window {
