@@ -24,8 +24,11 @@ I'm not a security engineer. If you find a way for the user to acquire elevated 
 Read the scripts and make sure you understand them before you run them. Always know what you are installing on your devices.
 &nbsp;
 
+# Currently in progress:
+- Tests (sorry!)
+- Filesystem integration. Currently, I mount an NFS share over the project directory automatically at boot. This works very well, but you have to set it up manually. I'd like to allow the user to manage any remote locations from the application. If you don't do this, currently you'll need to remove the SD card to take off the media, or change the project directory in the source.
+
 # §1 Installation
-###### Before proceeding, you MUST read the notice at the bottom of this README
 #### §1.1 Download
 Clone the repository and change working directory:
 
