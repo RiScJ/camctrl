@@ -1,3 +1,6 @@
 #!/bin/bash
 
+echo "Installing dependencies..."
+cat cfg/dependencies | xargs sudo apt-get install -y
+
 qmake res/camctrl.pro
