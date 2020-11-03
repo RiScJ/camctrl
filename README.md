@@ -1,6 +1,6 @@
 # ```camctrl```
 Qt-based UI for camera control on the Raspberry Pi's 7" touch display.
-### 
+###
 
 ![](docs/main.png)
 
@@ -12,44 +12,36 @@ Qt-based UI for camera control on the Raspberry Pi's 7" touch display.
 - Astrophotography
 - Etc.
 
+# Notice
+```camctrl``` is designed to be used as a standalone, embedded application on a *dedicated* Raspberry Pi. I recommend against using it on a device you need for something else. The program uses root privileges, and is intended to autostart on boot. I offer no insurance the software is bug-free. I've put a lot of work into this, but I'm not perfect.
+
+If you want/need ```camctrl``` to not autostart (such as for debugging, you only want to use some of its command-line tools, or you aren't using it on an embedded system), remove the line from the installation script which copies .bashrc.
+
+The application uses root priviliges for fast memory mapping over /dev/mem. I know /dev/gpiomem is available and does not require root. However, I have chosen to remain with /dev/mem for two reasons: I will need it for planned future features, and the program's nature as an (intended) embedded application effectively necessitates its backend to have elevated privileges. Privileges in the "userspace"/frontend are intended to be normal.
+
+I'm not a security engineer. If you find a way for the user to acquire elevated privileges from the frontend, please open an issue.
+
+Read the scripts and make sure you understand them before you run them. Always know what you are installing on your devices.
+&nbsp;
+
 # §1 Installation
-###### Before proceeding, please read the notice at the bottom of this README
+###### Before proceeding, you MUST read the notice at the bottom of this README
 #### §1.1 Download
 Clone the repository and change working directory:
 
 `$ git clone https://github.com/RiScJ/camctrl && cd camctrl`
 
-#### §1.2 Retrieve and install dependencies
-```camctrl``` is built in Qt and requires many of its modules. To install them, run:
-
-`$ ./setup`
-
-The list of dependencies is located in cfg/dependencies.
-
-#### §1.3 Configuration
-The configuration script will make certain modifications to the programs behavior, including such things as autostart. While you can choose to enable autostart on your first installation, it isn't recommended you do so. Instead, you should ensure the program runs as expected for you first. When you are satisfied with your installation and its behavior for your application, you can enable it then. Details on how to do this are found in §2.1. To configure, run:
+#### §1.2 Configure
+```camctrl``` is built in Qt and requires many of its modules. We need to install them. This script will also create a new user for the application.
 
 `$ ./configure`
 
-You will be asked a variety of questions. They are important -- read them carefully!
+The list of dependencies is located in cfg/dependencies.
 
-#### §1.4 Install
-The installation script will handle the build process, and then copy binaries and static resources to /usr/local/bin and /usr/local/share/camctrl respectively. To install, run:
+#### §1.3 Install
+The installation script will handle the build process, and then copy over binaries and static resources. To install, run:
 
 `$ ./install`
-
-#### §1.5 Clean
-Before cleaning, it would be wise to test the installation. To do so, run:
-
-`$ camctrl -t`
-
-This will run through an array of tests, and return a report at the end. If all tests passed, you can remove our temporary directory:
-
-`$ ./clean all`
-
-If you want to retain the sources, but remove the intermediary build files, you can:
-
-`$ ./clean build`
 
 # §2 Usage
 
@@ -60,11 +52,10 @@ If you want to retain the sources, but remove the intermediary build files, you 
 ### -t
 Runs a series of tests on the application. Prints their results as they come in. At the end, a report is generated detailing any problems.
 
+This is still in progress.
+
 ### -G
 Displays a live reading in the commandline of measured GPIO levels. Good for testing your external triggering circuits.
-
-### -f
-Enables autostart, beginning with the next boot. You'll be asked to confirm before continuing. This is of course just a software behavior, and not a real fuse. I call it that because if at a later time you decide you want to disable the autostart behavior, it's going to be somewhat of a nuisance. You'll have to remove the SD card, mount it on another machine, and edit rc.local.
 
 ## §2.2 Graphical interface
 
@@ -185,7 +176,7 @@ To serve as a trigger event, the application will use...
 > The application is currently recording video.  
 
 ###### CAPTURING
-> The application is currently capturing an image or frame. Under typical circumstances, this process should be so fast that this status ought not ever be visible. 
+> The application is currently capturing an image or frame. Under typical circumstances, this process should be so fast that this status ought not ever be visible.
 
 ### §2.2.2 Using the project manager
 
@@ -200,14 +191,14 @@ The list view contains entries for each of your projects, displaying both their 
 The control panel contains an assortment of tiles which allow you to interact with the projects. You will find the ability to create new projects, delete projects, select the project you want to work on, and open them to see previews of the media you've captured.
 
 #### §2.2.2.1 Creating a new project
-To create a new project, tap the "Projects" tile to enter the project manager. Once there, tap the "New" tile. You'll be taken to a context with a single text input, and two buttons to either confirm or cancel. 
+To create a new project, tap the "Projects" tile to enter the project manager. Once there, tap the "New" tile. You'll be taken to a context with a single text input, and two buttons to either confirm or cancel.
 
 ![](docs/new-project.png)
 
 Tap the text input and an on-screen keyboard will appear. Type the desired name for your new project, and tap "Create". If successful, you should see a new project with the name you entered appear in the list view on the left side of the project manager.
 
 #### §2.2.2.2 Deleting a project
-Scroll through the list view on the left side of the project manager until you find the project you want to delete. Tap its entry, and a highlight bar will move over it. Once highlighted, tap the "Delete" tile. A popup window will appear letting you know that this action cannot be undone, and to make sure you are certain before continuing. 
+Scroll through the list view on the left side of the project manager until you find the project you want to delete. Tap its entry, and a highlight bar will move over it. Once highlighted, tap the "Delete" tile. A popup window will appear letting you know that this action cannot be undone, and to make sure you are certain before continuing.
 
 ![](docs/delete-project.png)
 
@@ -226,7 +217,7 @@ The media viewer's menu is similar to that of the project manager, composed of a
 The list view contains entries for each media file within the project. The control panel contains an interface for filtering the media, and opening them.
 
 ##### §2.2.2.4.1 Choosing a file
-Choosing a media file is similar to choosing a project: simply scroll through the list, and select a file by tapping on it. Tap the "Open" tile to view the mediafile. 
+Choosing a media file is similar to choosing a project: simply scroll through the list, and select a file by tapping on it. Tap the "Open" tile to view the mediafile.
 
 ![](docs/view-media.png)
 
@@ -239,7 +230,7 @@ If your project has a substantial number of mediafiles, you may wish to filter t
 
 #### §2.2.3.1 Trigger configuration
 
-To configure options for both timed and external triggering, tap on the "Trigger Setup" tile from the main window. 
+To configure options for both timed and external triggering, tap on the "Trigger Setup" tile from the main window.
 
 ![](docs/trigger-settings.png)
 
@@ -249,23 +240,8 @@ The tumblers in the "Timer" tile control intervals for timed triggering. The lef
 
 #### §2.2.3.2 Miscellaneous settings
 
-From the main window, tap the "Settings" tile. 
+From the main window, tap the "Settings" tile.
 
 ![](docs/app-config.png)
 
 Here are options to add annotations to the captured media (such as timestamps or exposure settings), and change the framerate of the encoded timelapse.
-
-#  
-#  
-#  
-#  
-
-# Notice
-```camctrl``` is designed to be used as a standalone, embedded application on a *dedicated* Raspberry Pi. I recommend against using it on a device you need for something else. The program uses root privileges, and is intended to autostart on boot. I offer no insurance the software is bug-free. I've put a lot of work into this, but I'm not perfect. 
-
-If you want/need ```camctrl``` to not autostart (such as for debugging, you only want to use some of its command-line tools, or you aren't using it on an embedded system), there is a configuration option to make it so. When you run ./configure immediately before installation, answer no to "Do you want camctrl to autostart on boot (embedded applications)?"
-
-The application uses sudo priviliges for fast memory mapping over /dev/mem. I know /dev/gpiomem is available and does not require root. However, I have chosen to remain with /dev/mem for two reasons: I will need it for planned future features, and the program's nature as an (intended) embedded application effectively necessitates its backend to have elevated privileges. Privileges in the "userspace"/frontend are normal. 
-
-Read the scripts and make sure you understand them before you run them. Always know what you are installing on your devices.
-&nbsp;
