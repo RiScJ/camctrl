@@ -2,5 +2,15 @@
 
 echo "Installing dependencies..."
 cat cfg/dependencies | xargs sudo apt-get install -y
+echo "Done."
 
+echo "Creating new user \"camctrl\"."
+adduser --disabled-login --gecos "" camctrl
+usermod -aG sudo camctrl
+echo "Done."
+
+echo "Running qmake..."
 qmake res/camctrl.pro
+echo "Done."
+
+echo "You must run \"passwd camctrl\" before continuing."

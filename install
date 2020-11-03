@@ -1,10 +1,25 @@
 #!/bin/bash
 
+# Build
 make
+
+# Move the binary into PATH
 sudo mv camctrl /usr/local/bin/camctrl
+
+# Create some directories for storing resources
 sudo mkdir -p /usr/local/share/camctrl/docs
+
+# Create an example project
 sudo mkdir -p /usr/share/camctrl/Projects/example
+
+# Copy over internal documentation
 sudo cp res/docs/* /usr/local/share/camctrl/docs/
+
+# Copy init script for autostart
 sudo cp cfg/init /usr/local/share/camctrl/init
-sudo cp cfg/.bashrc /home/pi/.bashrc
+
+# Copy bashrc for camctrl user --- this is what calls init script
+sudo cp cfg/.bashrc /home/camctrl/.bashrc
+
+# Copy autologic service for camctrl user
 sudo cp cfg/autologin.conf /etc/systemd/system/getty@tty1.service.d/autologin.conf

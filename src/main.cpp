@@ -1,9 +1,9 @@
 // Outcomment during non-BCM development
 // START BLOCK
 
-#include "gpio_utils.h"
-#include "test_gpio.hpp"
-#include "test_gpio_utils.hpp"
+//#include "gpio_utils.h"
+//#include "test_gpio.hpp"
+//#include "test_gpio_utils.hpp"
 
 // END BLOCK
 
@@ -43,10 +43,10 @@ int confirm_fuse(void) {
 	}
 };
 
-int test(int argc, char* argv[]) {
-	TEST_GPIOUtils(argc, argv);
-	return 0;
-};
+//int test(int argc, char* argv[]) {
+//	TEST_GPIOUtils(argc, argv);
+//	return 0;
+//};
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -77,14 +77,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 	if (flag_fuse) return confirm_fuse();
 
-	if (flag_cli_gpio) {
-		TEST_GPIO();
-		exit(0);
-	}
+//	if (flag_cli_gpio) {
+//		TEST_GPIO();
+//		exit(0);
+//	}
 
-	if (flag_test){
-		return test(argc, argv);
-	}
+//	if (flag_test){
+//		return test(argc, argv);
+//	}
 
 	qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
@@ -103,8 +103,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	FileUtils* fileUtils = new FileUtils();
 	engine.rootContext()->setContextProperty("fileUtils", fileUtils);
 
-	GPIOUtils* gpio = new GPIOUtils();
-	engine.rootContext()->setContextProperty("gpioUtils", gpio);
+//	GPIOUtils* gpio = new GPIOUtils();
+//	engine.rootContext()->setContextProperty("gpioUtils", gpio);
 
 	TimelapseUtils* timelapseUtils = new TimelapseUtils();
 	engine.rootContext()->setContextProperty("TimelapseUtils", timelapseUtils);
@@ -116,7 +116,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 	CameraUtils::set_homeDir("/" + FileUtils::whoami().toStdString() + "/");
 	engine.rootContext()->setContextProperty("cam", cameraUtils);
 
-	GPIOUtils::start();
+//	GPIOUtils::start();
 
 	engine.load(url);
 
