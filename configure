@@ -1,12 +1,38 @@
 #!/bin/bash
 
+echo "Running full system upgrade..."
+sudo apt-get update
+sudo apt-get upgrade
+echo "Done."
+
 echo "Installing dependencies..."
 cat cfg/dependencies | xargs sudo apt-get install -y
 echo "Done."
 
 echo "Creating new user \"camctrl\"."
-adduser --disabled-login --gecos "" camctrl
-usermod -aG sudo camctrl
+sudo adduser --disabled-login --gecos "" camctrl
+sudo usermod -aG sudo camctrl
+echo "Done."
+
+echo "Downloading fonts..."
+echo "Computer Modern:"
+mkdir computermodern && cd computermodern
+wget https://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/cmmi10.ttf
+wget https://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/cmr10.ttf
+wget https://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/cmb10.ttf
+wget https://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/cmsy10.ttf
+wget https://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/cmtt10.ttf
+cd ..
+echo "Computer Concrete:"
+mkdir computerconcrete && cd computerconcrete
+wget https://fontlibrary.org/en/font/cmu-concrete/4dc4d9812272fbd7cb913c389a001c50/cmu-concrete.zip
+unzip cmu-concrete.zip
+cd ..
+sudo mkdir /usr/share/fonts/truetype/computermodern
+sudo mkdir /usr/share/fonts/truetype/computerconcrete
+sudo mv computermodern/* /usr/share/fonts/truetype/computermodern/
+sudo mv computerconcrete/* /usr/share/fonts/truetype/computerconcrete/
+rmdir computermodern computerconcrete
 echo "Done."
 
 echo "Running qmake..."

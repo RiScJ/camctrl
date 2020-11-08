@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Get the Qt virtualkeyboard module and build it
+git clone -b 5.11 https://github.com/qt/qtvirtualkeyboard.git
+cd qtvirtualkeyboard
+qmake
+sudo make
+sudo make install
+cd ..
+
 # Build
 make
 
